@@ -1,5 +1,12 @@
 import * as React from "react";
-import { GalleryVerticalEnd, User, Package } from "lucide-react";
+import {
+  GalleryVerticalEnd,
+  User,
+  Package,
+  CalendarCheck,
+  Users,
+  UserCog,
+} from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
@@ -29,10 +36,26 @@ const data = {
   ],
   navMain: [
     {
+      title: "Admin",
+      url: "#",
+      icon: User,
+      isActive: false,
+      items: [
+        {
+          title: "List",
+          url: "/admin",
+        },
+        {
+          title: "Add New",
+          url: "/admin/create",
+        },
+      ],
+    },
+    {
       title: "Products",
       url: "#",
       icon: Package,
-      isActive: true,
+      isActive: false,
       items: [
         {
           title: "List",
@@ -45,18 +68,50 @@ const data = {
       ],
     },
     {
-      title: "Admin",
+      title: "Booking",
       url: "#",
-      icon: User,
-      isActive: true,
+      icon: CalendarCheck,
+      isActive: false,
       items: [
         {
           title: "List",
-          url: "/admin",
+          url: "/bookings",
         },
         {
           title: "Add New",
-          url: "/admin/create",
+          url: "/bookings/create",
+        },
+      ],
+    },
+    {
+      title: "Client",
+      url: "#",
+      icon: Users,
+      isActive: false,
+      items: [
+        {
+          title: "List",
+          url: "/clients",
+        },
+        {
+          title: "Add New",
+          url: "/clients/create",
+        },
+      ],
+    },
+    {
+      title: "Supplier",
+      url: "#",
+      icon: UserCog,
+      isActive: false,
+      items: [
+        {
+          title: "List",
+          url: "/suppliers",
+        },
+        {
+          title: "Add New",
+          url: "/suppliers/create",
         },
       ],
     },
