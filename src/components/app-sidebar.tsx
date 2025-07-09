@@ -6,6 +6,7 @@ import {
   CalendarCheck,
   Users,
   UserCog,
+  LayoutDashboard,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -35,6 +36,12 @@ const data = {
     },
   ],
   navMain: [
+    {
+      title: "Dashboard",
+      url: "/",
+      icon: LayoutDashboard,
+      isActive: false,
+    },
     {
       title: "Admin",
       url: "#",
