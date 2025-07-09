@@ -76,7 +76,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavUser user={data.user} />
       </SidebarFooter>
       <SidebarRail />
-      <SidebarTrigger className="border border-gray-300 cursor-pointer absolute right-0 top-2/3 translate-x-1/2 bg-white rounded-full p-2 z-20" />
+      <SidebarTrigger className="border border-border cursor-pointer absolute right-0 top-2/3 translate-x-1/2 bg-background rounded-full p-2 z-20" />
     </Sidebar>
   );
 }
