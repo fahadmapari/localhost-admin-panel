@@ -40,7 +40,24 @@ const data = {
       title: "Dashboard",
       url: "/",
       icon: LayoutDashboard,
-      isActive: false,
+      items: [
+        {
+          title: "Bookings Metrics",
+          url: "/dashboard/bookings",
+        },
+        {
+          title: "Products Metrics",
+          url: "/dashboard/products",
+        },
+        {
+          title: "Clients Metrics",
+          url: "/dashboard/clients",
+        },
+        {
+          title: "Suppliers Metrics",
+          url: "/dashboard/suppliers",
+        },
+      ],
     },
     {
       title: "Admin",
