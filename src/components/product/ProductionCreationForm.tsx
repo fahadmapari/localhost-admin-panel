@@ -20,6 +20,9 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
+import { Textarea } from "../ui/textarea";
+
+import DropdownSelect from "../inputs/DropdownSelect";
 
 const ProductionCreationForm = () => {
   const form = useForm<z.infer<typeof productSchema>>({
@@ -91,70 +94,209 @@ const ProductionCreationForm = () => {
   }
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <ScrollArea className="h-full">
-          <Accordion type="single" collapsible className="space-y-4">
-            <AccordionItem
-              className="border p-4 rounded-xl"
-              value="item-1"
-              defaultChecked={true}
+      <form
+        className="h-full flex flex-col"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        <div className="flex-1 overflow-hidden">
+          <ScrollArea className="h-full">
+            <Accordion
+              type="single"
+              collapsible
+              className="space-y-4"
+              defaultValue="item-1"
             >
-              <AccordionTrigger className="text-2xl">
-                Product Information
-              </AccordionTrigger>
-              <AccordionContent>
-                <div className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="title"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Title</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+              <AccordionItem
+                className="border p-4 rounded-xl"
+                value="item-1"
+                defaultChecked={true}
+              >
+                <AccordionTrigger className="text-2xl">
+                  Product Information
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-6">
+                    <FormField
+                      control={form.control}
+                      name="title"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Title</FormLabel>
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl>
-                          <Input className="w-full" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </AccordionContent>
-            </AccordionItem>
+                    <div className="flex w-full gap-4">
+                      <FormField
+                        control={form.control}
+                        name="serviceType"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Service Type</FormLabel>
+                            <FormControl>
+                              <DropdownSelect
+                                value={field.value}
+                                onChange={field.onChange}
+                                defaultValue={field.value}
+                                options={
+                                  productSchema.shape.serviceType.options
+                                }
+                                label="Service Types"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-            <AccordionItem className="border p-4 rounded-xl" value="item-2">
-              <AccordionTrigger className="text-2xl">
-                Product Images
-              </AccordionTrigger>
-              <AccordionContent>
-                Yes. It adheres to the WAI-ARIA design pattern.
-              </AccordionContent>
-            </AccordionItem>
+                      <FormField
+                        control={form.control}
+                        name="tourType"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Tour Type</FormLabel>
+                            <FormControl>
+                              <DropdownSelect
+                                value={field.value}
+                                onChange={field.onChange}
+                                defaultValue={field.value}
+                                options={productSchema.shape.tourType.options}
+                                label="Tour Types"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-            <AccordionItem className="!border p-4 rounded-xl" value="item-3">
-              <AccordionTrigger className="text-2xl">
-                Pricing & Schedule Information
-              </AccordionTrigger>
-              <AccordionContent>
-                Yes. It adheres to the WAI-ARIA design pattern.
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </ScrollArea>
-        <div className="flex justify-center my-6">
+                      <FormField
+                        control={form.control}
+                        name="activityType"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Activity Type</FormLabel>
+                            <FormControl>
+                              <DropdownSelect
+                                value={field.value}
+                                onChange={field.onChange}
+                                defaultValue={field.value}
+                                options={
+                                  productSchema.shape.activityType.options
+                                }
+                                label="Activity Types"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="subType"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Activity Type</FormLabel>
+                            <FormControl>
+                              <DropdownSelect
+                                value={field.value}
+                                onChange={field.onChange}
+                                defaultValue={field.value}
+                                options={productSchema.shape.subType.options}
+                                label="Activity Types"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <FormField
+                      control={form.control}
+                      name="description"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Description</FormLabel>
+                          <FormControl>
+                            <Textarea className="w-full h-[250px]" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <div className="flex w-full gap-4">
+                      <FormField
+                        control={form.control}
+                        name="willSee"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>
+                              You will see (Press enter for multple values)
+                            </FormLabel>
+                            <FormControl>
+                              <Textarea
+                                className="w-full h-[150px]"
+                                {...field}
+                                onChange={(e) =>
+                                  field.onChange(e.target.value.split("\n"))
+                                }
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="willLearn"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>
+                              You will Learn (Press enter for multple values)
+                            </FormLabel>
+                            <FormControl>
+                              <Textarea
+                                className="w-full h-[150px]"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem className="border p-4 rounded-xl" value="item-2">
+                <AccordionTrigger className="text-2xl">
+                  Product Images
+                </AccordionTrigger>
+                <AccordionContent>
+                  Yes. It adheres to the WAI-ARIA design pattern.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem className="!border p-4 rounded-xl" value="item-3">
+                <AccordionTrigger className="text-2xl">
+                  Pricing & Schedule Information
+                </AccordionTrigger>
+                <AccordionContent>
+                  Yes. It adheres to the WAI-ARIA design pattern.
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </ScrollArea>
+        </div>
+        <div className="flex justify-center mt-6">
           <Button className="mx-auto cursor-pointer" type="submit">
             Submit
           </Button>

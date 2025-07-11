@@ -14,17 +14,16 @@ function App() {
       <TooltipProvider>
         <SidebarProvider>
           <AppSidebar variant="sidebar" />
-          <SidebarInset>
+          <SidebarInset className="max-h-screen h-screen overflow-hidden">
             <header className="flex h-12 justify-between shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 pr-4">
               <div></div>
               <ThemeSwitcher />
             </header>
-            <div className="flex flex-1 flex-col gap-4 p-4 pb-0 pt-0">
-              <main className="bg-muted/50 h-full max-h-full overflow-hidden rounded-xl">
-                <Outlet />
-              </main>
+            <main className="h-full gap-4 m-4 mt-0 bg-muted/50 flex-1 overflow-hidden rounded-xl">
+              <Outlet />
+
               <Toaster />
-            </div>
+            </main>
           </SidebarInset>
         </SidebarProvider>
       </TooltipProvider>
