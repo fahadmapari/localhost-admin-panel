@@ -28,6 +28,7 @@ import { MultiSelect } from "../multi-select";
 import { MultiImageUpload } from "../multi-image-upload";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { Switch } from "../ui/switch";
 
 const frameworks: string[] = ["walk"];
 
@@ -72,10 +73,14 @@ const ProductionCreationForm = () => {
       images: [],
       priceModel: "fixed rate",
       currency: "EUR",
-      b2bRate: 0, // Must be a number
-      b2bExtraHourSupplement: 0,
-      b2cRate: 0,
-      b2cExtraHourSupplement: 0,
+      b2bRateInstant: 0, // Must be a number
+      b2bExtraHourSupplementInsant: 0,
+      b2bRateOnRequest: 0, // Must be a number
+      b2bExtraHourSupplementOnRequest: 0,
+      b2cRateInstant: 0,
+      b2cExtraHourSupplementInstant: 0,
+      b2cRateOnRequest: 0,
+      b2cExtraHourSupplementOnRequest: 0,
       closedDates: [],
       holidayDates: [],
       publicHolidaySupplementPercent: 0,
@@ -91,8 +96,8 @@ const ProductionCreationForm = () => {
       cancellationTerms: [],
       realease: "", // optional in schema, initialize as empty string
       isB2B: true,
-      isB2C: false,
-      overridePriceFromContract: true,
+      isB2C: true,
+      overridePriceFromContract: false,
       isBookingPerProduct: false,
     },
   });
@@ -810,13 +815,121 @@ const ProductionCreationForm = () => {
                     />
                   </div>
 
-                  <div>
+                  <div className="grid grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
-                      name="currency"
+                      name="b2bRateInstant"
                       render={({ field }) => (
                         <FormItem className="flex-1">
-                          <FormLabel>Rate (B2B Instant )</FormLabel>
+                          <FormLabel>Rate B2B (Instant)</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="number" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="b2bExtraHourSupplementInsant"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>
+                            Extra Hour Supplement(Not "Charges") B2B (Instant)
+                          </FormLabel>
+                          <FormControl>
+                            <Input {...field} type="number" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="b2cRateInstant"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>Rate B2C (Instant)</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="number" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="b2cExtraHourSupplementInstant"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>
+                            Extra Hour Supplement(Not "Charges") B2C (Instant)
+                          </FormLabel>
+                          <FormControl>
+                            <Input {...field} type="number" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="b2bRateOnRequest"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>Rate B2C (On Request)</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="number" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="b2bExtraHourSupplementOnRequest"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>
+                            Extra Hour Supplement(Not "Charges") B2C (On
+                            Request)
+                          </FormLabel>
+                          <FormControl>
+                            <Input {...field} type="number" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="b2cRateOnRequest"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>Rate B2C (On Request)</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="number" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="b2cExtraHourSupplementOnRequest"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>
+                            Extra Hour Supplement(Not "Charges") B2C (On
+                            Request)
+                          </FormLabel>
                           <FormControl>
                             <Input {...field} type="number" />
                           </FormControl>
@@ -830,9 +943,78 @@ const ProductionCreationForm = () => {
             </Accordion>
           </ScrollArea>
         </div>
-        <div className="flex justify-center mt-6">
+        <div className="flex flex-col items-center justify-center mt-6 w-full">
+          <div className="flex items-center justify-between w-full mb-4 border border-border rounded-xl p-4">
+            <FormField
+              control={form.control}
+              name="isB2B"
+              render={({ field }) => (
+                <FormItem className="flex flex-col justify-center items-center gap-2">
+                  <FormLabel>B2B Enabled</FormLabel>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="isB2C"
+              render={({ field }) => (
+                <FormItem className="flex flex-col justify-center items-center gap-2">
+                  <FormLabel>B2C Enabled</FormLabel>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="overridePriceFromContract"
+              render={({ field }) => (
+                <FormItem className="flex flex-col justify-center items-center gap-2">
+                  <FormLabel>Override Price From Contract</FormLabel>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="isBookingPerProduct"
+              render={({ field }) => (
+                <FormItem className="flex flex-col justify-center items-center gap-2">
+                  <FormLabel>Booking Per Product</FormLabel>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <Button className="mx-auto cursor-pointer" type="submit">
-            Submit
+            Create New Product
           </Button>
         </div>
       </form>
