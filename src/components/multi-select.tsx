@@ -92,6 +92,10 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
       }
     }, [selectAll]);
 
+    React.useEffect(() => {
+      onValueChange?.(value ? value : internalValue);
+    }, []);
+
     return (
       <div ref={ref} className={cn("w-full space-y-2", className)}>
         <Popover open={open} onOpenChange={setOpen}>
@@ -137,6 +141,7 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
                     <CommandItem
                       key={option}
                       onSelect={() => handleSelect(option)}
+                      className="capitalize"
                     >
                       <Check
                         className={cn(
@@ -164,7 +169,7 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
                 <Badge
                   variant="secondary"
                   key={item}
-                  className="flex items-center gap-1"
+                  className="flex items-center gap-1 capitalize"
                 >
                   {option}
                   <button

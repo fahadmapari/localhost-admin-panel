@@ -30,11 +30,10 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Switch } from "../ui/switch";
 
-const frameworks: string[] = ["walk"];
-
 const ProductionCreationForm = () => {
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
+    mode: "onChange",
     defaultValues: {
       title: "",
       serviceType: "guide",
@@ -46,7 +45,7 @@ const ProductionCreationForm = () => {
       willLearn: [],
       tourTextLanguage: "english",
       bookingType: "instant",
-      tourGuideLanguageInstant: [],
+      tourGuideLanguageInstant: ["English"],
       tourGuideLanguageOnRequest: [],
       mandatoryInformation: [],
       recommdendedInformation: [],
@@ -719,10 +718,11 @@ const ProductionCreationForm = () => {
                           <FormLabel>Tags</FormLabel>
                           <FormControl>
                             <MultiSelect
-                              options={frameworks}
                               value={field.value}
                               onValueChange={field.onChange}
+                              options={productSchema.shape.tags.element.options}
                               placeholder="Type to search tags..."
+                              defaultValue={field.value}
                             />
                           </FormControl>
                           <FormMessage />

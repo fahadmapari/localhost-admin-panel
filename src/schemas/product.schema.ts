@@ -6,11 +6,11 @@ const meetingPointSchema = z.object({
   country: z.string({ message: "Country is required." }),
   city: z.string({ message: "City is required." }),
   latitude: z
-    .number()
+    .number("Latitude is required.")
     .min(-90, { error: "Latitude must be greater than or equal to -90" })
     .max(90, { error: "Latitude must be less than or equal to 90" }),
   longitude: z
-    .number()
+    .number("Longitude is required.")
     .min(-180, { error: "Longitude must be greater than or equal to -180" })
     .max(180, { error: "Longitude must be less than or equal to 180" }),
   text: z.string().min(1, "Meeting point text is required."),
@@ -79,7 +79,19 @@ export const productSchema = z.object({
     .positive("Max pax must be a positive number."),
   meetingPoint: meetingPointSchema,
   endPoint: endPointSchema.optional(),
-  tags: z.array(z.string({})).min(1, "At least one tag is required."),
+  tags: z
+    .array(
+      z.enum([
+        "walk",
+        "museum",
+        "palace",
+        "science",
+        "technology",
+        "beer",
+        "christmas",
+      ])
+    )
+    .min(1, "At least one tag is required."),
   images: z
     .array(
       z
