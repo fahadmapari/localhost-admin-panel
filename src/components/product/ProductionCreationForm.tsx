@@ -29,6 +29,7 @@ import { MultiImageUpload } from "../multi-image-upload";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Switch } from "../ui/switch";
+import { MultiDateSelect } from "../multi-date-select";
 
 const ProductionCreationForm = () => {
   const form = useForm<z.infer<typeof productSchema>>({
@@ -932,6 +933,50 @@ const ProductionCreationForm = () => {
                           </FormLabel>
                           <FormControl>
                             <Input {...field} type="number" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <Separator />
+
+                  <div className="flex items-start gap-4">
+                    <FormField
+                      control={form.control}
+                      name="closedDates"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>Closed Dates</FormLabel>
+                          <FormControl>
+                            <MultiDateSelect
+                              value={field.value}
+                              onValueChange={field.onChange}
+                              minDate={new Date()}
+                              placeholder="Click to select dates..."
+                              showPresets={false}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="holidayDates"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>Holiday Dates</FormLabel>
+                          <FormControl>
+                            <MultiDateSelect
+                              value={field.value}
+                              onValueChange={field.onChange}
+                              minDate={new Date()}
+                              placeholder="Click to select dates..."
+                              showPresets={false}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
