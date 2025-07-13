@@ -30,6 +30,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Switch } from "../ui/switch";
 import { MultiDateSelect } from "../multi-date-select";
+import { DatePicker } from "../date-picker";
 
 const ProductionCreationForm = () => {
   const form = useForm<z.infer<typeof productSchema>>({
@@ -86,7 +87,7 @@ const ProductionCreationForm = () => {
       publicHolidaySupplementPercent: 0,
       weekendSupplementPercent: 0,
       availability: {
-        startTime: "",
+        startTime: "06:00",
         endTime: "",
         duration: {
           value: 0,
@@ -101,6 +102,12 @@ const ProductionCreationForm = () => {
       isBookingPerProduct: false,
     },
   });
+
+  const {
+    formState: { errors },
+  } = form;
+
+  console.log(errors);
 
   function onSubmit(values: z.infer<typeof productSchema>) {
     console.log(values);
@@ -142,7 +149,7 @@ const ProductionCreationForm = () => {
                 value="item-1"
                 defaultChecked={true}
               >
-                <AccordionTrigger className="text-2xl">
+                <AccordionTrigger className="text-2xl cursor-pointer">
                   Product Information
                 </AccordionTrigger>
                 <AccordionContent>
@@ -552,7 +559,13 @@ const ProductionCreationForm = () => {
                           <FormItem className="flex-1">
                             <FormLabel>No of Pax</FormLabel>
                             <FormControl>
-                              <Input {...field} type="number" />
+                              <Input
+                                {...field}
+                                onChange={(e) =>
+                                  field.onChange(Number(e.target.value))
+                                }
+                                type="number"
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -741,7 +754,7 @@ const ProductionCreationForm = () => {
                 )}
                 value="item-2"
               >
-                <AccordionTrigger className="text-2xl">
+                <AccordionTrigger className="text-2xl cursor-pointer">
                   Product Images
                 </AccordionTrigger>
                 <AccordionContent>
@@ -770,7 +783,7 @@ const ProductionCreationForm = () => {
               </AccordionItem>
 
               <AccordionItem className="!border p-4 rounded-xl" value="item-3">
-                <AccordionTrigger className="text-2xl">
+                <AccordionTrigger className="text-2xl cursor-pointer">
                   Pricing & Schedule Information
                 </AccordionTrigger>
                 <AccordionContent className="space-y-4">
@@ -983,6 +996,193 @@ const ProductionCreationForm = () => {
                       )}
                     />
                   </div>
+
+                  <div className="flex items-start gap-4">
+                    <FormField
+                      control={form.control}
+                      name="publicHolidaySupplementPercent"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>
+                            Public Holiday Supplement in Percentage
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              onChange={(e) =>
+                                field.onChange(Number(e.target.value))
+                              }
+                              type="number"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="weekendSupplementPercent"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>
+                            Weekend Supplement in Percentage
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              onChange={(e) =>
+                                field.onChange(Number(e.target.value))
+                              }
+                              type="number"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <FormField
+                      control={form.control}
+                      name="availability.startDate"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>Start Date</FormLabel>
+                          <FormControl>
+                            <DatePicker
+                              value={field.value}
+                              onChange={field.onChange}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="availability.endDate"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>End Date</FormLabel>
+                          <FormControl>
+                            <DatePicker
+                              value={field.value}
+                              onChange={field.onChange}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="availability.startTime"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>Start Time</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="time" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="availability.endTime"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>End Time</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="time" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <div className="flex gap-2">
+                      <FormField
+                        control={form.control}
+                        name="availability.duration.value"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Duration</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="number" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="availability.duration.unit"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Duration Unit</FormLabel>
+                            <FormControl>
+                              <DropdownSelect
+                                value={field.value}
+                                onChange={field.onChange}
+                                options={
+                                  productSchema.shape.availability.shape
+                                    .duration.shape.unit.options
+                                }
+                                defaultValue={field.value}
+                                label="Duration Units"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+
+                  <FormField
+                    control={form.control}
+                    name="cancellationTerms"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel>
+                          Cancellation Terms (Press enter for multple values)
+                        </FormLabel>
+                        <FormControl>
+                          <Textarea
+                            {...field}
+                            onChange={(e) =>
+                              field.onChange(
+                                e.target.value ? e.target.value.split("\n") : []
+                              )
+                            }
+                            className="w-full h-[150px]"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="realease"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel>Realease</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </AccordionContent>
               </AccordionItem>
             </Accordion>

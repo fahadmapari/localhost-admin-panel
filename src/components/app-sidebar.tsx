@@ -89,6 +89,10 @@ const data = {
           title: "Add New",
           url: "/products/create",
         },
+        {
+          title: "Bulk Upload",
+          url: "/products/bulk-upload",
+        },
       ],
     },
     {

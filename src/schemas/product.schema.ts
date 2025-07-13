@@ -29,7 +29,7 @@ const availabilitySchema = z.object({
   startTime: z.string().min(1, "Start time is required."),
   endTime: z.string().min(1, "End time is required."),
   duration: z.object({
-    value: z.number({ message: "Duration value is required." }),
+    value: z.number("Duration value is required."),
     unit: z.enum(["minutes", "hours", "days"]),
   }),
 });
@@ -75,7 +75,7 @@ export const productSchema = z.object({
     "e-voucher accepted",
   ]),
   maxPax: z
-    .number({ message: "Max pax is required." })
+    .number("Max pax is required.")
     .positive("Max pax must be a positive number."),
   meetingPoint: meetingPointSchema,
   endPoint: endPointSchema.optional(),

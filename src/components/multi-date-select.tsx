@@ -246,6 +246,7 @@ export const MultiDateSelect = React.forwardRef<
                   }}
                   disabled={isDateDisabled}
                   className="rounded-md border-0"
+                  captionLayout="dropdown"
                 />
               </div>
             </div>
