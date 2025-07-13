@@ -21,7 +21,15 @@ const router = createBrowserRouter([
         path: "products/create",
         Component: ProductCreate,
       },
+      {
+        path: "*", // catch-all 404 route
+        element: <div>404 - Page Not Found</div>,
+      },
     ],
+  },
+  {
+    path: "*", // catch-all 404 route
+    element: <div>404 - Page Not Found</div>,
   },
 ]);
 

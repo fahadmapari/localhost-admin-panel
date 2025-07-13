@@ -1114,7 +1114,13 @@ const ProductionCreationForm = () => {
                           <FormItem className="flex-1">
                             <FormLabel>Duration</FormLabel>
                             <FormControl>
-                              <Input {...field} type="number" />
+                              <Input
+                                {...field}
+                                onChange={(e) =>
+                                  field.onChange(parseFloat(e.target.value))
+                                }
+                                type="number"
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
