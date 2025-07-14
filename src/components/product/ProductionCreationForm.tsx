@@ -75,13 +75,13 @@ const ProductionCreationForm = () => {
       priceModel: "fixed rate",
       currency: "EUR",
       b2bRateInstant: 0, // Must be a number
-      b2bExtraHourSupplementInsant: 0,
+      b2bExtraHourSupplementInsant: undefined,
       b2bRateOnRequest: 0, // Must be a number
-      b2bExtraHourSupplementOnRequest: 0,
+      b2bExtraHourSupplementOnRequest: undefined,
       b2cRateInstant: 0,
-      b2cExtraHourSupplementInstant: 0,
+      b2cExtraHourSupplementInstant: undefined,
       b2cRateOnRequest: 0,
-      b2cExtraHourSupplementOnRequest: 0,
+      b2cExtraHourSupplementOnRequest: undefined,
       closedDates: [],
       holidayDates: [],
       publicHolidaySupplementPercent: 0,

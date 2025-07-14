@@ -1,18 +1,17 @@
 import { z } from "zod";
 import languages from "../assets/json/languages.v1.json";
 
-// --- Sub-schemas remain the same ---
 const meetingPointSchema = z.object({
-  country: z.string({ message: "Country is required." }),
-  city: z.string({ message: "City is required." }),
+  country: z.string("Country is required."),
+  city: z.string("City is required."),
   latitude: z
     .number("Latitude is required.")
-    .min(-90, { error: "Latitude must be greater than or equal to -90" })
-    .max(90, { error: "Latitude must be less than or equal to 90" }),
+    .min(-90, "Latitude must be greater than or equal to -90")
+    .max(90, "Latitude must be less than or equal to 90"),
   longitude: z
     .number("Longitude is required.")
-    .min(-180, { error: "Longitude must be greater than or equal to -180" })
-    .max(180, { error: "Longitude must be less than or equal to 180" }),
+    .min(-180, "Longitude must be greater than or equal to -180")
+    .max(180, "Longitude must be less than or equal to 180"),
   text: z.string().min(1, "Meeting point text is required."),
   pickupInstructions: z.array(z.string()).optional(),
 });
@@ -34,7 +33,6 @@ const availabilitySchema = z.object({
   }),
 });
 
-// --- Main Product Schema with corrections ---
 export const productSchema = z.object({
   title: z.string().min(1, "Title is required."),
   serviceType: z.enum(["guide", "assistant"]),
@@ -104,29 +102,29 @@ export const productSchema = z.object({
     .min(1, "At least one image is required."),
   priceModel: z.enum(["fixed rate", "per pax"]),
   currency: z.enum(["USD", "EUR", "GBP", "INR"]),
-  b2bRateInstant: z.number({ message: "B2B rate is required." }),
-  b2bExtraHourSupplementInsant: z.number(),
-  b2bRateOnRequest: z.number({ message: "B2B rate is required." }),
-  b2bExtraHourSupplementOnRequest: z.number(),
-  // Apply .default() to optional numbers to ensure their type is `number` not `number | undefined`
-  b2cRateInstant: z.number(),
-  b2cExtraHourSupplementInstant: z.number(),
-  b2cRateOnRequest: z.number(),
-  b2cExtraHourSupplementOnRequest: z.number(),
+  b2bRateInstant: z.number("B2B Instant rate is required."),
+  b2bExtraHourSupplementInsant: z.number().optional(),
+  b2bRateOnRequest: z.number("B2B On Request rate is required."),
+  b2bExtraHourSupplementOnRequest: z.number().optional(),
+
+  b2cRateInstant: z.number("B2C Instant rate is required."),
+  b2cExtraHourSupplementInstant: z.number().optional(),
+  b2cRateOnRequest: z.number("B2C On Request rate is required."),
+  b2cExtraHourSupplementOnRequest: z.number().optional(),
   closedDates: z.array(z.date()).optional(),
   holidayDates: z.array(z.date()).optional(),
-  // Also apply .default() here
+
   publicHolidaySupplementPercent: z.number(),
   weekendSupplementPercent: z.number(),
   availability: availabilitySchema,
   cancellationTerms: z
     .array(z.string())
     .min(1, "At least one cancellation term is required."),
-  realease: z.string().optional(), // Correctly optional string
+  realease: z.string().min(1, "Realease is required."),
   isB2B: z.boolean(),
   isB2C: z.boolean(),
   overridePriceFromContract: z.boolean(),
-  isBookingPerProduct: z.boolean(), // Correctly included
+  isBookingPerProduct: z.boolean(),
 });
 
 export type ProductFormValues = z.infer<typeof productSchema>;

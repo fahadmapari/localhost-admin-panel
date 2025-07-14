@@ -6,6 +6,7 @@ import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import ProductList from "./pages/product/ProductList.tsx";
 import ProductCreate from "./pages/product/ProductCreate.tsx";
+import LoginPage from "./pages/login/LoginPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
         element: <div>404 - Page Not Found</div>,
       },
     ],
+  },
+  {
+    path: "/login",
+    Component: LoginPage,
   },
   {
     path: "*", // catch-all 404 route
