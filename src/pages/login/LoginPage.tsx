@@ -2,9 +2,23 @@ import { LoginForm } from "@/components/login-form";
 import { Toaster } from "@/components/ui/sonner";
 import { THEME_KEY } from "@/lib/constants";
 import { ThemeProvider } from "@/providers/ThemeProvider";
+import { useAuthStore } from "@/store/auth.store";
+
 import { GalleryVerticalEnd } from "lucide-react";
+import { useEffect, useLayoutEffect } from "react";
+import { redirect, useNavigate } from "react-router";
 
 const LoginPage = () => {
+  const { isLoggedIn, accessToken } = useAuthStore();
+  const navigate = useNavigate();
+
+  useLayoutEffect(() => {
+    console.log(isLoggedIn, accessToken);
+    if (isLoggedIn || accessToken) {
+      navigate("/");
+    }
+  }, [isLoggedIn, accessToken]);
+
   return (
     <ThemeProvider defaultTheme="dark" storageKey={THEME_KEY}>
       <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">

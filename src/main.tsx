@@ -7,11 +7,14 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import ProductList from "./pages/product/ProductList.tsx";
 import ProductCreate from "./pages/product/ProductCreate.tsx";
 import LoginPage from "./pages/login/LoginPage.tsx";
+import AuthProvider from "./providers/AuthProvider.tsx";
+import { routeProtector } from "./loaders/routeProtector.ts";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    loader: routeProtector,
     children: [
       {
         path: "products",
@@ -40,6 +43,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>
 );
