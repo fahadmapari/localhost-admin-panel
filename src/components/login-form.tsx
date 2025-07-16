@@ -72,8 +72,6 @@ export function LoginForm({
       setAccessToken("");
       setIsLoggedIn(false);
     }
-
-    console.log(values);
   }
 
   return (
