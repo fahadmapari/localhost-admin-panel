@@ -9,6 +9,7 @@ import ProductCreate from "./pages/product/ProductCreate.tsx";
 import LoginPage from "./pages/login/LoginPage.tsx";
 import AuthProvider from "./providers/AuthProvider.tsx";
 import { routeProtector } from "./loaders/routeProtector.ts";
+import AdminList from "./pages/admin/AdminList.tsx";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: "products/create",
         Component: ProductCreate,
+      },
+      {
+        path: "admin",
+        Component: AdminList,
       },
       {
         path: "*", // catch-all 404 route

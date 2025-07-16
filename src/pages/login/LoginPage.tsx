@@ -5,8 +5,8 @@ import { ThemeProvider } from "@/providers/ThemeProvider";
 import { useAuthStore } from "@/store/auth.store";
 
 import { GalleryVerticalEnd } from "lucide-react";
-import { useEffect, useLayoutEffect } from "react";
-import { redirect, useNavigate } from "react-router";
+import { useLayoutEffect } from "react";
+import { useNavigate } from "react-router";
 
 const LoginPage = () => {
   const { isLoggedIn, accessToken } = useAuthStore();

@@ -24,11 +24,15 @@ import api from "@/lib/axios";
 import { toast } from "sonner";
 import { AxiosError, isAxiosError } from "axios";
 import { setAuthToken } from "@/lib/axios/token";
+import { useAuthStore } from "@/store/auth.store";
+import { useNavigate } from "react-router";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const { setAccessToken, setIsLoggedIn } = useAuthStore();
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -46,6 +50,10 @@ export function LoginForm({
         password: values.password,
       });
       setAuthToken(data.data.accessToken);
+      setAccessToken(data.data.accessToken);
+      setIsLoggedIn(true);
+
+      navigate("/");
     } catch (err) {
       if (isAxiosError(err)) {
         const error = err as AxiosError;
@@ -59,6 +67,10 @@ export function LoginForm({
           position: "top-center",
         });
       }
+
+      setAuthToken(null);
+      setAccessToken("");
+      setIsLoggedIn(false);
     }
 
     console.log(values);
