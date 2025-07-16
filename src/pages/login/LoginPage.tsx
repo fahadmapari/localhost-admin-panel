@@ -1,4 +1,5 @@
 import { LoginForm } from "@/components/login-form";
+import { Toaster } from "@/components/ui/sonner";
 import { THEME_KEY } from "@/lib/constants";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { GalleryVerticalEnd } from "lucide-react";
@@ -22,6 +23,7 @@ const LoginPage = () => {
           </a>
           <LoginForm />
         </div>
+        <Toaster />
       </div>
     </ThemeProvider>
   );
