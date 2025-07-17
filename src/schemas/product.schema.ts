@@ -48,12 +48,11 @@ export const productSchema = z.object({
     .min(1, "At least one 'will learn' item is required."),
   tourTextLanguage: z.enum(["english"]),
   bookingType: z.enum(["instant", "request"]),
-  tourGuideLanguageInstant: z
-    .array(z.enum([...Object.values(languages)]))
-    .min(1, "At least one 'tour guide language' item is required."),
+  tourGuideLanguageInstant: z.array(z.enum([...Object.values(languages)])),
+
   tourGuideLanguageOnRequest: z
     .array(z.enum([...Object.values(languages)]))
-    .optional(),
+    .min(1, "At least one 'tour guide language' item is required."),
   mandatoryInformation: z
     .array(z.string())
     .min(1, "At least one mandatory information is required."),

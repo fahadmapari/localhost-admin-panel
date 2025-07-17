@@ -27,10 +27,11 @@ import { Separator } from "../ui/separator";
 import { MultiSelect } from "../multi-select";
 import { MultiImageUpload } from "../multi-image-upload";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn, convertToFormData } from "@/lib/utils";
 import { Switch } from "../ui/switch";
 import { MultiDateSelect } from "../multi-date-select";
 import { DatePicker } from "../date-picker";
+import api from "@/lib/axios";
 
 const ProductionCreationForm = () => {
   const form = useForm<z.infer<typeof productSchema>>({
@@ -47,8 +48,8 @@ const ProductionCreationForm = () => {
       willLearn: [],
       tourTextLanguage: "english",
       bookingType: "instant",
-      tourGuideLanguageInstant: ["English"],
-      tourGuideLanguageOnRequest: [],
+      tourGuideLanguageInstant: [],
+      tourGuideLanguageOnRequest: ["English"],
       mandatoryInformation: [],
       recommdendedInformation: [],
       included: [],
@@ -107,13 +108,15 @@ const ProductionCreationForm = () => {
     formState: { errors },
   } = form;
 
-  console.log(errors);
+  async function onSubmit(values: z.infer<typeof productSchema>) {
+    console.log(values);
 
-  function onSubmit(values: z.infer<typeof productSchema>) {
-    console.log(values);
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    const res = await api.post("/products", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    console.log(res);
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -135,7 +138,10 @@ const ProductionCreationForm = () => {
   };
   return (
     <Form {...form}>
-      <form className="h-full flex flex-col" onSubmit={handleSubmit}>
+      <form
+        className="h-full flex flex-col"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
         <div className="flex-1 overflow-hidden">
           <ScrollArea className="h-full">
             <Accordion
@@ -837,7 +843,13 @@ const ProductionCreationForm = () => {
                         <FormItem className="flex-1">
                           <FormLabel>Rate B2B (Instant)</FormLabel>
                           <FormControl>
-                            <Input {...field} type="number" />
+                            <Input
+                              {...field}
+                              onChange={(e) =>
+                                field.onChange(Number(e.target.value))
+                              }
+                              type="number"
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -853,7 +865,13 @@ const ProductionCreationForm = () => {
                             Extra Hour Supplement(Not "Charges") B2B (Instant)
                           </FormLabel>
                           <FormControl>
-                            <Input {...field} type="number" />
+                            <Input
+                              {...field}
+                              onChange={(e) =>
+                                field.onChange(Number(e.target.value))
+                              }
+                              type="number"
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -867,7 +885,13 @@ const ProductionCreationForm = () => {
                         <FormItem className="flex-1">
                           <FormLabel>Rate B2C (Instant)</FormLabel>
                           <FormControl>
-                            <Input {...field} type="number" />
+                            <Input
+                              {...field}
+                              onChange={(e) =>
+                                field.onChange(Number(e.target.value))
+                              }
+                              type="number"
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -883,7 +907,13 @@ const ProductionCreationForm = () => {
                             Extra Hour Supplement(Not "Charges") B2C (Instant)
                           </FormLabel>
                           <FormControl>
-                            <Input {...field} type="number" />
+                            <Input
+                              {...field}
+                              onChange={(e) =>
+                                field.onChange(Number(e.target.value))
+                              }
+                              type="number"
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -897,7 +927,13 @@ const ProductionCreationForm = () => {
                         <FormItem className="flex-1">
                           <FormLabel>Rate B2C (On Request)</FormLabel>
                           <FormControl>
-                            <Input {...field} type="number" />
+                            <Input
+                              {...field}
+                              onChange={(e) =>
+                                field.onChange(Number(e.target.value))
+                              }
+                              type="number"
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -914,7 +950,13 @@ const ProductionCreationForm = () => {
                             Request)
                           </FormLabel>
                           <FormControl>
-                            <Input {...field} type="number" />
+                            <Input
+                              {...field}
+                              onChange={(e) =>
+                                field.onChange(Number(e.target.value))
+                              }
+                              type="number"
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -928,7 +970,13 @@ const ProductionCreationForm = () => {
                         <FormItem className="flex-1">
                           <FormLabel>Rate B2C (On Request)</FormLabel>
                           <FormControl>
-                            <Input {...field} type="number" />
+                            <Input
+                              {...field}
+                              onChange={(e) =>
+                                field.onChange(Number(e.target.value))
+                              }
+                              type="number"
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -945,7 +993,13 @@ const ProductionCreationForm = () => {
                             Request)
                           </FormLabel>
                           <FormControl>
-                            <Input {...field} type="number" />
+                            <Input
+                              {...field}
+                              onChange={(e) =>
+                                field.onChange(Number(e.target.value))
+                              }
+                              type="number"
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
