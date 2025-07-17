@@ -27,7 +27,7 @@ import { Separator } from "../ui/separator";
 import { MultiSelect } from "../multi-select";
 import { MultiImageUpload } from "../multi-image-upload";
 import { toast } from "sonner";
-import { cn, convertToFormData } from "@/lib/utils";
+import { cn, objectToFormData } from "@/lib/utils";
 import { Switch } from "../ui/switch";
 import { MultiDateSelect } from "../multi-date-select";
 import { DatePicker } from "../date-picker";
@@ -53,31 +53,30 @@ const ProductionCreationForm = () => {
       mandatoryInformation: [],
       recommdendedInformation: [],
       included: [],
-      excluded: [], // optional in schema, initialize as empty array
+      excluded: [],
       activitySuitableFor: "all",
       voucherType: "printed or e-voucher accepted",
-      maxPax: 15, // Must be a positive number
+      maxPax: 15,
       meetingPoint: {
         country: "germany",
         city: "berlin",
-        latitude: undefined, // Using 0 as a placeholder
+        latitude: undefined,
         longitude: undefined,
         text: "",
         pickupInstructions: [],
       },
       endPoint: {
-        // optional in schema, but good to initialize
         latitude: undefined,
         longitude: undefined,
         text: undefined,
       },
-      tags: ["walk"], // optional in schema, initialize as empty array
+      tags: ["walk"],
       images: [],
       priceModel: "fixed rate",
       currency: "EUR",
-      b2bRateInstant: 0, // Must be a number
+      b2bRateInstant: 0,
       b2bExtraHourSupplementInsant: undefined,
-      b2bRateOnRequest: 0, // Must be a number
+      b2bRateOnRequest: 0,
       b2bExtraHourSupplementOnRequest: undefined,
       b2cRateInstant: 0,
       b2cExtraHourSupplementInstant: undefined,
@@ -96,7 +95,7 @@ const ProductionCreationForm = () => {
         },
       },
       cancellationTerms: [],
-      realease: "", // optional in schema, initialize as empty string
+      realease: "",
       isB2B: true,
       isB2C: true,
       overridePriceFromContract: false,
@@ -109,7 +108,11 @@ const ProductionCreationForm = () => {
   } = form;
 
   async function onSubmit(values: z.infer<typeof productSchema>) {
-    console.log(values);
+    const formData = objectToFormData(values);
+
+    for (const [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
 
     const res = await api.post("/products", formData, {
       headers: {

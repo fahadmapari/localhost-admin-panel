@@ -5,61 +5,42 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const convertToFormData = (values, options = {}) => {
-  const { arrayFormat = "brackets", skipEmpty = false } = options;
-  const formData = new FormData();
+export function objectToFormData(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  obj: any,
+  form: FormData = new FormData(),
+  parentKey: string = ""
+): FormData {
+  if (obj === null || obj === undefined) return form;
 
-  const appendValue = (key, value) => {
-    // Skip empty values if option is set
-    if (skipEmpty && (value === "" || value === null || value === undefined)) {
+  Object.entries(obj).forEach(([key, value]) => {
+    const fullKey = parentKey ? `${parentKey}.${key}` : key;
+
+    if (value === undefined || value === null) {
+      // Optionally: form.append(fullKey, '');
       return;
     }
 
-    // Handle File objects
     if (value instanceof File) {
-      formData.append(key, value);
-      return;
-    }
+      form.append(fullKey, value);
+    } else if (Array.isArray(value)) {
+      value.forEach((item) => {
+        if (item === undefined || item === null) return;
 
-    // Handle FileList objects
-    if (value instanceof FileList) {
-      Array.from(value).forEach((file, index) => {
-        const fileKey = arrayFormat === "brackets" ? `${key}[${index}]` : key;
-        formData.append(fileKey, file);
+        if (item instanceof File) {
+          form.append(fullKey, item); // 👈 No []
+        } else if (typeof item === "object") {
+          objectToFormData(item, form, fullKey); // keep fullKey same
+        } else {
+          form.append(fullKey, item); // 👈 No []
+        }
       });
-      return;
+    } else if (typeof value === "object") {
+      objectToFormData(value, form, fullKey);
+    } else {
+      form.append(fullKey, value);
     }
-
-    // Handle arrays
-    if (Array.isArray(value)) {
-      value.forEach((item, index) => {
-        const arrayKey = arrayFormat === "brackets" ? `${key}[${index}]` : key;
-        appendValue(arrayKey, item);
-      });
-      return;
-    }
-
-    // Handle nested objects
-    if (
-      value !== null &&
-      typeof value === "object" &&
-      !(value instanceof Date)
-    ) {
-      Object.keys(value).forEach((nestedKey) => {
-        const nestedKeyName = `${key}[${nestedKey}]`;
-        appendValue(nestedKeyName, value[nestedKey]);
-      });
-      return;
-    }
-
-    // Handle primitive values
-    formData.append(key, value);
-  };
-
-  // Process all form values
-  Object.keys(values).forEach((key) => {
-    appendValue(key, values[key]);
   });
 
-  return formData;
-};
+  return form;
+}
