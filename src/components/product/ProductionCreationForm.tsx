@@ -110,10 +110,6 @@ const ProductionCreationForm = () => {
   async function onSubmit(values: z.infer<typeof productSchema>) {
     const formData = objectToFormData(values);
 
-    for (const [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
-
     const res = await api.post("/products", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -293,7 +289,7 @@ const ProductionCreationForm = () => {
                                 onChange={(e) =>
                                   field.onChange(
                                     e.target.value
-                                      ? e.target.value.split("\n")
+                                      ? [...e.target.value.split("\n")]
                                       : []
                                   )
                                 }
@@ -319,7 +315,7 @@ const ProductionCreationForm = () => {
                                 onChange={(e) =>
                                   field.onChange(
                                     e.target.value
-                                      ? e.target.value.split("\n")
+                                      ? [...e.target.value.split("\n")]
                                       : []
                                   )
                                 }
