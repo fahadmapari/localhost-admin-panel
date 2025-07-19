@@ -4,7 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { productSchema } from "@/schemas/product.schema";
@@ -118,28 +118,18 @@ const ProductionCreationForm = () => {
     console.log(res);
   }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const isValid = await form.trigger();
-
-    if (!isValid) {
-      toast.error("Please fix all the errors", {
-        position: "top-center",
-        richColors: true,
-      });
-
-      const errors = form.formState.errors;
-
-      return;
-    }
-
-    form.handleSubmit(onSubmit);
+  const onError = (errors: FieldErrors<z.infer<typeof productSchema>>) => {
+    toast.error("Please check and fix all the errors.", {
+      position: "top-center",
+      richColors: true,
+    });
   };
+
   return (
     <Form {...form}>
       <form
         className="h-full flex flex-col"
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(onSubmit, onError)}
       >
         <div className="flex-1 overflow-hidden">
           <ScrollArea className="h-full">
@@ -755,7 +745,7 @@ const ProductionCreationForm = () => {
               <AccordionItem
                 className={cn(
                   "border p-4 rounded-xl",
-                  form.formState.errors.images && "border-destructive"
+                  errors.images && "border-destructive"
                 )}
                 value="item-2"
               >

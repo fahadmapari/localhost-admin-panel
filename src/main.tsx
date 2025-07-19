@@ -10,6 +10,7 @@ import LoginPage from "./pages/login/LoginPage.tsx";
 import AuthProvider from "./providers/AuthProvider.tsx";
 import { routeProtector } from "./loaders/routeProtector.ts";
 import AdminList from "./pages/admin/AdminList.tsx";
+import ProductMetrics from "./pages/dashboard/ProductMetrics.tsx";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,14 @@ const router = createBrowserRouter([
     element: <App />,
     loader: routeProtector,
     children: [
+      {
+        path: "dashboard",
+        element: <div>Dashboard</div>,
+      },
+      {
+        path: "dashboard/products",
+        Component: ProductMetrics,
+      },
       {
         path: "products",
         Component: ProductList,
