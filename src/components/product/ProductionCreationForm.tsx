@@ -107,6 +107,52 @@ const ProductionCreationForm = () => {
     formState: { errors },
   } = form;
 
+  const isPricingScheduleError = (
+    errors: FieldErrors<z.infer<typeof productSchema>>
+  ) => {
+    return errors.b2bRateInstant ||
+      errors.b2bExtraHourSupplementInsant ||
+      errors.b2cRateInstant ||
+      errors.b2cExtraHourSupplementInstant ||
+      errors.b2bRateOnRequest ||
+      errors.b2bExtraHourSupplementOnRequest ||
+      errors.b2cRateOnRequest ||
+      errors.b2cExtraHourSupplementOnRequest ||
+      errors.availability ||
+      errors.priceModel ||
+      errors.currency
+      ? true
+      : false;
+  };
+
+  const isProductInfoError = (
+    errors: FieldErrors<z.infer<typeof productSchema>>
+  ) => {
+    return errors.title ||
+      errors.serviceType ||
+      errors.tourType ||
+      errors.activityType ||
+      errors.subType ||
+      errors.description ||
+      errors.willSee ||
+      errors.willLearn ||
+      errors.tourTextLanguage ||
+      errors.tourGuideLanguageInstant ||
+      errors.tourGuideLanguageOnRequest ||
+      errors.mandatoryInformation ||
+      errors.recommdendedInformation ||
+      errors.included ||
+      errors.excluded ||
+      errors.activitySuitableFor ||
+      errors.voucherType ||
+      errors.maxPax ||
+      errors.meetingPoint ||
+      errors.endPoint ||
+      errors.tags
+      ? true
+      : false;
+  };
+
   async function onSubmit(values: z.infer<typeof productSchema>) {
     const formData = objectToFormData(values);
 
@@ -140,7 +186,10 @@ const ProductionCreationForm = () => {
               defaultValue="item-1"
             >
               <AccordionItem
-                className="border p-4 rounded-xl"
+                className={cn(
+                  "border p-4 rounded-xl",
+                  isProductInfoError(errors) && "border-destructive"
+                )}
                 value="item-1"
                 defaultChecked={true}
               >
@@ -777,7 +826,13 @@ const ProductionCreationForm = () => {
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem className="!border p-4 rounded-xl" value="item-3">
+              <AccordionItem
+                className={cn(
+                  "!border p-4 rounded-xl",
+                  isProductInfoError(errors) && "border-destructive"
+                )}
+                value="item-3"
+              >
                 <AccordionTrigger className="text-2xl cursor-pointer">
                   Pricing & Schedule Information
                 </AccordionTrigger>

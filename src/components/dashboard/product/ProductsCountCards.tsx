@@ -1,5 +1,7 @@
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
+  CardAction,
   CardDescription,
   CardHeader,
   CardTitle,
@@ -17,15 +19,15 @@ const ProductsCountCards = () => {
 
       <Card className="flex-1">
         <CardHeader>
-          <CardDescription>Total Products</CardDescription>
-          <CardTitle className="text-4xl font-semibold">28950</CardTitle>
+          <CardDescription>Total Instant Products </CardDescription>
+          <CardTitle className="text-4xl font-semibold">10000</CardTitle>
         </CardHeader>
       </Card>
 
       <Card className="flex-1">
         <CardHeader>
-          <CardDescription>Total Products</CardDescription>
-          <CardTitle className="text-4xl font-semibold">28950</CardTitle>
+          <CardDescription>Total On Request Products</CardDescription>
+          <CardTitle className="text-4xl font-semibold">5000</CardTitle>
         </CardHeader>
       </Card>
     </div>
