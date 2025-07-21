@@ -5,7 +5,7 @@ import axios from "axios";
 import { redirect } from "react-router";
 
 export const routeProtector = async () => {
-  const { accessToken, setAccessToken, setIsLoggedIn } =
+  const { accessToken, setAccessToken, setIsLoggedIn, setUser } =
     useAuthStore.getState();
   if (accessToken) {
     return null;
@@ -15,9 +15,16 @@ export const routeProtector = async () => {
     const res = await axios.post(BASE_API_URL + "/auth/refresh", undefined, {
       withCredentials: true,
     });
+
     setAccessToken(res.data.data.accessToken);
     setAuthToken(res.data.data.accessToken);
     setIsLoggedIn(true);
+    setUser({
+      id: res.data.data.user.id,
+      name: res.data.data.user.name,
+      role: res.data.data.user.role,
+      email: res.data.data.user.email,
+    });
   } catch {
     setAccessToken("");
     setAuthToken(null);
