@@ -31,7 +31,7 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const { setAccessToken, setIsLoggedIn } = useAuthStore();
+  const { setAccessToken, setIsLoggedIn, setUser } = useAuthStore();
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -50,11 +50,18 @@ export function LoginForm({
       setAuthToken(data.data.accessToken);
       setAccessToken(data.data.accessToken);
       setIsLoggedIn(true);
+      setUser({
+        id: data.data.user.id,
+        name: data.data.user.name,
+        role: data.data.user.role,
+        email: data.data.user.email,
+      });
 
       navigate("/");
     } catch (err) {
       if (isAxiosError(err)) {
         const error = err as AxiosError;
+
         toast.error(error.response?.data?.error || "Something went wrong", {
           richColors: true,
           position: "top-center",

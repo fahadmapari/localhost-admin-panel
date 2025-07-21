@@ -10,9 +10,15 @@ interface AuthState {
         id: string;
         name: string;
         role: string;
+        email: string;
       }
     | undefined;
-  setUser: (user: { id: string; name: string; role: string }) => void;
+  setUser: (user: {
+    id: string;
+    name: string;
+    role: string;
+    email: string;
+  }) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -21,5 +27,6 @@ export const useAuthStore = create<AuthState>((set) => ({
   user: undefined,
   setIsLoggedIn: (isLoggedIn: boolean) => set({ isLoggedIn }),
   setAccessToken: (accessToken: string) => set({ accessToken }),
-  setUser: (user: { id: string; name: string; role: string }) => set({ user }),
+  setUser: (user: { id: string; name: string; role: string; email: string }) =>
+    set({ user }),
 }));
