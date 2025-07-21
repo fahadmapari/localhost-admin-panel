@@ -1,6 +1,5 @@
 import axios from "axios";
 import { BASE_API_URL } from "../constants";
-
 const api = axios.create({
   baseURL: BASE_API_URL,
   withCredentials: true,
@@ -19,9 +18,13 @@ api.interceptors.response.use(
     ) {
       originalRequest._retry = true;
       try {
-        const { data } = await axios.post("/auth/refresh", undefined, {
-          withCredentials: true,
-        });
+        const { data } = await axios.post(
+          BASE_API_URL + "/auth/refresh",
+          undefined,
+          {
+            withCredentials: true,
+          }
+        );
 
         const accessToken = data.data.accessToken;
 

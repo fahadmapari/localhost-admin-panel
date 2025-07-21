@@ -32,6 +32,8 @@ import { Switch } from "../ui/switch";
 import { MultiDateSelect } from "../multi-date-select";
 import { DatePicker } from "../date-picker";
 import api from "@/lib/axios";
+import { useEffect } from "react";
+import { difference } from "lodash";
 
 const ProductionCreationForm = () => {
   const form = useForm<z.infer<typeof productSchema>>({
@@ -107,6 +109,8 @@ const ProductionCreationForm = () => {
     formState: { errors },
   } = form;
 
+  useEffect(() => {}, []);
+
   const isPricingScheduleError = (
     errors: FieldErrors<z.infer<typeof productSchema>>
   ) => {
@@ -156,15 +160,23 @@ const ProductionCreationForm = () => {
   async function onSubmit(values: z.infer<typeof productSchema>) {
     const formData = objectToFormData(values);
 
-    const res = await api.post("/products", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    console.log(res);
+    try {
+      await api.post("/products", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      form.reset();
+    } catch {
+      toast.error("Error while creating product", {
+        position: "top-center",
+        richColors: true,
+      });
+    }
   }
 
-  const onError = (errors: FieldErrors<z.infer<typeof productSchema>>) => {
+  const onError = () => {
     toast.error("Please check and fix all the errors.", {
       position: "top-center",
       richColors: true,
@@ -400,7 +412,13 @@ const ProductionCreationForm = () => {
                             <FormControl>
                               <MultiSelect
                                 value={field.value}
-                                onValueChange={field.onChange}
+                                onValueChange={(value) => {
+                                  const uniqueValues = difference(
+                                    value,
+                                    form.getValues().tourGuideLanguageOnRequest
+                                  );
+                                  field.onChange(uniqueValues);
+                                }}
                                 defaultValue={field.value}
                                 options={
                                   productSchema.shape.tourGuideLanguageInstant
@@ -424,7 +442,13 @@ const ProductionCreationForm = () => {
                             <FormControl>
                               <MultiSelect
                                 value={field.value}
-                                onValueChange={field.onChange}
+                                onValueChange={(value) => {
+                                  const uniqueValues = difference(
+                                    value,
+                                    form.getValues().tourGuideLanguageInstant
+                                  );
+                                  field.onChange(uniqueValues);
+                                }}
                                 defaultValue={field.value}
                                 options={
                                   productSchema.shape.tourGuideLanguageInstant
@@ -829,7 +853,7 @@ const ProductionCreationForm = () => {
               <AccordionItem
                 className={cn(
                   "!border p-4 rounded-xl",
-                  isProductInfoError(errors) && "border-destructive"
+                  isPricingScheduleError(errors) && "border-destructive"
                 )}
                 value="item-3"
               >
