@@ -2,6 +2,7 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -14,6 +15,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Loader } from "../ui/loader";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../ui/pagination";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -30,6 +39,7 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
@@ -76,6 +86,27 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
+      <Pagination className="border-t border-border">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious onClick={() => table.previousPage()} />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">First</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">1</PaginationLink>
+          </PaginationItem>
+
+          <PaginationItem>
+            <PaginationLink href="#">Last</PaginationLink>
+          </PaginationItem>
+
+          <PaginationItem>
+            <PaginationNext onClick={() => table.nextPage()} />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 }
