@@ -75,3 +75,58 @@ export interface TourProduct {
   updatedAt: string; // ISO date string
   __v: number;
 }
+
+export interface TourListType {
+  baseProduct: {
+    _id: string;
+    title: string;
+    serviceType: string;
+    tourType: string;
+    activityType: string;
+    subType: string;
+    description: string;
+    willSee: string[];
+    willLearn: string[];
+    tourTextLanguage: string;
+    bookingType: string;
+    tourGuideLanguageInstant: string[];
+    tourGuideLanguageOnRequest: string[];
+    mandatoryInformation: string[];
+    recommdendedInformation: string[];
+    included: string[];
+    excluded: string[];
+    activitySuitableFor: string;
+    voucherType: string;
+    maxPax: number;
+    meetingPoint: MeetingPoint;
+    endPoint: EndPoint;
+    tags: string[];
+    images: string[];
+    availability: Availability;
+    cancellationTerms: string[];
+    realease: string;
+    closedDates: string[];
+    holidayDates: string[];
+  };
+  _id: string;
+  tourGuideLanguage: string;
+  priceModel: string;
+  currency: string;
+  b2bRateInstant: number;
+  b2bExtraHourSupplementInsant: number;
+  b2bRateOnRequest: number;
+  b2bExtraHourSupplementOnRequest: number;
+  b2cRateInstant: number;
+  b2cExtraHourSupplementInstant: number;
+  b2cRateOnRequest: number;
+  b2cExtraHourSupplementOnRequest: number;
+  publicHolidaySupplementPercent: number;
+  weekendSupplementPercent: number;
+  isB2B: boolean;
+  isB2C: boolean;
+  overridePriceFromContract: boolean;
+  isBookingPerProduct: boolean;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+  __v: number;
+}

@@ -1,17 +1,18 @@
 import { DataTable } from "@/components/common/DataTable";
 import { Loader } from "@/components/ui/loader";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import api from "@/lib/axios";
-import { TourProduct } from "@/types/product";
+import { TourListType } from "@/types/product";
 import { ColumnDef } from "@tanstack/react-table";
 import useSWR from "swr";
 
 interface ProductType {
-  products: TourProduct[];
+  products: TourListType[];
   totalProducts: number;
 }
 
 const List = () => {
-  const columns: ColumnDef<TourProduct>[] = [
+  const columns: ColumnDef<TourListType>[] = [
     {
       accessorKey: "id",
       header: "Sr. No.",
@@ -23,15 +24,19 @@ const List = () => {
       accessorKey: "title",
       header: "Title",
       cell: (info) => {
-        return info.row.original.title;
+        return info.row.original.baseProduct.title;
       },
     },
     {
-      accessorKey: "meetingPoint.country",
+      accessorKey: "tourGuideLanguage",
+      header: "Language",
+    },
+    {
+      accessorKey: "baseProduct.meetingPoint.country",
       header: "Country",
     },
     {
-      accessorKey: "meetingPoint.city",
+      accessorKey: "baseProduct.meetingPoint.city",
       header: "City",
     },
   ];
@@ -40,8 +45,8 @@ const List = () => {
     "/products",
     async (url): Promise<ProductType> => {
       const { data } = await api.get(url);
-      console.log(data.data);
-      return data?.data?.products;
+      console.log(data?.data?.productsData);
+      return data?.data?.productsData;
     }
   );
 
@@ -50,7 +55,7 @@ const List = () => {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 h-full flex flex-col">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-semibold pb-4">Product List</h1>
         <div className="flex gap-2 items-center text-sm">
@@ -60,11 +65,13 @@ const List = () => {
           </span>
         </div>
       </div>
-      <DataTable
-        columns={columns}
-        data={data?.products || []}
-        isLoading={isLoading}
-      />
+      <ScrollArea className="flex-1 overflow-y-hidden">
+        <DataTable
+          columns={columns}
+          data={data?.products || []}
+          isLoading={isLoading}
+        />
+      </ScrollArea>
     </div>
   );
 };
