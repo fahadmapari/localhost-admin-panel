@@ -55,12 +55,12 @@ const availabilitySchema = z
   );
 
 export const productSchema = z.object({
-  title: z.string().min(1, "Title is required."),
+  title: z.string().min(1, "Title is required.").trim(),
   serviceType: z.enum(["guide", "assistant"]),
   tourType: z.enum(["shared", "private"]),
   activityType: z.enum(["city tours"]),
   subType: z.enum(["walking tours"]),
-  description: z.string().min(1, "Description is required."),
+  description: z.string().min(1, "Description is required.").trim(),
   willSee: z
     .array(z.string())
     .min(1, "At least one 'will see' item is required."),

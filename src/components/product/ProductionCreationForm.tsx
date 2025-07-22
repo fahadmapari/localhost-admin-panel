@@ -993,7 +993,7 @@ const ProductionCreationForm = () => {
                       name="b2bRateOnRequest"
                       render={({ field }) => (
                         <FormItem className="flex-1">
-                          <FormLabel>Rate B2C (On Request)</FormLabel>
+                          <FormLabel>Rate B2B (On Request)</FormLabel>
                           <FormControl>
                             <Input
                               {...field}
