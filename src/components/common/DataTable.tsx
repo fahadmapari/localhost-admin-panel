@@ -101,66 +101,70 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      <div className="border-t border-border py-1 flex justify-between items-center">
-        <div />
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationLink
-                className={cn(
-                  !table.getCanPreviousPage() && "opacity-50 cursor-not-allowed"
-                )}
-                onClick={() =>
-                  table.getCanPreviousPage() && table.setPageIndex(0)
-                }
-              >
-                First
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationPrevious
-                className={cn(
-                  !table.getCanPreviousPage() && "opacity-50 cursor-not-allowed"
-                )}
-                onClick={() =>
-                  table.getCanPreviousPage() && table.previousPage()
-                }
-              />
-            </PaginationItem>
+      {Boolean(pageCount && pageCount > 1) && (
+        <div className="border-t border-border py-1 flex justify-between items-center">
+          <div />
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationLink
+                  className={cn(
+                    !table.getCanPreviousPage() &&
+                      "opacity-50 cursor-not-allowed"
+                  )}
+                  onClick={() =>
+                    table.getCanPreviousPage() && table.setPageIndex(0)
+                  }
+                >
+                  First
+                </PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationPrevious
+                  className={cn(
+                    !table.getCanPreviousPage() &&
+                      "opacity-50 cursor-not-allowed"
+                  )}
+                  onClick={() =>
+                    table.getCanPreviousPage() && table.previousPage()
+                  }
+                />
+              </PaginationItem>
 
-            <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
-            </PaginationItem>
+              <PaginationItem>
+                <PaginationLink href="#">1</PaginationLink>
+              </PaginationItem>
 
-            <PaginationItem>
-              <PaginationNext
-                className={cn(
-                  !table.getCanNextPage() && "opacity-50 cursor-not-allowed"
-                )}
-                onClick={() => table.getCanNextPage() && table.nextPage()}
-              />
-            </PaginationItem>
+              <PaginationItem>
+                <PaginationNext
+                  className={cn(
+                    !table.getCanNextPage() && "opacity-50 cursor-not-allowed"
+                  )}
+                  onClick={() => table.getCanNextPage() && table.nextPage()}
+                />
+              </PaginationItem>
 
-            <PaginationItem>
-              <PaginationLink
-                className={cn(
-                  !table.getCanNextPage() && "opacity-50 cursor-not-allowed"
-                )}
-                onClick={() =>
-                  table.getCanNextPage() &&
-                  table.setPageIndex(pageCount ? pageCount - 1 : 0)
-                }
-              >
-                Last
-              </PaginationLink>
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+              <PaginationItem>
+                <PaginationLink
+                  className={cn(
+                    !table.getCanNextPage() && "opacity-50 cursor-not-allowed"
+                  )}
+                  onClick={() =>
+                    table.getCanNextPage() &&
+                    table.setPageIndex(pageCount ? pageCount - 1 : 0)
+                  }
+                >
+                  Last
+                </PaginationLink>
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
 
-        <div className="flex min-w-fit pr-4 text-ring">
-          {(pagination?.pageIndex || 0) + 1}/{pageCount} Pages
+          <div className="flex min-w-fit pr-4 text-ring">
+            {(pagination?.pageIndex || 0) + 1}/{pageCount} Pages
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

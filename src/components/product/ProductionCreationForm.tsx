@@ -168,6 +168,11 @@ const ProductionCreationForm = () => {
       });
 
       form.reset();
+
+      toast.success("Product created successfully", {
+        position: "top-center",
+        richColors: true,
+      });
     } catch {
       toast.error("Error while creating product", {
         position: "top-center",

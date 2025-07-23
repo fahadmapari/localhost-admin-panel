@@ -1,11 +1,12 @@
 import { DataTable } from "@/components/common/DataTable";
 import { Loader } from "@/components/ui/loader";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePaginationControl } from "@/hooks/usePaginationControl";
 import api from "@/lib/axios";
 import { TourListType } from "@/types/product";
 import { ColumnDef } from "@tanstack/react-table";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import useSWR from "swr";
 
@@ -16,6 +17,7 @@ interface ProductType {
 
 const List = () => {
   const [pagination, setPagination] = usePaginationControl();
+  const [bookingType, setBookingType] = useState<string>("all");
   const columns: ColumnDef<TourListType>[] = [
     {
       accessorKey: "id",
@@ -31,6 +33,10 @@ const List = () => {
       cell: (info) => {
         return info.row.original.baseProduct.title;
       },
+    },
+    {
+      accessorKey: "bookingType",
+      header: "Type",
     },
     {
       accessorKey: "tourGuideLanguage",
@@ -82,6 +88,19 @@ const List = () => {
           </span>
         </div>
       </div>
+      <Tabs
+        className="mb-2"
+        defaultValue={"all"}
+        value={bookingType}
+        onValueChange={setBookingType}
+      >
+        <TabsList className="w-full">
+          <TabsTrigger value="all">All</TabsTrigger>
+          <TabsTrigger value="instant">Instant</TabsTrigger>
+          <TabsTrigger value="request">On Request</TabsTrigger>
+          <TabsTrigger value="base">Base</TabsTrigger>
+        </TabsList>
+      </Tabs>
       <ScrollArea className="flex-1 overflow-y-hidden">
         <DataTable
           columns={columns}
