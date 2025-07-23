@@ -53,7 +53,7 @@ const List = () => {
   ];
 
   const { data, error, isLoading } = useSWR(
-    `/products?page=${pagination.pageIndex}&limit=${pagination.pageSize}`,
+    `/products?page=${pagination.pageIndex}&limit=${pagination.pageSize}&bookingType=${bookingType}`,
     async (url): Promise<ProductType> => {
       const { data } = await api.get(url);
       console.log(data?.data?.productsData);
