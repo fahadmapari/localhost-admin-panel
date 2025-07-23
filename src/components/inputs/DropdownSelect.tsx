@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { cn } from "@/lib/utils";
 
 interface Props {
   value: string;
@@ -15,6 +16,7 @@ interface Props {
   defaultValue: string;
   options: string[];
   label: string;
+  className?: string;
 }
 
 const DropdownSelect = ({
@@ -23,10 +25,11 @@ const DropdownSelect = ({
   onChange,
   options,
   label,
+  className,
 }: Props) => {
   return (
     <Select value={value} onValueChange={onChange} defaultValue={defaultValue}>
-      <SelectTrigger className="w-full capitalize">
+      <SelectTrigger className={cn("w-full capitalize", className)}>
         <SelectValue placeholder="Select" />
       </SelectTrigger>
       <SelectContent>

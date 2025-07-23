@@ -1,9 +1,12 @@
 import { DataTable } from "@/components/common/DataTable";
 import { Loader } from "@/components/ui/loader";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { usePaginationControl } from "@/hooks/usePaginationControl";
 import api from "@/lib/axios";
 import { TourListType } from "@/types/product";
 import { ColumnDef } from "@tanstack/react-table";
+import { useMemo } from "react";
+
 import useSWR from "swr";
 
 interface ProductType {
@@ -12,12 +15,14 @@ interface ProductType {
 }
 
 const List = () => {
+  const [pagination, setPagination] = usePaginationControl();
   const columns: ColumnDef<TourListType>[] = [
     {
       accessorKey: "id",
       header: "Sr. No.",
       cell: (info) => {
-        return info.row.index + 1;
+        const { pageIndex, pageSize } = info.table.getState().pagination;
+        return pageIndex * pageSize + info.row.index + 1;
       },
     },
     {
@@ -42,12 +47,20 @@ const List = () => {
   ];
 
   const { data, error, isLoading } = useSWR(
-    "/products",
+    `/products?page=${pagination.pageIndex}&limit=${pagination.pageSize}`,
     async (url): Promise<ProductType> => {
       const { data } = await api.get(url);
       console.log(data?.data?.productsData);
       return data?.data?.productsData;
+    },
+    {
+      revalidateOnFocus: false,
     }
+  );
+
+  const totalProductCount = useMemo(
+    () => data?.totalProducts,
+    [data?.totalProducts]
   );
 
   if (error) {
@@ -61,7 +74,11 @@ const List = () => {
         <div className="flex gap-2 items-center text-sm">
           <span>Total Products: </span>
           <span className="font-medium">
-            {isLoading ? <Loader type="dots" size="sm" /> : data?.totalProducts}
+            {isLoading && !totalProductCount ? (
+              <Loader type="dots" size="sm" />
+            ) : (
+              totalProductCount
+            )}
           </span>
         </div>
       </div>
@@ -70,6 +87,9 @@ const List = () => {
           columns={columns}
           data={data?.products || []}
           isLoading={isLoading}
+          pagination={pagination}
+          onPaginationChange={setPagination}
+          pageCount={Math.ceil((totalProductCount || 0) / pagination.pageSize)}
         />
       </ScrollArea>
     </div>
