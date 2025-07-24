@@ -8,9 +8,9 @@ interface ProductUploadLoaderProps {
 const ProductUploadLoader = ({ open }: ProductUploadLoaderProps) => {
   return (
     <Dialog open={open}>
-      <DialogContent showCloseButton={false}>
+      <DialogContent className="outline-none" showCloseButton={false}>
         <Player
-          src="/lotties/hour-glass.json"
+          src="/lotties/isometric-loader.json"
           loop
           autoplay
           style={{ width: 200 }}
