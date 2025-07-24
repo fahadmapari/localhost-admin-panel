@@ -12,6 +12,11 @@ interface ProductMetricsProps {
   totalProductsCount?: number;
 }
 
+const formatter = new Intl.NumberFormat("en", {
+  notation: "compact",
+  compactDisplay: "short",
+});
+
 const ProductsCountCards = ({
   totalInstantProductsCount,
   totalOnRequestProductsCount,
@@ -24,7 +29,9 @@ const ProductsCountCards = ({
         <CardHeader>
           <CardDescription>Total Unique Products</CardDescription>
           <CardTitle className="text-4xl font-semibold">
-            {totalUniqueProductCount || "-"}
+            {totalUniqueProductCount
+              ? formatter.format(totalUniqueProductCount)
+              : "-"}
           </CardTitle>
         </CardHeader>
       </Card>
@@ -33,7 +40,7 @@ const ProductsCountCards = ({
         <CardHeader>
           <CardDescription>Total Products</CardDescription>
           <CardTitle className="text-4xl font-semibold">
-            {totalProductsCount || "-"}
+            {totalProductsCount ? formatter.format(totalProductsCount) : "-"}
           </CardTitle>
         </CardHeader>
       </Card>
@@ -42,7 +49,9 @@ const ProductsCountCards = ({
         <CardHeader>
           <CardDescription>Total Instant Products </CardDescription>
           <CardTitle className="text-4xl font-semibold">
-            {totalInstantProductsCount || "-"}
+            {totalInstantProductsCount
+              ? formatter.format(totalInstantProductsCount)
+              : "-"}
           </CardTitle>
         </CardHeader>
       </Card>
@@ -51,7 +60,9 @@ const ProductsCountCards = ({
         <CardHeader>
           <CardDescription>Total On Request Products</CardDescription>
           <CardTitle className="text-4xl font-semibold">
-            {totalOnRequestProductsCount || "-"}
+            {totalOnRequestProductsCount
+              ? formatter.format(totalOnRequestProductsCount)
+              : "-"}
           </CardTitle>
         </CardHeader>
       </Card>

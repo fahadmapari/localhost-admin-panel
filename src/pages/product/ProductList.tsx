@@ -6,7 +6,7 @@ import { usePaginationControl } from "@/hooks/usePaginationControl";
 import api from "@/lib/axios";
 import { TourListType } from "@/types/product";
 import { ColumnDef } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import useSWR from "swr";
 
@@ -16,8 +16,19 @@ interface ProductType {
 }
 
 const List = () => {
-  const [pagination, setPagination] = usePaginationControl();
+  const [pagination, setPagination] = usePaginationControl({
+    pageIndex: 0,
+    pageSize: 15,
+  });
   const [bookingType, setBookingType] = useState<string>("all");
+
+  useEffect(() => {
+    setPagination({
+      pageIndex: 0,
+      pageSize: 15,
+    });
+  }, [bookingType]);
+
   const columns: ColumnDef<TourListType>[] = [
     {
       accessorKey: "id",

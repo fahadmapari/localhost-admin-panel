@@ -164,11 +164,11 @@ export function DataTable<TData, TValue>({
                 ).map((page) => (
                   <PaginationLink
                     className={cn(
-                      page === (pagination?.pageIndex || 0 + 1)
+                      page === (pagination?.pageIndex || 0) + 1
                         ? "pointer-events-none"
                         : "opacity-50 cursor-pointer"
                     )}
-                    onClick={() => table.setPageIndex(Number(page))}
+                    onClick={() => table.setPageIndex(Number(page - 1))}
                   >
                     {page}
                   </PaginationLink>
