@@ -5,27 +5,54 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-const ProductsCountCards = () => {
+interface ProductMetricsProps {
+  totalInstantProductsCount?: number;
+  totalOnRequestProductsCount?: number;
+  totalUniqueProductCount?: number;
+  totalProductsCount?: number;
+}
+
+const ProductsCountCards = ({
+  totalInstantProductsCount,
+  totalOnRequestProductsCount,
+  totalProductsCount,
+  totalUniqueProductCount,
+}: ProductMetricsProps) => {
   return (
     <div className="flex gap-4">
       <Card className="flex-1">
         <CardHeader>
+          <CardDescription>Total Unique Products</CardDescription>
+          <CardTitle className="text-4xl font-semibold">
+            {totalUniqueProductCount || "-"}
+          </CardTitle>
+        </CardHeader>
+      </Card>
+
+      <Card className="flex-1">
+        <CardHeader>
           <CardDescription>Total Products</CardDescription>
-          <CardTitle className="text-4xl font-semibold">28950</CardTitle>
+          <CardTitle className="text-4xl font-semibold">
+            {totalProductsCount || "-"}
+          </CardTitle>
         </CardHeader>
       </Card>
 
       <Card className="flex-1">
         <CardHeader>
           <CardDescription>Total Instant Products </CardDescription>
-          <CardTitle className="text-4xl font-semibold">10000</CardTitle>
+          <CardTitle className="text-4xl font-semibold">
+            {totalInstantProductsCount || "-"}
+          </CardTitle>
         </CardHeader>
       </Card>
 
       <Card className="flex-1">
         <CardHeader>
           <CardDescription>Total On Request Products</CardDescription>
-          <CardTitle className="text-4xl font-semibold">5000</CardTitle>
+          <CardTitle className="text-4xl font-semibold">
+            {totalOnRequestProductsCount || "-"}
+          </CardTitle>
         </CardHeader>
       </Card>
     </div>
