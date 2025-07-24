@@ -26,6 +26,10 @@ const ProductMetrics = () => {
     }
   );
 
+  if (error) {
+    return <div className="p-4">Something went wrong</div>;
+  }
+
   return (
     <div className="p-4 h-full flex flex-col">
       <h1 className="text-3xl font-semibold pb-4">Product Metrics</h1>

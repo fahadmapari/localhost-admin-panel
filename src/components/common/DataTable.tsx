@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Loader } from "../ui/loader";
+// import { Loader } from "../ui/loader";
 import {
   Pagination,
   PaginationContent,
@@ -26,6 +26,7 @@ import {
   PaginationPrevious,
 } from "../ui/pagination";
 import { cn } from "@/lib/utils";
+import DocumentLoader from "./DocumentLoader";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -95,7 +96,7 @@ export function DataTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-80 text-center">
-                {isLoading ? <Loader type="spinner" /> : <span>No Data</span>}
+                {isLoading ? <DocumentLoader /> : <span>No Data</span>}
               </TableCell>
             </TableRow>
           )}
