@@ -12,31 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
-const weeklyData = [
-  { day: "Monday", products: 186 },
-  { day: "Tuesday", products: 305 },
-  { day: "Wednesday", products: 237 },
-  { day: "Thrusday", products: 73 },
-  { day: "Friday", products: 209 },
-  { day: "Saturday", products: 214 },
-  { day: "Sunday", products: 500 },
-];
-
-const monthlyData = [
-  { day: "January", products: 186 },
-  { day: "February", products: 305 },
-  { day: "March", products: 237 },
-  { day: "April", products: 73 },
-  { day: "May", products: 209 },
-  { day: "June", products: 214 },
-  { day: "July", products: 500 },
-  { day: "August", products: 186 },
-  { day: "September", products: 305 },
-  { day: "October", products: 237 },
-  { day: "November", products: 73 },
-  { day: "December", products: 209 },
-];
+import dayjs from "dayjs";
 
 const chartConfig = {
   products: {
@@ -45,12 +21,60 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const ProductUploadBarChart = () => {
+interface ProductUploadBarChartProps {
+  last12MonthsProducts: { createdAt: string }[];
+}
+
+const buildWeeklyData = (data: { createdAt: string }[]) => {
+  const weeklyData: Record<string, number> = {};
+
+  for (let i = 7; i >= 0; i--) {
+    const monthName = dayjs().subtract(i, "day").format("dddd");
+    weeklyData[monthName] = 0;
+  }
+
+  for (const product of data) {
+    const day = dayjs(product.createdAt).format("dddd");
+    weeklyData[day] += 1;
+  }
+
+  const weeklyDataArray = Object.entries(weeklyData).map(([key, value]) => {
+    return { day: key, products: value };
+  });
+
+  return weeklyDataArray;
+};
+
+const buildMonthlyData = (data: { createdAt: string }[]) => {
+  const last12Months: Record<string, number> = {};
+
+  for (let i = 11; i >= 0; i--) {
+    const monthName = dayjs().subtract(i, "month").format("MMMM");
+    last12Months[monthName] = 0;
+  }
+
+  for (const product of data) {
+    const monthName = dayjs(product.createdAt).format("MMMM");
+    last12Months[monthName] += 1;
+  }
+
+  const last12MonthsData = Object.entries(last12Months).map(([key, value]) => {
+    return { day: key, products: value };
+  });
+
+  return last12MonthsData;
+};
+
+const ProductUploadBarChart = ({
+  last12MonthsProducts,
+}: ProductUploadBarChartProps) => {
+  const weeklyData = buildWeeklyData(last12MonthsProducts);
+  const monthlyData = buildMonthlyData(last12MonthsProducts);
   return (
     <div className="flex gap-4">
       <Card className="flex-1">
         <CardHeader>
-          <CardTitle>Weekly Uploaded Products</CardTitle>
+          <CardTitle>Weekly Uploaded Unique Products</CardTitle>
           <CardDescription>Last 7 days</CardDescription>
         </CardHeader>
         <CardContent>
@@ -78,7 +102,7 @@ const ProductUploadBarChart = () => {
 
       <Card className="flex-1">
         <CardHeader>
-          <CardTitle>Monthly Uploaded Products</CardTitle>
+          <CardTitle>Monthly Uploaded Unique Products</CardTitle>
           <CardDescription>Last 12 months</CardDescription>
         </CardHeader>
         <CardContent>
@@ -97,7 +121,7 @@ const ProductUploadBarChart = () => {
               <Bar
                 dataKey={"products"}
                 fill="var(--color-products)"
-                radius={8}
+                radius={5}
               />
             </BarChart>
           </ChartContainer>

@@ -1,6 +1,7 @@
 import ProductsCountCards from "@/components/dashboard/product/ProductsCountCards";
 import ProductUploadBarChart from "@/components/dashboard/product/ProductUploadBarChart";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Skeleton } from "@/components/ui/skeleton";
 import api from "@/lib/axios";
 import useSWR from "swr";
 
@@ -30,13 +31,33 @@ const ProductMetrics = () => {
       <h1 className="text-3xl font-semibold pb-4">Product Metrics</h1>
       <ScrollArea className="flex-1 overflow-hidden">
         <div className="space-y-6">
-          <ProductsCountCards
-            totalInstantProductsCount={data?.totalUniqueProductCount}
-            totalOnRequestProductsCount={data?.totalOnRequestProductsCount}
-            totalProductsCount={data?.totalProductsCount}
-            totalUniqueProductCount={data?.totalUniqueProductCount}
-          />
-          <ProductUploadBarChart />
+          {isLoading ? (
+            <>
+              <div className="flex gap-4 items-center">
+                <Skeleton className="flex-1 h-[116px]" />
+                <Skeleton className="flex-1 h-[116px]" />
+                <Skeleton className="flex-1 h-[116px]" />
+                <Skeleton className="flex-1 h-[116px]" />
+              </div>
+
+              <div className="flex gap-4 items-center">
+                <Skeleton className="flex-1 h-[300px]" />
+                <Skeleton className="flex-1 h-[300px]" />
+              </div>
+            </>
+          ) : (
+            <>
+              <ProductsCountCards
+                totalInstantProductsCount={data?.totalInstantProductsCount}
+                totalOnRequestProductsCount={data?.totalOnRequestProductsCount}
+                totalProductsCount={data?.totalProductsCount}
+                totalUniqueProductCount={data?.totalUniqueProductCount}
+              />
+              <ProductUploadBarChart
+                last12MonthsProducts={data?.last12MonthProducts || []}
+              />
+            </>
+          )}
         </div>
       </ScrollArea>
     </div>
