@@ -35,6 +35,7 @@ import api from "@/lib/axios";
 import { useEffect, useState } from "react";
 import { difference } from "lodash";
 import ProductUploadLoader from "./ProductUploadLoader";
+import { MultiValueTextarea } from "../ui/MultiValueTextarea";
 
 const ProductionCreationForm = () => {
   const [isUploading, setIsUploading] = useState(false);
@@ -111,7 +112,9 @@ const ProductionCreationForm = () => {
     formState: { errors },
   } = form;
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log(form.getValues().willSee);
+  }, [form.formState.isValidating]);
 
   const isPricingScheduleError = (
     errors: FieldErrors<z.infer<typeof productSchema>>
@@ -349,16 +352,9 @@ const ProductionCreationForm = () => {
                                 You will see (Press enter for multple values)
                               </FormLabel>
                               <FormControl>
-                                <Textarea
+                                <MultiValueTextarea
                                   className="w-full h-[150px]"
                                   {...field}
-                                  onChange={(e) =>
-                                    field.onChange(
-                                      e.target.value
-                                        ? [...e.target.value.split("\n")]
-                                        : []
-                                    )
-                                  }
                                 />
                               </FormControl>
                               <FormMessage />
@@ -375,16 +371,9 @@ const ProductionCreationForm = () => {
                                 You will Learn (Press enter for multple values)
                               </FormLabel>
                               <FormControl>
-                                <Textarea
+                                <MultiValueTextarea
                                   className="w-full h-[150px]"
                                   {...field}
-                                  onChange={(e) =>
-                                    field.onChange(
-                                      e.target.value
-                                        ? [...e.target.value.split("\n")]
-                                        : []
-                                    )
-                                  }
                                 />
                               </FormControl>
                               <FormMessage />
@@ -493,16 +482,9 @@ const ProductionCreationForm = () => {
                                 values)
                               </FormLabel>
                               <FormControl>
-                                <Textarea
+                                <MultiValueTextarea
                                   className="w-full h-[150px]"
                                   {...field}
-                                  onChange={(e) =>
-                                    field.onChange(
-                                      e.target.value
-                                        ? e.target.value.split("\n")
-                                        : []
-                                    )
-                                  }
                                 />
                               </FormControl>
                               <FormMessage />
@@ -520,16 +502,9 @@ const ProductionCreationForm = () => {
                                 values)
                               </FormLabel>
                               <FormControl>
-                                <Textarea
+                                <MultiValueTextarea
                                   className="w-full h-[150px]"
                                   {...field}
-                                  onChange={(e) =>
-                                    field.onChange(
-                                      e.target.value
-                                        ? e.target.value.split("\n")
-                                        : []
-                                    )
-                                  }
                                 />
                               </FormControl>
                               <FormMessage />
@@ -548,16 +523,9 @@ const ProductionCreationForm = () => {
                                 Included (Press enter for multple values)
                               </FormLabel>
                               <FormControl>
-                                <Textarea
+                                <MultiValueTextarea
                                   className="w-full h-[150px]"
                                   {...field}
-                                  onChange={(e) =>
-                                    field.onChange(
-                                      e.target.value
-                                        ? e.target.value.split("\n")
-                                        : []
-                                    )
-                                  }
                                 />
                               </FormControl>
                               <FormMessage />
@@ -574,16 +542,9 @@ const ProductionCreationForm = () => {
                                 Excluded (Press enter for multple values)
                               </FormLabel>
                               <FormControl>
-                                <Textarea
+                                <MultiValueTextarea
                                   className="w-full h-[150px]"
                                   {...field}
-                                  onChange={(e) =>
-                                    field.onChange(
-                                      e.target.value
-                                        ? e.target.value.split("\n")
-                                        : []
-                                    )
-                                  }
                                 />
                               </FormControl>
                               <FormMessage />
@@ -779,16 +740,9 @@ const ProductionCreationForm = () => {
                           <FormItem className="flex-1">
                             <FormLabel>Pickup Instructions</FormLabel>
                             <FormControl>
-                              <Textarea
+                              <MultiValueTextarea
                                 className="w-full h-[80px]"
                                 {...field}
-                                onChange={(e) =>
-                                  field.onChange(
-                                    e.target.value
-                                      ? e.target.value.split("\n")
-                                      : []
-                                  )
-                                }
                               />
                             </FormControl>
                             <FormMessage />
@@ -1303,15 +1257,8 @@ const ProductionCreationForm = () => {
                             Cancellation Terms (Press enter for multple values)
                           </FormLabel>
                           <FormControl>
-                            <Textarea
+                            <MultiValueTextarea
                               {...field}
-                              onChange={(e) =>
-                                field.onChange(
-                                  e.target.value
-                                    ? e.target.value.split("\n")
-                                    : []
-                                )
-                              }
                               className="w-full h-[150px]"
                             />
                           </FormControl>
