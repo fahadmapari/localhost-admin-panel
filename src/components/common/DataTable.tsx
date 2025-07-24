@@ -28,6 +28,28 @@ import {
 import { cn } from "@/lib/utils";
 import DocumentLoader from "./DocumentLoader";
 
+function getPaginationPages(
+  currentPage: number,
+  totalPages: number,
+  maxVisiblePages: number = 5
+): number[] {
+  const half = Math.floor(maxVisiblePages / 2);
+  let start = Math.max(1, currentPage - half);
+  let end = start + maxVisiblePages - 1;
+
+  if (end > totalPages) {
+    end = totalPages;
+    start = Math.max(1, end - maxVisiblePages + 1);
+  }
+
+  const pages: number[] = [];
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  return pages;
+}
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -110,6 +132,7 @@ export function DataTable<TData, TValue>({
               <PaginationItem>
                 <PaginationLink
                   className={cn(
+                    "cursor-pointer",
                     !table.getCanPreviousPage() &&
                       "opacity-50 cursor-not-allowed"
                   )}
@@ -123,6 +146,7 @@ export function DataTable<TData, TValue>({
               <PaginationItem>
                 <PaginationPrevious
                   className={cn(
+                    "cursor-pointer",
                     !table.getCanPreviousPage() &&
                       "opacity-50 cursor-not-allowed"
                   )}
@@ -133,12 +157,28 @@ export function DataTable<TData, TValue>({
               </PaginationItem>
 
               <PaginationItem>
-                <PaginationLink href="#">1</PaginationLink>
+                {getPaginationPages(
+                  pagination?.pageIndex || 0,
+                  pageCount || 0,
+                  7
+                ).map((page) => (
+                  <PaginationLink
+                    className={cn(
+                      page === (pagination?.pageIndex || 0 + 1)
+                        ? "pointer-events-none"
+                        : "opacity-50 cursor-pointer"
+                    )}
+                    onClick={() => table.setPageIndex(Number(page))}
+                  >
+                    {page}
+                  </PaginationLink>
+                ))}
               </PaginationItem>
 
               <PaginationItem>
                 <PaginationNext
                   className={cn(
+                    "cursor-pointer",
                     !table.getCanNextPage() && "opacity-50 cursor-not-allowed"
                   )}
                   onClick={() => table.getCanNextPage() && table.nextPage()}
@@ -148,6 +188,7 @@ export function DataTable<TData, TValue>({
               <PaginationItem>
                 <PaginationLink
                   className={cn(
+                    "cursor-pointer",
                     !table.getCanNextPage() && "opacity-50 cursor-not-allowed"
                   )}
                   onClick={() =>
