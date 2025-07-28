@@ -70,7 +70,7 @@ export const productSchema = z.object({
   tourTextLanguage: z.enum(["english"]),
   bookingType: z.enum(["instant", "request"]),
   tourGuideLanguageInstant: z.array(z.enum([...Object.values(languages)])),
-
+  tourGuideLanguage: z.string(),
   tourGuideLanguageOnRequest: z
     .array(z.enum([...Object.values(languages)]))
     .min(1, "At least one 'tour guide language' item is required."),
@@ -110,6 +110,7 @@ export const productSchema = z.object({
       ])
     )
     .min(1, "At least one tag is required."),
+  existingImages: z.array(z.string()).optional(),
   images: z
     .array(
       z
@@ -118,6 +119,7 @@ export const productSchema = z.object({
           error: "Only JPG, PNG, and WebP images are allowed.",
         })
         .max(1024 * 1024 * 5, "Image size must be less than 5MB.")
+        .or(z.string())
     )
     .min(1, "At least one image is required."),
   priceModel: z.enum(["fixed rate", "per pax"]),

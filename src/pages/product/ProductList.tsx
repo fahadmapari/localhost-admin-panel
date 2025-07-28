@@ -7,6 +7,7 @@ import api from "@/lib/axios";
 import { TourListType } from "@/types/product";
 import { ColumnDef } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router";
 
 import useSWR from "swr";
 
@@ -42,7 +43,11 @@ const List = () => {
       accessorKey: "title",
       header: "Title",
       cell: (info) => {
-        return info.row.original.baseProduct.title;
+        return (
+          <Link className="underline" to={`/products/${info.row.original._id}`}>
+            {info.row.original.baseProduct.title}
+          </Link>
+        );
       },
     },
     {

@@ -110,6 +110,7 @@ export interface TourListType {
   };
   _id: string;
   tourGuideLanguage: string;
+  bookingType: string;
   priceModel: string;
   currency: string;
   b2bRateInstant: number;

@@ -1,3 +1,5 @@
+"use client";
+
 import type React from "react";
 
 import { useCallback, useEffect, useState } from "react";
@@ -8,14 +10,16 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 interface ImageFile {
-  file: File;
+  file?: File;
+  url?: string;
   preview: string;
   id: string;
+  isExisting?: boolean;
 }
 
 interface MultiImageUploadProps {
-  value?: File[];
-  onChange?: (files: File[]) => void;
+  value?: (File | string)[];
+  onChange?: (files: (File | string)[]) => void;
   maxFiles?: number;
   maxSize?: number; // in MB
   accept?: string;
@@ -35,17 +39,34 @@ export function MultiImageUpload({
   const [images, setImages] = useState<ImageFile[]>([]);
   const [dragActive, setDragActive] = useState(false);
 
-  // Convert File objects to ImageFile objects with previews
+  // Convert File objects and URLs to ImageFile objects with previews
   useEffect(() => {
-    const newImages = value.map((file) => ({
-      file,
-      preview: URL.createObjectURL(file),
-      id: `${file.name}-${file.lastModified}`,
-    }));
+    const newImages = value.map((item, index) => {
+      if (typeof item === "string") {
+        // It's a URL
+        return {
+          url: item,
+          preview: item,
+          id: `url-${item}-${index}`,
+          isExisting: true,
+        };
+      } else {
+        // It's a File object
+        return {
+          file: item,
+          preview: URL.createObjectURL(item),
+          id: `${item.name}-${item.lastModified}`,
+          isExisting: false,
+        };
+      }
+    });
 
-    // Cleanup old previews
+    // Cleanup old previews (only for File objects, not URLs)
     images.forEach((img) => {
-      if (!newImages.find((newImg) => newImg.id === img.id)) {
+      if (
+        !img.isExisting &&
+        !newImages.find((newImg) => newImg.id === img.id)
+      ) {
         URL.revokeObjectURL(img.preview);
       }
     });
@@ -54,7 +75,11 @@ export function MultiImageUpload({
 
     // Cleanup on unmount
     return () => {
-      newImages.forEach((img) => URL.revokeObjectURL(img.preview));
+      newImages.forEach((img) => {
+        if (!img.isExisting) {
+          URL.revokeObjectURL(img.preview);
+        }
+      });
     };
   }, [value]);
 
@@ -81,13 +106,15 @@ export function MultiImageUpload({
           return;
         }
 
-        // Check for duplicates
-        const isDuplicate = value.some(
-          (existingFile) =>
-            existingFile.name === file.name &&
-            existingFile.size === file.size &&
-            existingFile.lastModified === file.lastModified
-        );
+        // Check for duplicates (only against File objects)
+        const isDuplicate = value.some((existingItem) => {
+          if (typeof existingItem === "string") return false;
+          return (
+            existingItem.name === file.name &&
+            existingItem.size === file.size &&
+            existingItem.lastModified === file.lastModified
+          );
+        });
 
         if (!isDuplicate) {
           validFiles.push(file);
@@ -139,6 +166,24 @@ export function MultiImageUpload({
     [handleFiles]
   );
 
+  const getImageDisplayInfo = (image: ImageFile) => {
+    if (image.file) {
+      return {
+        name: image.file.name,
+        size: `${(image.file.size / 1024 / 1024).toFixed(2)} MB`,
+      };
+    } else if (image.url) {
+      const urlParts = image.url.split("/");
+      const fileName = urlParts[urlParts.length - 1] || "Existing image";
+      return {
+        name:
+          fileName.length > 20 ? `${fileName.substring(0, 20)}...` : fileName,
+        size: "Existing",
+      };
+    }
+    return { name: "Unknown", size: "Unknown" };
+  };
+
   return (
     <div className={cn("w-full space-y-4", className)}>
       {/* Upload Area */}
@@ -169,7 +214,7 @@ export function MultiImageUpload({
             Drop images here or click to upload
           </p>
           <p className="text-xs text-muted-foreground mt-1">
-            PNG, JPG, Webp up to {maxSize}MB each (max {maxFiles} files)
+            PNG, JPG, WebP up to {maxSize}MB each (max {maxFiles} files)
           </p>
           {value.length > 0 && (
             <p className="text-xs text-muted-foreground mt-1">
@@ -182,37 +227,45 @@ export function MultiImageUpload({
       {/* Image Thumbnails */}
       {images.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          {images.map((image, index) => (
-            <Card key={image.id} className="relative group overflow-hidden">
-              <div className="h-[200px] relative">
-                <img
-                  src={image.preview || "/placeholder.svg"}
-                  alt={`Upload ${index + 1}`}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => removeImage(index)}
-                    disabled={disabled}
-                    className="h-8 w-8 p-0"
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
+          {images.map((image, index) => {
+            const displayInfo = getImageDisplayInfo(image);
+            return (
+              <Card key={image.id} className="relative group overflow-hidden">
+                <div className="h-[200px] relative">
+                  <img
+                    src={image.preview || "/placeholder.svg"}
+                    alt={`Upload ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                  {image.isExisting && (
+                    <div className="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded">
+                      Existing
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => removeImage(index)}
+                      disabled={disabled}
+                      className="h-8 w-8 p-0"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
-              <div className="p-2">
-                <p className="text-xs text-muted-foreground truncate">
-                  {image.file.name}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {(image.file.size / 1024 / 1024).toFixed(2)} MB
-                </p>
-              </div>
-            </Card>
-          ))}
+                <div className="p-2">
+                  <p className="text-xs text-muted-foreground truncate">
+                    {displayInfo.name}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {displayInfo.size}
+                  </p>
+                </div>
+              </Card>
+            );
+          })}
         </div>
       )}
 

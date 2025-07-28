@@ -17,6 +17,7 @@ interface Props {
   options: string[];
   label: string;
   className?: string;
+  disabled?: boolean;
 }
 
 const DropdownSelect = ({
@@ -26,9 +27,15 @@ const DropdownSelect = ({
   options,
   label,
   className,
+  disabled = false,
 }: Props) => {
   return (
-    <Select value={value} onValueChange={onChange} defaultValue={defaultValue}>
+    <Select
+      value={value}
+      onValueChange={onChange}
+      defaultValue={defaultValue}
+      disabled={disabled}
+    >
       <SelectTrigger className={cn("w-full capitalize", className)}>
         <SelectValue placeholder="Select" />
       </SelectTrigger>

@@ -11,6 +11,7 @@ import AuthProvider from "./providers/AuthProvider.tsx";
 import { routeProtector } from "./loaders/routeProtector.ts";
 import AdminList from "./pages/admin/AdminList.tsx";
 import ProductMetrics from "./pages/dashboard/ProductMetrics.tsx";
+import ProductEdit from "./pages/product/ProductEdit.tsx";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "products/create",
         Component: ProductCreate,
+      },
+      {
+        path: "products/:id",
+        Component: ProductEdit,
       },
       {
         path: "admin",

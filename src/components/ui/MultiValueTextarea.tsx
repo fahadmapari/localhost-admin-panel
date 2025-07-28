@@ -13,6 +13,7 @@ interface MultiValueTextareaProps {
   placeholder?: string;
   className?: string;
   disabled?: boolean;
+  maxHeight?: string;
 }
 
 export function MultiValueTextarea({
@@ -21,6 +22,7 @@ export function MultiValueTextarea({
   placeholder = "Type and press Enter to add tags...",
   className,
   disabled = false,
+  maxHeight = "200px",
 }: MultiValueTextareaProps) {
   const [inputValue, setInputValue] = useState("");
   const [, setIsFocused] = useState(false);
@@ -87,20 +89,22 @@ export function MultiValueTextarea({
   return (
     <div
       className={cn(
-        "flex w-full flex-wrap items-start gap-1 ring-offset-background cursor-text border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30  field-sizing-content min-h-16 rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none  disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+        "flex  flex-wrap items-start gap-1 ring-offset-background cursor-text overflow-y-auto border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 field-sizing-content min-h-16 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
         "focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+        "disabled:cursor-not-allowed disabled:opacity-50",
         disabled && "cursor-not-allowed opacity-50",
         className
       )}
+      style={{ maxHeight }}
       onClick={handleContainerClick}
     >
       {value.map((item, index) => (
         <Badge
           key={index}
           variant="secondary"
-          className="flex items-center gap-1 pr-1 m-0.5 text-xs"
+          className="flex items-center gap-1 pr-1 m-0.5 text-xs max-w-full break-words whitespace-normal"
         >
-          <span>{item}</span>
+          <span className="break-all">{item}</span>
           {!disabled && (
             <button
               type="button"
@@ -108,7 +112,7 @@ export function MultiValueTextarea({
                 e.stopPropagation();
                 removeValue(index);
               }}
-              className="ml-1 rounded-full hover:bg-muted-foreground/20 p-0.5"
+              className="ml-1 rounded-full hover:bg-muted-foreground/20 p-0.5 flex-shrink-0"
             >
               <X className="h-3 w-3" />
             </button>
@@ -127,7 +131,7 @@ export function MultiValueTextarea({
         onBlur={() => setIsFocused(false)}
         placeholder={value.length === 0 ? placeholder : ""}
         disabled={disabled}
-        className="flex-1 min-w-[120px] bg-transparent border-none outline-none placeholder:text-muted-foreground"
+        className="flex-1 min-w-[120px] max-w-full bg-transparent border-none outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed"
       />
     </div>
   );

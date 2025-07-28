@@ -32,17 +32,102 @@ import { Switch } from "../ui/switch";
 import { MultiDateSelect } from "../multi-date-select";
 import { DatePicker } from "../date-picker";
 import api from "@/lib/axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { difference } from "lodash";
 import ProductUploadLoader from "./ProductUploadLoader";
 import { MultiValueTextarea } from "../ui/MultiValueTextarea";
 
-const ProductionCreationForm = () => {
+import languages from "../../assets/json/languages.v1.json";
+
+interface ProductFormProps {
+  isEdit?: boolean;
+  product?: {
+    title: string;
+    serviceType: "guide" | "assistant";
+    tourType: "shared" | "private";
+    activityType: "city tours";
+    subType: "walking tours";
+    description: string;
+    willSee: string[];
+    willLearn: string[];
+    tourTextLanguage: "english";
+    bookingType: "instant" | "request";
+    tourGuideLanguageInstant: string[];
+    tourGuideLanguageOnRequest: string[];
+    mandatoryInformation: string[];
+    recommdendedInformation: string[];
+    included: string[];
+    excluded: string[];
+    activitySuitableFor: "all" | "adults" | "children";
+    voucherType:
+      | "printed or e-voucher accepted"
+      | "printed"
+      | "e-voucher accepted";
+    maxPax: number;
+    meetingPoint: {
+      country: string;
+      city: string;
+      latitude: number;
+      longitude: number;
+      text: string;
+      pickupInstructions: string[];
+    };
+    endPoint: {
+      latitude: number | undefined;
+      longitude: number | undefined;
+      text: string;
+    };
+    tags: (
+      | "walk"
+      | "museum"
+      | "palace"
+      | "science"
+      | "technology"
+      | "beer"
+      | "christmas"
+      | undefined
+    )[];
+    images: (File | string | undefined)[] | undefined;
+    priceModel: "fixed rate" | "per pax";
+    currency: "USD" | "EUR" | "GBP" | "INR";
+    b2bRateInstant: number;
+    b2bExtraHourSupplementInsant: number | undefined;
+    b2bRateOnRequest: number | undefined;
+    b2bExtraHourSupplementOnRequest: number | undefined;
+    b2cRateInstant: number;
+    b2cExtraHourSupplementInstant: number | undefined;
+    b2cRateOnRequest: number | undefined;
+    b2cExtraHourSupplementOnRequest: number | undefined;
+    closedDates: Date[];
+    holidayDates: Date[];
+    publicHolidaySupplementPercent: number;
+    weekendSupplementPercent: number;
+    availability: {
+      startTime: string;
+      endTime: string;
+      duration: {
+        value: number;
+        unit: "minutes" | "hours" | "days";
+      };
+    };
+    cancellationTerms: string[];
+    realease: string;
+    isB2B: boolean;
+    isB2C: boolean;
+    overridePriceFromContract: boolean;
+    isBookingPerProduct: boolean;
+  };
+}
+
+const ProductionCreationForm = ({
+  product,
+  isEdit = false,
+}: ProductFormProps) => {
   const [isUploading, setIsUploading] = useState(false);
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
     mode: "onChange",
-    defaultValues: {
+    defaultValues: product || {
       title: "",
       serviceType: "guide",
       tourType: "private",
@@ -52,7 +137,7 @@ const ProductionCreationForm = () => {
       willSee: [],
       willLearn: [],
       tourTextLanguage: "english",
-      bookingType: "instant",
+      bookingType: "request",
       tourGuideLanguageInstant: [],
       tourGuideLanguageOnRequest: ["English"],
       mandatoryInformation: [],
@@ -112,10 +197,6 @@ const ProductionCreationForm = () => {
     formState: { errors },
   } = form;
 
-  useEffect(() => {
-    console.log(form.getValues().willSee);
-  }, [form.formState.isValidating]);
-
   const isPricingScheduleError = (
     errors: FieldErrors<z.infer<typeof productSchema>>
   ) => {
@@ -162,6 +243,48 @@ const ProductionCreationForm = () => {
       : false;
   };
 
+  async function onEditSubmit(values: z.infer<typeof productSchema>) {
+    values.existingImages = values.images.filter(
+      (image) => typeof image === "string"
+    );
+    values.images = values.images.filter((image) => image instanceof File);
+
+    if (values.images.length === 0 && values.existingImages.length === 0) {
+      toast.error("Please upload atleast one image", {
+        position: "top-center",
+        richColors: true,
+      });
+      return;
+    }
+
+    const formData = objectToFormData(values);
+
+    try {
+      setIsUploading(true);
+      await api.post("/products/edit", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      form.reset();
+
+      setIsUploading(false);
+
+      toast.success("Product created successfully", {
+        position: "top-center",
+        richColors: true,
+      });
+    } catch (error) {
+      setIsUploading(false);
+      console.log(error);
+      toast.error("Error while creating product" + error, {
+        position: "top-center",
+        richColors: true,
+      });
+    }
+  }
+
   async function onSubmit(values: z.infer<typeof productSchema>) {
     const formData = objectToFormData(values);
 
@@ -181,9 +304,10 @@ const ProductionCreationForm = () => {
         position: "top-center",
         richColors: true,
       });
-    } catch {
+    } catch (error) {
       setIsUploading(false);
-      toast.error("Error while creating product", {
+      console.log(error);
+      toast.error("Error while creating product" + error, {
         position: "top-center",
         richColors: true,
       });
@@ -202,7 +326,10 @@ const ProductionCreationForm = () => {
       <Form {...form}>
         <form
           className="h-full flex flex-col"
-          onSubmit={form.handleSubmit(onSubmit, onError)}
+          onSubmit={form.handleSubmit(
+            isEdit ? onEditSubmit : onSubmit,
+            onError
+          )}
         >
           <div className="flex-1 overflow-hidden">
             <ScrollArea className="h-full">
@@ -232,7 +359,11 @@ const ProductionCreationForm = () => {
                           <FormItem>
                             <FormLabel>Title</FormLabel>
                             <FormControl>
-                              <Input {...field} />
+                              <Input
+                                {...field}
+                                className="read-only:opacity-60 read-only:cursor-not-allowed"
+                                readOnly={isEdit}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -255,6 +386,8 @@ const ProductionCreationForm = () => {
                                     productSchema.shape.serviceType.options
                                   }
                                   label="Service Types"
+                                  className="disabled:opacity-60"
+                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -275,6 +408,8 @@ const ProductionCreationForm = () => {
                                   defaultValue={field.value}
                                   options={productSchema.shape.tourType.options}
                                   label="Tour Types"
+                                  className="disabled:opacity-60"
+                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -297,6 +432,8 @@ const ProductionCreationForm = () => {
                                     productSchema.shape.activityType.options
                                   }
                                   label="Activity Types"
+                                  className="disabled:opacity-60"
+                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -309,7 +446,7 @@ const ProductionCreationForm = () => {
                           name="subType"
                           render={({ field }) => (
                             <FormItem className="flex-1">
-                              <FormLabel>Activity Type</FormLabel>
+                              <FormLabel>Sub Type</FormLabel>
                               <FormControl>
                                 <DropdownSelect
                                   value={field.value}
@@ -317,6 +454,8 @@ const ProductionCreationForm = () => {
                                   defaultValue={field.value}
                                   options={productSchema.shape.subType.options}
                                   label="Activity Types"
+                                  className="disabled:opacity-60"
+                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -333,8 +472,9 @@ const ProductionCreationForm = () => {
                             <FormLabel>Description</FormLabel>
                             <FormControl>
                               <Textarea
-                                className="w-full h-[250px]"
+                                className="w-full h-[250px] disabled:opacity-60"
                                 {...field}
+                                disabled={isEdit}
                               />
                             </FormControl>
                             <FormMessage />
@@ -342,7 +482,7 @@ const ProductionCreationForm = () => {
                         )}
                       />
 
-                      <div className="flex w-full gap-4">
+                      <div className="flex items-start w-full gap-4">
                         <FormField
                           control={form.control}
                           name="willSee"
@@ -355,6 +495,7 @@ const ProductionCreationForm = () => {
                                 <MultiValueTextarea
                                   className="w-full h-[150px]"
                                   {...field}
+                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -374,6 +515,7 @@ const ProductionCreationForm = () => {
                                 <MultiValueTextarea
                                   className="w-full h-[150px]"
                                   {...field}
+                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -400,6 +542,7 @@ const ProductionCreationForm = () => {
                                     productSchema.shape.tourTextLanguage.options
                                   }
                                   label="Tour Text Languages"
+                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -407,66 +550,121 @@ const ProductionCreationForm = () => {
                           )}
                         />
 
-                        <FormField
-                          control={form.control}
-                          name="tourGuideLanguageInstant"
-                          render={({ field }) => (
-                            <FormItem className="flex-1">
-                              <FormLabel>
-                                Tour Guide Language (Instant)
-                              </FormLabel>
-                              <FormControl>
-                                <MultiSelect
-                                  value={field.value}
-                                  onValueChange={(value) => {
-                                    const uniqueValues = difference(
-                                      value,
-                                      form.getValues()
-                                        .tourGuideLanguageOnRequest
-                                    );
-                                    field.onChange(uniqueValues);
-                                  }}
-                                  defaultValue={field.value}
-                                  options={
-                                    productSchema.shape.tourGuideLanguageInstant
-                                      .element.options
-                                  }
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                        {isEdit && (
+                          <FormField
+                            control={form.control}
+                            name="tourGuideLanguage"
+                            render={({ field }) => (
+                              <FormItem className="flex-1">
+                                <FormLabel>Tour Guide Language</FormLabel>
+                                <FormControl>
+                                  <DropdownSelect
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    defaultValue={field.value}
+                                    options={Object.values(languages)}
+                                    label="Tour Guide Languages"
+                                    disabled={isEdit}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        )}
 
-                        <FormField
-                          control={form.control}
-                          name="tourGuideLanguageOnRequest"
-                          render={({ field }) => (
-                            <FormItem className="flex-1">
-                              <FormLabel>
-                                Tour Guide Language (On Request)
-                              </FormLabel>
-                              <FormControl>
-                                <MultiSelect
-                                  value={field.value}
-                                  onValueChange={(value) => {
-                                    const uniqueValues = difference(
-                                      value,
-                                      form.getValues().tourGuideLanguageInstant
-                                    );
-                                    field.onChange(uniqueValues);
-                                  }}
-                                  defaultValue={field.value}
-                                  options={
-                                    productSchema.shape.tourGuideLanguageInstant
-                                      .element.options
-                                  }
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                        {isEdit && (
+                          <FormField
+                            control={form.control}
+                            name="bookingType"
+                            render={({ field }) => (
+                              <FormItem className="flex-1">
+                                <FormLabel>Booking Type</FormLabel>
+                                <FormControl>
+                                  <DropdownSelect
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    defaultValue={field.value}
+                                    options={
+                                      productSchema.shape.bookingType.options
+                                    }
+                                    label="Booking Types"
+                                    disabled={isEdit}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        )}
+
+                        {!isEdit && (
+                          <FormField
+                            control={form.control}
+                            name="tourGuideLanguageInstant"
+                            render={({ field }) => (
+                              <FormItem className="flex-1">
+                                <FormLabel>
+                                  Tour Guide Language (Instant)
+                                </FormLabel>
+                                <FormControl>
+                                  <MultiSelect
+                                    value={field.value}
+                                    onValueChange={(value) => {
+                                      const uniqueValues = difference(
+                                        value,
+                                        form.getValues()
+                                          .tourGuideLanguageOnRequest
+                                      );
+                                      field.onChange(uniqueValues);
+                                    }}
+                                    defaultValue={field.value}
+                                    options={
+                                      productSchema.shape
+                                        .tourGuideLanguageInstant.element
+                                        .options
+                                    }
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        )}
+
+                        {!isEdit && (
+                          <FormField
+                            control={form.control}
+                            name="tourGuideLanguageOnRequest"
+                            render={({ field }) => (
+                              <FormItem className="flex-1">
+                                <FormLabel>
+                                  Tour Guide Language (On Request)
+                                </FormLabel>
+                                <FormControl>
+                                  <MultiSelect
+                                    value={field.value}
+                                    onValueChange={(value) => {
+                                      const uniqueValues = difference(
+                                        value,
+                                        form.getValues()
+                                          .tourGuideLanguageInstant
+                                      );
+                                      field.onChange(uniqueValues);
+                                    }}
+                                    defaultValue={field.value}
+                                    options={
+                                      productSchema.shape
+                                        .tourGuideLanguageInstant.element
+                                        .options
+                                    }
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        )}
                       </div>
 
                       <Separator />
@@ -485,6 +683,7 @@ const ProductionCreationForm = () => {
                                 <MultiValueTextarea
                                   className="w-full h-[150px]"
                                   {...field}
+                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -505,6 +704,7 @@ const ProductionCreationForm = () => {
                                 <MultiValueTextarea
                                   className="w-full h-[150px]"
                                   {...field}
+                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -526,6 +726,7 @@ const ProductionCreationForm = () => {
                                 <MultiValueTextarea
                                   className="w-full h-[150px]"
                                   {...field}
+                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -545,6 +746,7 @@ const ProductionCreationForm = () => {
                                 <MultiValueTextarea
                                   className="w-full h-[150px]"
                                   {...field}
+                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -570,6 +772,7 @@ const ProductionCreationForm = () => {
                                       .options
                                   }
                                   label="Suitable For"
+                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -592,6 +795,7 @@ const ProductionCreationForm = () => {
                                     productSchema.shape.voucherType.options
                                   }
                                   label="Voucher Types"
+                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -611,7 +815,9 @@ const ProductionCreationForm = () => {
                                   onChange={(e) =>
                                     field.onChange(Number(e.target.value))
                                   }
+                                  className="read-only:opacity-60 read-only:cursor-not-allowed"
                                   type="number"
+                                  readOnly={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -645,6 +851,7 @@ const ProductionCreationForm = () => {
                                     "africa",
                                   ]}
                                   label="countries"
+                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -665,6 +872,7 @@ const ProductionCreationForm = () => {
                                   defaultValue={field.value}
                                   options={["berlin", "munich", "frankfurt"]}
                                   label="cities"
+                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -689,6 +897,8 @@ const ProductionCreationForm = () => {
                                     )
                                   }
                                   type="number"
+                                  readOnly={isEdit}
+                                  className="read-only:opacity-60 read-only:cursor-not-allowed"
                                 />
                               </FormControl>
                               <FormMessage />
@@ -711,6 +921,8 @@ const ProductionCreationForm = () => {
                                     )
                                   }
                                   type="number"
+                                  readOnly={isEdit}
+                                  className="read-only:opacity-60 read-only:cursor-not-allowed"
                                 />
                               </FormControl>
                               <FormMessage />
@@ -726,7 +938,12 @@ const ProductionCreationForm = () => {
                           <FormItem className="flex-1">
                             <FormLabel>Meeting Point</FormLabel>
                             <FormControl>
-                              <Input {...field} type="text" />
+                              <Input
+                                {...field}
+                                type="text"
+                                readOnly={isEdit}
+                                className="read-only:opacity-60 read-only:cursor-not-allowed"
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -743,6 +960,7 @@ const ProductionCreationForm = () => {
                               <MultiValueTextarea
                                 className="w-full h-[80px]"
                                 {...field}
+                                disabled={isEdit}
                               />
                             </FormControl>
                             <FormMessage />
@@ -757,7 +975,12 @@ const ProductionCreationForm = () => {
                           <FormItem className="flex-1">
                             <FormLabel>End Point</FormLabel>
                             <FormControl>
-                              <Input {...field} type="text" />
+                              <Input
+                                {...field}
+                                type="text"
+                                readOnly={isEdit}
+                                className="read-only:opacity-60 read-only:cursor-not-allowed"
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -779,6 +1002,7 @@ const ProductionCreationForm = () => {
                                 }
                                 placeholder="Type to search tags..."
                                 defaultValue={field.value}
+                                disabled={isEdit}
                               />
                             </FormControl>
                             <FormMessage />
@@ -812,6 +1036,7 @@ const ProductionCreationForm = () => {
                               onChange={field.onChange}
                               maxFiles={5}
                               maxSize={5}
+                              disabled={isEdit}
                             />
                           </FormControl>
                           <FormDescription>
@@ -1065,6 +1290,7 @@ const ProductionCreationForm = () => {
                                 minDate={new Date()}
                                 placeholder="Click to select dates..."
                                 showPresets={false}
+                                disabled={isEdit}
                               />
                             </FormControl>
                             <FormMessage />
@@ -1085,6 +1311,7 @@ const ProductionCreationForm = () => {
                                 minDate={new Date()}
                                 placeholder="Click to select dates..."
                                 showPresets={false}
+                                disabled={isEdit}
                               />
                             </FormControl>
                             <FormMessage />
@@ -1150,6 +1377,7 @@ const ProductionCreationForm = () => {
                               <DatePicker
                                 value={field.value}
                                 onChange={field.onChange}
+                                disabled={() => isEdit}
                               />
                             </FormControl>
                             <FormMessage />
@@ -1167,6 +1395,7 @@ const ProductionCreationForm = () => {
                               <DatePicker
                                 value={field.value}
                                 onChange={field.onChange}
+                                disabled={() => isEdit}
                               />
                             </FormControl>
                             <FormMessage />
@@ -1181,7 +1410,12 @@ const ProductionCreationForm = () => {
                           <FormItem className="flex-1">
                             <FormLabel>Start Time</FormLabel>
                             <FormControl>
-                              <Input {...field} type="time" />
+                              <Input
+                                {...field}
+                                type="time"
+                                readOnly={isEdit}
+                                className="read-only:opacity-60 read-only:cursor-not-allowed"
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -1195,7 +1429,12 @@ const ProductionCreationForm = () => {
                           <FormItem className="flex-1">
                             <FormLabel>End Time</FormLabel>
                             <FormControl>
-                              <Input {...field} type="time" />
+                              <Input
+                                {...field}
+                                type="time"
+                                readOnly={isEdit}
+                                className="read-only:opacity-60 read-only:cursor-not-allowed"
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -1216,6 +1455,8 @@ const ProductionCreationForm = () => {
                                     field.onChange(parseFloat(e.target.value))
                                   }
                                   type="number"
+                                  readOnly={isEdit}
+                                  className="read-only:opacity-60 read-only:cursor-not-allowed"
                                 />
                               </FormControl>
                               <FormMessage />
@@ -1239,6 +1480,7 @@ const ProductionCreationForm = () => {
                                   }
                                   defaultValue={field.value}
                                   label="Duration Units"
+                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -1260,6 +1502,7 @@ const ProductionCreationForm = () => {
                             <MultiValueTextarea
                               {...field}
                               className="w-full h-[150px]"
+                              disabled={isEdit}
                             />
                           </FormControl>
                           <FormMessage />
@@ -1274,7 +1517,11 @@ const ProductionCreationForm = () => {
                         <FormItem className="flex-1">
                           <FormLabel>Realease</FormLabel>
                           <FormControl>
-                            <Input {...field} />
+                            <Input
+                              {...field}
+                              readOnly={isEdit}
+                              className="read-only:opacity-60 read-only:cursor-not-allowed"
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -1363,7 +1610,7 @@ const ProductionCreationForm = () => {
               type="submit"
               disabled={isUploading}
             >
-              Create New Product
+              {isEdit ? "Save changes" : "Create New Product"}
             </Button>
           </div>
         </form>
