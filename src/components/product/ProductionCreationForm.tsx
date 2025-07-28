@@ -1602,16 +1602,31 @@ const ProductionCreationForm = ({
                 )}
               />
             </div>
-            <Button
-              className={cn(
-                "mx-auto cursor-pointer",
-                isUploading && "opacity-50"
+            <div className="flex items-center gap-4">
+              <Button
+                className={cn(
+                  "mx-auto cursor-pointer",
+                  isUploading && "opacity-50"
+                )}
+                type="submit"
+                disabled={isUploading}
+              >
+                {isEdit ? "Update Current" : "Create New Product"}
+              </Button>
+
+              {isEdit && (
+                <Button
+                  className={cn(
+                    "mx-auto cursor-pointer",
+                    isUploading && "opacity-50"
+                  )}
+                  type="button"
+                  disabled={isUploading}
+                >
+                  Update All
+                </Button>
               )}
-              type="submit"
-              disabled={isUploading}
-            >
-              {isEdit ? "Save changes" : "Create New Product"}
-            </Button>
+            </div>
           </div>
         </form>
       </Form>
