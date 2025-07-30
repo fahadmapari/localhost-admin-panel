@@ -81,6 +81,7 @@ interface InitialProductState {
   isB2C: boolean;
   overridePriceFromContract: boolean;
   isBookingPerProduct: boolean;
+  productCode: string;
 }
 
 const ProductEdit = () => {
@@ -92,39 +93,39 @@ const ProductEdit = () => {
 
     const productData = {
       title: product.baseProduct.title,
-      serviceType: product.baseProduct.serviceType,
-      tourType: product.baseProduct.tourType,
-      activityType: product.baseProduct.activityType,
-      subType: product.baseProduct.subType,
-      description: product.baseProduct.description,
-      willSee: product.baseProduct.willSee,
-      willLearn: product.baseProduct.willLearn,
-      tourTextLanguage: product.baseProduct.tourTextLanguage,
+      serviceType: product.serviceType,
+      tourType: product.tourType,
+      activityType: product.activityType,
+      subType: product.subType,
+      description: product.description,
+      willSee: product.willSee,
+      willLearn: product.willLearn,
+      tourTextLanguage: product.tourTextLanguage,
       bookingType: product.bookingType,
       tourGuideLanguageInstant: product.baseProduct.tourGuideLanguageInstant,
       tourGuideLanguageOnRequest:
         product.baseProduct.tourGuideLanguageOnRequest,
-      mandatoryInformation: product.baseProduct.mandatoryInformation,
-      recommdendedInformation: product.baseProduct.recommdendedInformation,
-      included: product.baseProduct.included,
-      excluded: product.baseProduct.excluded,
-      activitySuitableFor: product.baseProduct.activitySuitableFor,
-      voucherType: product.baseProduct.voucherType,
-      maxPax: product.baseProduct.maxPax,
+      mandatoryInformation: product.mandatoryInformation,
+      recommdendedInformation: product.recommdendedInformation,
+      included: product.included,
+      excluded: product.excluded,
+      activitySuitableFor: product.activitySuitableFor,
+      voucherType: product.voucherType,
+      maxPax: product.maxPax,
       meetingPoint: {
-        country: product.baseProduct.meetingPoint.country,
-        city: product.baseProduct.meetingPoint.city,
-        latitude: product.baseProduct.meetingPoint.latitude,
-        longitude: product.baseProduct.meetingPoint.longitude,
-        text: product.baseProduct.meetingPoint.text,
-        pickupInstructions: product.baseProduct.meetingPoint.pickupInstructions,
+        country: product.meetingPoint.country,
+        city: product.meetingPoint.city,
+        latitude: product.meetingPoint.latitude,
+        longitude: product.meetingPoint.longitude,
+        text: product.meetingPoint.text,
+        pickupInstructions: product.meetingPoint.pickupInstructions,
       },
       endPoint: {
         latitude: undefined,
         longitude: undefined,
-        text: product.baseProduct.endPoint.text,
+        text: product.endPoint.text,
       },
-      tags: product.baseProduct.tags,
+      tags: product.tags,
       images: product.baseProduct.images.map((img) => CLOUD_FRONT_URL + img),
       priceModel: product.priceModel,
       currency: product.currency,
@@ -136,33 +137,32 @@ const ProductEdit = () => {
       b2cExtraHourSupplementInstant: product.b2cExtraHourSupplementInstant,
       b2cRateOnRequest: product.b2cRateOnRequest,
       b2cExtraHourSupplementOnRequest: product.b2cExtraHourSupplementOnRequest,
-      closedDates: product.baseProduct.closedDates.map(
-        (date) => new Date(date)
-      ),
-      holidayDates: product.baseProduct.holidayDates.map(
-        (date) => new Date(date)
-      ),
+      closedDates: product.closedDates.map((date) => new Date(date)),
+      holidayDates: product.holidayDates.map((date) => new Date(date)),
       publicHolidaySupplementPercent: product.publicHolidaySupplementPercent,
       weekendSupplementPercent: product.weekendSupplementPercent,
       availability: {
-        startTime: product.baseProduct.availability.startTime,
-        endTime: product.baseProduct.availability.endTime,
+        startTime: product.availability.startTime,
+        endTime: product.availability.endTime,
         duration: {
-          value: product.baseProduct.availability.duration.value,
-          unit: product.baseProduct.availability.duration.unit,
+          value: product.availability.duration.value,
+          unit: product.availability.duration.unit,
         },
       },
-      cancellationTerms: product.baseProduct.cancellationTerms,
-      realease: product.baseProduct.realease,
+      cancellationTerms: product.cancellationTerms,
+      realease: product.realease,
       isB2B: product.isB2B,
       isB2C: product.isB2C,
       overridePriceFromContract: product.overridePriceFromContract,
       isBookingPerProduct: product.isBookingPerProduct,
       tourGuideLanguage: product.tourGuideLanguage,
+      productCode: product.productCode,
     };
 
     return productData as InitialProductState;
   });
+
+  console.log(data);
 
   return (
     <div className="h-full p-4">

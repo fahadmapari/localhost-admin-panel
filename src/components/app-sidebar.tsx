@@ -143,6 +143,22 @@ const data = {
         },
       ],
     },
+    {
+      title: "HR",
+      url: "#",
+      icon: UserCog,
+      isActive: false,
+      items: [
+        {
+          title: "List",
+          url: "/hr",
+        },
+        {
+          title: "Add New",
+          url: "/hr/create",
+        },
+      ],
+    },
   ],
 };
 

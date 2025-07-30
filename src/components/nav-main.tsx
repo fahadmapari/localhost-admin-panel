@@ -16,7 +16,8 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
+import { cn } from "@/lib/utils";
 
 export function NavMain({
   items,
@@ -32,6 +33,8 @@ export function NavMain({
     }[];
   }[];
 }) {
+  const { pathname } = useLocation();
+
   return (
     <SidebarGroup>
       <SidebarMenu>
@@ -39,11 +42,19 @@ export function NavMain({
           <Collapsible
             key={item.title}
             asChild
-            defaultOpen={item.isActive}
+            defaultOpen={pathname
+              .split("/")[1]
+              .includes(item.title.toLowerCase())}
             className="group/collapsible"
           >
             <SidebarMenuItem>
-              <CollapsibleTrigger asChild>
+              <CollapsibleTrigger
+                asChild
+                className={cn(
+                  pathname.split("/")[1].includes(item.title.toLowerCase()) &&
+                    "bg-secondary"
+                )}
+              >
                 <SidebarMenuButton tooltip={item.title}>
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>

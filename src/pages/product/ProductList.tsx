@@ -1,4 +1,5 @@
 import { DataTable } from "@/components/common/DataTable";
+import FiltersScreen from "@/components/common/FiltersScreen";
 import { Loader } from "@/components/ui/loader";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -53,18 +54,44 @@ const List = () => {
     {
       accessorKey: "bookingType",
       header: "Type",
+      cell: (info) => {
+        return (
+          <div className="capitalize">{info.row.original.bookingType}</div>
+        );
+      },
     },
     {
       accessorKey: "tourGuideLanguage",
       header: "Language",
+      cell: (info) => {
+        return (
+          <div className="capitalize">
+            {info.row.original.tourGuideLanguage}
+          </div>
+        );
+      },
     },
     {
-      accessorKey: "baseProduct.meetingPoint.country",
+      accessorKey: "meetingPoint.country",
       header: "Country",
+      cell: (info) => {
+        return (
+          <div className="capitalize">
+            {info.row.original.meetingPoint.country}
+          </div>
+        );
+      },
     },
     {
-      accessorKey: "baseProduct.meetingPoint.city",
+      accessorKey: "meetingPoint.city",
       header: "City",
+      cell: (info) => {
+        return (
+          <div className="capitalize">
+            {info.row.original.meetingPoint.city}
+          </div>
+        );
+      },
     },
   ];
 
@@ -93,15 +120,18 @@ const List = () => {
     <div className="p-4 h-full flex flex-col">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-semibold pb-4">Product List</h1>
-        <div className="flex gap-2 items-center text-sm">
-          <span>Total Products: </span>
-          <span className="font-medium">
-            {isLoading && !totalProductCount ? (
-              <Loader type="dots" size="sm" />
-            ) : (
-              totalProductCount
-            )}
-          </span>
+        <div className="flex items-center gap-4">
+          <div className="flex gap-2 items-center text-sm">
+            <span>Total Products: </span>
+            <span className="font-medium">
+              {isLoading && !totalProductCount ? (
+                <Loader type="dots" size="sm" />
+              ) : (
+                totalProductCount
+              )}
+            </span>
+          </div>
+          <FiltersScreen />
         </div>
       </div>
       <Tabs

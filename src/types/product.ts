@@ -80,36 +80,36 @@ export interface TourListType {
   baseProduct: {
     _id: string;
     title: string;
-    serviceType: string;
-    tourType: string;
-    activityType: string;
-    subType: string;
-    description: string;
-    willSee: string[];
-    willLearn: string[];
-    tourTextLanguage: string;
-    bookingType: string;
+
     tourGuideLanguageInstant: string[];
     tourGuideLanguageOnRequest: string[];
-    mandatoryInformation: string[];
-    recommdendedInformation: string[];
-    included: string[];
-    excluded: string[];
-    activitySuitableFor: string;
-    voucherType: string;
-    maxPax: number;
-    meetingPoint: MeetingPoint;
-    endPoint: EndPoint;
-    tags: string[];
     images: string[];
-    availability: Availability;
-    cancellationTerms: string[];
-    realease: string;
-    closedDates: string[];
-    holidayDates: string[];
   };
   _id: string;
+  availability: Availability;
+  cancellationTerms: string[];
+  realease: string;
+  closedDates: string[];
+  holidayDates: string[];
   tourGuideLanguage: string;
+  mandatoryInformation: string[];
+  recommdendedInformation: string[];
+  serviceType: string;
+  tourType: string;
+  activityType: string;
+  subType: string;
+  description: string;
+  willSee: string[];
+  willLearn: string[];
+  tourTextLanguage: string;
+  included: string[];
+  excluded: string[];
+  activitySuitableFor: string;
+  voucherType: string;
+  maxPax: number;
+  meetingPoint: MeetingPoint;
+  endPoint: EndPoint;
+  tags: string[];
   bookingType: string;
   priceModel: string;
   currency: string;
@@ -129,5 +129,6 @@ export interface TourListType {
   isBookingPerProduct: boolean;
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string
+  productCode: string;
   __v: number;
 }

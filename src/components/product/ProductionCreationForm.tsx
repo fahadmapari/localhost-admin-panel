@@ -116,6 +116,7 @@ interface ProductFormProps {
     isB2C: boolean;
     overridePriceFromContract: boolean;
     isBookingPerProduct: boolean;
+    productCode: string;
   };
 }
 
@@ -138,6 +139,7 @@ const ProductionCreationForm = ({
       willLearn: [],
       tourTextLanguage: "english",
       bookingType: "request",
+      tourGuideLanguage: "English",
       tourGuideLanguageInstant: [],
       tourGuideLanguageOnRequest: ["English"],
       mandatoryInformation: [],
@@ -331,6 +333,12 @@ const ProductionCreationForm = ({
             onError
           )}
         >
+          {isEdit && (
+            <div className="flex items-center gap-2 text-sm px-2 mb-2">
+              <span className="font-medium">Product Code:</span>
+              <span className="uppercase">{product?.productCode || "-"}</span>
+            </div>
+          )}
           <div className="flex-1 overflow-hidden">
             <ScrollArea className="h-full">
               <Accordion
@@ -387,7 +395,6 @@ const ProductionCreationForm = ({
                                   }
                                   label="Service Types"
                                   className="disabled:opacity-60"
-                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -409,7 +416,6 @@ const ProductionCreationForm = ({
                                   options={productSchema.shape.tourType.options}
                                   label="Tour Types"
                                   className="disabled:opacity-60"
-                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -433,7 +439,6 @@ const ProductionCreationForm = ({
                                   }
                                   label="Activity Types"
                                   className="disabled:opacity-60"
-                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -455,7 +460,6 @@ const ProductionCreationForm = ({
                                   options={productSchema.shape.subType.options}
                                   label="Activity Types"
                                   className="disabled:opacity-60"
-                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -474,7 +478,6 @@ const ProductionCreationForm = ({
                               <Textarea
                                 className="w-full h-[250px] disabled:opacity-60"
                                 {...field}
-                                disabled={isEdit}
                               />
                             </FormControl>
                             <FormMessage />
@@ -495,7 +498,6 @@ const ProductionCreationForm = ({
                                 <MultiValueTextarea
                                   className="w-full h-[150px]"
                                   {...field}
-                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -515,7 +517,6 @@ const ProductionCreationForm = ({
                                 <MultiValueTextarea
                                   className="w-full h-[150px]"
                                   {...field}
-                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -542,7 +543,6 @@ const ProductionCreationForm = ({
                                     productSchema.shape.tourTextLanguage.options
                                   }
                                   label="Tour Text Languages"
-                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -564,7 +564,6 @@ const ProductionCreationForm = ({
                                     defaultValue={field.value}
                                     options={Object.values(languages)}
                                     label="Tour Guide Languages"
-                                    disabled={isEdit}
                                   />
                                 </FormControl>
                                 <FormMessage />
@@ -589,7 +588,6 @@ const ProductionCreationForm = ({
                                       productSchema.shape.bookingType.options
                                     }
                                     label="Booking Types"
-                                    disabled={isEdit}
                                   />
                                 </FormControl>
                                 <FormMessage />
@@ -683,7 +681,6 @@ const ProductionCreationForm = ({
                                 <MultiValueTextarea
                                   className="w-full h-[150px]"
                                   {...field}
-                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -704,7 +701,6 @@ const ProductionCreationForm = ({
                                 <MultiValueTextarea
                                   className="w-full h-[150px]"
                                   {...field}
-                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -726,7 +722,6 @@ const ProductionCreationForm = ({
                                 <MultiValueTextarea
                                   className="w-full h-[150px]"
                                   {...field}
-                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -746,7 +741,6 @@ const ProductionCreationForm = ({
                                 <MultiValueTextarea
                                   className="w-full h-[150px]"
                                   {...field}
-                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -772,7 +766,6 @@ const ProductionCreationForm = ({
                                       .options
                                   }
                                   label="Suitable For"
-                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -795,7 +788,6 @@ const ProductionCreationForm = ({
                                     productSchema.shape.voucherType.options
                                   }
                                   label="Voucher Types"
-                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -817,7 +809,6 @@ const ProductionCreationForm = ({
                                   }
                                   className="read-only:opacity-60 read-only:cursor-not-allowed"
                                   type="number"
-                                  readOnly={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -851,7 +842,6 @@ const ProductionCreationForm = ({
                                     "africa",
                                   ]}
                                   label="countries"
-                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -872,7 +862,6 @@ const ProductionCreationForm = ({
                                   defaultValue={field.value}
                                   options={["berlin", "munich", "frankfurt"]}
                                   label="cities"
-                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -897,7 +886,6 @@ const ProductionCreationForm = ({
                                     )
                                   }
                                   type="number"
-                                  readOnly={isEdit}
                                   className="read-only:opacity-60 read-only:cursor-not-allowed"
                                 />
                               </FormControl>
@@ -921,7 +909,6 @@ const ProductionCreationForm = ({
                                     )
                                   }
                                   type="number"
-                                  readOnly={isEdit}
                                   className="read-only:opacity-60 read-only:cursor-not-allowed"
                                 />
                               </FormControl>
@@ -941,7 +928,6 @@ const ProductionCreationForm = ({
                               <Input
                                 {...field}
                                 type="text"
-                                readOnly={isEdit}
                                 className="read-only:opacity-60 read-only:cursor-not-allowed"
                               />
                             </FormControl>
@@ -960,7 +946,6 @@ const ProductionCreationForm = ({
                               <MultiValueTextarea
                                 className="w-full h-[80px]"
                                 {...field}
-                                disabled={isEdit}
                               />
                             </FormControl>
                             <FormMessage />
@@ -978,7 +963,6 @@ const ProductionCreationForm = ({
                               <Input
                                 {...field}
                                 type="text"
-                                readOnly={isEdit}
                                 className="read-only:opacity-60 read-only:cursor-not-allowed"
                               />
                             </FormControl>
@@ -1002,7 +986,6 @@ const ProductionCreationForm = ({
                                 }
                                 placeholder="Type to search tags..."
                                 defaultValue={field.value}
-                                disabled={isEdit}
                               />
                             </FormControl>
                             <FormMessage />
@@ -1036,7 +1019,6 @@ const ProductionCreationForm = ({
                               onChange={field.onChange}
                               maxFiles={5}
                               maxSize={5}
-                              disabled={isEdit}
                             />
                           </FormControl>
                           <FormDescription>
@@ -1213,7 +1195,7 @@ const ProductionCreationForm = ({
                         render={({ field }) => (
                           <FormItem className="flex-1">
                             <FormLabel>
-                              Extra Hour Supplement(Not "Charges") B2C (On
+                              Extra Hour Supplement(Not "Charges") B2B (On
                               Request)
                             </FormLabel>
                             <FormControl>
@@ -1290,7 +1272,6 @@ const ProductionCreationForm = ({
                                 minDate={new Date()}
                                 placeholder="Click to select dates..."
                                 showPresets={false}
-                                disabled={isEdit}
                               />
                             </FormControl>
                             <FormMessage />
@@ -1311,7 +1292,6 @@ const ProductionCreationForm = ({
                                 minDate={new Date()}
                                 placeholder="Click to select dates..."
                                 showPresets={false}
-                                disabled={isEdit}
                               />
                             </FormControl>
                             <FormMessage />
@@ -1413,7 +1393,6 @@ const ProductionCreationForm = ({
                               <Input
                                 {...field}
                                 type="time"
-                                readOnly={isEdit}
                                 className="read-only:opacity-60 read-only:cursor-not-allowed"
                               />
                             </FormControl>
@@ -1432,7 +1411,6 @@ const ProductionCreationForm = ({
                               <Input
                                 {...field}
                                 type="time"
-                                readOnly={isEdit}
                                 className="read-only:opacity-60 read-only:cursor-not-allowed"
                               />
                             </FormControl>
@@ -1455,7 +1433,6 @@ const ProductionCreationForm = ({
                                     field.onChange(parseFloat(e.target.value))
                                   }
                                   type="number"
-                                  readOnly={isEdit}
                                   className="read-only:opacity-60 read-only:cursor-not-allowed"
                                 />
                               </FormControl>
@@ -1480,7 +1457,6 @@ const ProductionCreationForm = ({
                                   }
                                   defaultValue={field.value}
                                   label="Duration Units"
-                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -1502,7 +1478,6 @@ const ProductionCreationForm = ({
                             <MultiValueTextarea
                               {...field}
                               className="w-full h-[150px]"
-                              disabled={isEdit}
                             />
                           </FormControl>
                           <FormMessage />
@@ -1519,7 +1494,6 @@ const ProductionCreationForm = ({
                           <FormControl>
                             <Input
                               {...field}
-                              readOnly={isEdit}
                               className="read-only:opacity-60 read-only:cursor-not-allowed"
                             />
                           </FormControl>
@@ -1623,7 +1597,20 @@ const ProductionCreationForm = ({
                   type="button"
                   disabled={isUploading}
                 >
-                  Update All
+                  Update Multiple
+                </Button>
+              )}
+
+              {isEdit && (
+                <Button
+                  className={cn(
+                    "mx-auto cursor-pointer bg-destructive",
+                    isUploading && "opacity-50"
+                  )}
+                  type="button"
+                  disabled={isUploading}
+                >
+                  Delete Product
                 </Button>
               )}
             </div>
