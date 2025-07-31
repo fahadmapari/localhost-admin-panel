@@ -1,3 +1,30 @@
 *{
   box-sizing: border-box;
 }
+
+.scroll-area {
+  overflow-y: auto;
+  --scrollbar-size: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: hsl(240, 5%, 60%) transparent;
+}
+
+/* WebKit (Chrome, Safari) */
+.scroll-area::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+}
+
+.scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-area::-webkit-scrollbar-thumb {
+  background-color: hsl(240, 5%, 60%);
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.scroll-area::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(240, 5%, 40%);
+}

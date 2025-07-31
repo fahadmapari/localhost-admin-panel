@@ -89,9 +89,9 @@ export function MultiValueTextarea({
   return (
     <div
       className={cn(
-        "flex  flex-wrap items-start gap-1 ring-offset-background cursor-text overflow-y-auto border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 field-sizing-content min-h-16 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+        "flex flex-wrap items-start gap-1 ring-offset-background cursor-text overflow-y-auto border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 field-sizing-content min-h-16 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
         "focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
-        "disabled:cursor-not-allowed disabled:opacity-50",
+        "disabled:cursor-not-allowed disabled:opacity-50 scroll-area",
         disabled && "cursor-not-allowed opacity-50",
         className
       )}

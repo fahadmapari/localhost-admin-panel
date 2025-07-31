@@ -80,7 +80,7 @@ export interface TourListType {
   baseProduct: {
     _id: string;
     title: string;
-
+    tourTextLanguage: "english";
     tourGuideLanguageInstant: string[];
     tourGuideLanguageOnRequest: string[];
     images: string[];
@@ -101,7 +101,6 @@ export interface TourListType {
   description: string;
   willSee: string[];
   willLearn: string[];
-  tourTextLanguage: string;
   included: string[];
   excluded: string[];
   activitySuitableFor: string;

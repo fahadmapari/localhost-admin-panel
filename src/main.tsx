@@ -12,6 +12,7 @@ import { routeProtector } from "./loaders/routeProtector.ts";
 import AdminList from "./pages/admin/AdminList.tsx";
 import ProductMetrics from "./pages/dashboard/ProductMetrics.tsx";
 import ProductEdit from "./pages/product/ProductEdit.tsx";
+import Error404 from "./components/common/Error404.tsx";
 
 const router = createBrowserRouter([
   {
@@ -46,7 +47,7 @@ const router = createBrowserRouter([
       },
       {
         path: "*", // catch-all 404 route
-        element: <div>404 - Page Not Found</div>,
+        Component: Error404,
       },
     ],
   },
@@ -56,7 +57,7 @@ const router = createBrowserRouter([
   },
   {
     path: "*", // catch-all 404 route
-    element: <div>404 - Page Not Found</div>,
+    Component: Error404,
   },
 ]);
 

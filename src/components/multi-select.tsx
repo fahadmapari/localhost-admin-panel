@@ -162,7 +162,7 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
 
         {/* Selected Tags Section */}
         {selectedValues.length > 0 && (
-          <div className="flex flex-wrap gap-2 p-2 bg-muted/50 rounded-md border max-h-[100px] overflow-y-auto">
+          <div className="flex flex-wrap gap-2 p-2 bg-muted/50 rounded-md border max-h-[100px] scroll-area  overflow-y-auto ">
             {selectedValues.map((item) => {
               const option = options.find((opt) => opt === item);
               return (

@@ -41,6 +41,7 @@ import languages from "../../assets/json/languages.v1.json";
 import axios from "axios";
 import useSWR from "swr";
 import AlertModal from "../common/AlertModal";
+import MultipleProductEditModal from "./MultipleProductEditModal";
 
 interface ProductFormProps {
   isEdit?: boolean;
@@ -133,6 +134,7 @@ const ProductionCreationForm = ({
   isEdit = false,
 }: ProductFormProps) => {
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const [showMultipleEditModal, setShowMultipleEditModal] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
@@ -1636,6 +1638,7 @@ const ProductionCreationForm = ({
                   )}
                   type="button"
                   disabled={isUploading}
+                  onClick={() => setShowMultipleEditModal(true)}
                 >
                   Update Multiple
                 </Button>
@@ -1675,6 +1678,15 @@ const ProductionCreationForm = ({
         <AlertModal
           open={showDeleteAlert}
           close={() => setShowDeleteAlert(false)}
+        />
+      )}
+
+      {Boolean(isEdit && product) && (
+        <MultipleProductEditModal
+          open={showMultipleEditModal}
+          close={() => setShowMultipleEditModal(false)}
+          instantLanguages={product?.tourGuideLanguageInstant || []}
+          requestLanguages={product?.tourGuideLanguageOnRequest || []}
         />
       )}
     </div>

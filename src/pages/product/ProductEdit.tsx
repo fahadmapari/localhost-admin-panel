@@ -100,7 +100,7 @@ const ProductEdit = () => {
       description: product.description,
       willSee: product.willSee,
       willLearn: product.willLearn,
-      tourTextLanguage: product.tourTextLanguage,
+      tourTextLanguage: product.baseProduct.tourTextLanguage,
       bookingType: product.bookingType,
       tourGuideLanguageInstant: product.baseProduct.tourGuideLanguageInstant,
       tourGuideLanguageOnRequest:
@@ -161,8 +161,6 @@ const ProductEdit = () => {
 
     return productData as InitialProductState;
   });
-
-  console.log(data);
 
   return (
     <div className="h-full p-4">
