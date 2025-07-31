@@ -7,6 +7,7 @@ import {
   Users,
   UserCog,
   LayoutDashboard,
+  Network,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -146,7 +147,7 @@ const data = {
     {
       title: "HR",
       url: "#",
-      icon: UserCog,
+      icon: Network,
       isActive: false,
       items: [
         {

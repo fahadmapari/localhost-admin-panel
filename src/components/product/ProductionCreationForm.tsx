@@ -32,12 +32,15 @@ import { Switch } from "../ui/switch";
 import { MultiDateSelect } from "../multi-date-select";
 import { DatePicker } from "../date-picker";
 import api from "@/lib/axios";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { difference } from "lodash";
 import ProductUploadLoader from "./ProductUploadLoader";
 import { MultiValueTextarea } from "../ui/MultiValueTextarea";
 
 import languages from "../../assets/json/languages.v1.json";
+import axios from "axios";
+import useSWR from "swr";
+import AlertModal from "../common/AlertModal";
 
 interface ProductFormProps {
   isEdit?: boolean;
@@ -120,10 +123,16 @@ interface ProductFormProps {
   };
 }
 
+interface CountryCityType {
+  name: string;
+  cities: string[];
+}
+
 const ProductionCreationForm = ({
   product,
   isEdit = false,
 }: ProductFormProps) => {
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
@@ -195,9 +204,43 @@ const ProductionCreationForm = ({
     },
   });
 
+  const { data: countriesAndCities, isLoading } = useSWR(
+    ["countries", "cities"],
+    async () => {
+      const response = await axios.get<CountryCityType[]>(
+        "/json/countries_cities.json"
+      );
+
+      // TODO: optimize the json file later
+      const countries = response.data.map((country) => country.name);
+      const cities: Record<string, string[]> = {};
+      response.data.forEach((country) => {
+        cities[country.name] = country.cities;
+      });
+
+      return { countries, cities };
+    },
+    {
+      revalidateOnFocus: false,
+    }
+  );
+
   const {
     formState: { errors },
+    watch,
   } = form;
+
+  const watchedCountry = watch("meetingPoint.country");
+
+  const cities = useMemo(() => {
+    return countriesAndCities?.cities[watchedCountry] || [];
+  }, [watchedCountry]);
+
+  useEffect(() => {
+    form.setValue("meetingPoint.city", "");
+  }, [watchedCountry]);
+
+  console.log("changing");
 
   const isPricingScheduleError = (
     errors: FieldErrors<z.infer<typeof productSchema>>
@@ -835,13 +878,9 @@ const ProductionCreationForm = ({
                                   value={field.value}
                                   onChange={field.onChange}
                                   defaultValue={field.value}
-                                  options={[
-                                    "germany",
-                                    "europe",
-                                    "asia",
-                                    "africa",
-                                  ]}
+                                  options={countriesAndCities?.countries || []}
                                   label="countries"
+                                  disabled={isLoading}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -860,8 +899,9 @@ const ProductionCreationForm = ({
                                   value={field.value}
                                   onChange={field.onChange}
                                   defaultValue={field.value}
-                                  options={["berlin", "munich", "frankfurt"]}
+                                  options={cities}
                                   label="cities"
+                                  disabled={isLoading}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -1604,13 +1644,26 @@ const ProductionCreationForm = ({
               {isEdit && (
                 <Button
                   className={cn(
-                    "mx-auto cursor-pointer bg-destructive",
+                    "mx-auto hover:bg-destructive hover:text-primary cursor-pointer border border-destructive bg-transparent text-destructive",
+                    isUploading && "opacity-50"
+                  )}
+                  type="button"
+                  disabled={isUploading}
+                  onClick={() => setShowDeleteAlert(true)}
+                >
+                  Delete Current
+                </Button>
+              )}
+              {isEdit && (
+                <Button
+                  className={cn(
+                    "mx-auto hover:bg-destructive hover:text-primary cursor-pointer border border-destructive bg-transparent text-destructive",
                     isUploading && "opacity-50"
                   )}
                   type="button"
                   disabled={isUploading}
                 >
-                  Delete Product
+                  Delete Multiple
                 </Button>
               )}
             </div>
@@ -1618,6 +1671,12 @@ const ProductionCreationForm = ({
         </form>
       </Form>
       <ProductUploadLoader open={isUploading} />
+      {isEdit && (
+        <AlertModal
+          open={showDeleteAlert}
+          close={() => setShowDeleteAlert(false)}
+        />
+      )}
     </div>
   );
 };

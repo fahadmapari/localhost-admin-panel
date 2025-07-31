@@ -38,7 +38,7 @@ export function objectToFormData(
     } else if (typeof value === "object") {
       objectToFormData(value, form, fullKey);
     } else {
-      form.append(fullKey, value);
+      form.append(fullKey, value as string);
     }
   });
 

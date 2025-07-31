@@ -42,8 +42,8 @@ const DropdownSelect = ({
       <SelectContent>
         <SelectGroup>
           <SelectLabel>{label}</SelectLabel>
-          {options.map((op) => (
-            <SelectItem className="capitalize" value={op} key={op}>
+          {options.map((op, i) => (
+            <SelectItem className="capitalize" value={op} key={op + i}>
               {op}
             </SelectItem>
           ))}
