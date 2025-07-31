@@ -88,69 +88,78 @@ export function LoginForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      {isLoading ? (
-        <Card>
-          <CardHeader className="text-center">
-            <CardTitle className="text-xl">Welcome back</CardTitle>
-            <CardDescription>Have a productive day!</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)}>
+      <Card>
+        <CardHeader className="text-center">
+          <CardTitle className="text-xl">Welcome back</CardTitle>
+          <CardDescription>Have a productive day!</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="grid gap-6">
                 <div className="grid gap-6">
-                  <div className="grid gap-6">
-                    <div className="grid gap-3">
-                      <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                              <Input {...field} autoComplete="email" />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div className="grid gap-3">
-                      <FormField
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Password</FormLabel>
-                            <FormControl>
-                              <Input {...field} type="password" />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <Button
-                      type="submit"
-                      className="w-full cursor-pointer"
-                      disabled={isLoading}
-                    >
-                      Login
-                    </Button>
+                  <div className="grid gap-3">
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl>
+                            <Input {...field} autoComplete="email" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
-                  <div className="text-center text-sm flex flex-col gap-1">
-                    Don&apos;t have an account?{" "}
-                    <span className="underline underline-offset-4 cursor-pointer">
-                      Ask your manager for one.
-                    </span>
+                  <div className="grid gap-3">
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Password</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="password" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
+                  <Button
+                    type="submit"
+                    className="w-full cursor-pointer disabled:opacity-60"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <Player
+                        src="/lotties/lock-animation.json"
+                        speed={3}
+                        loop
+                        autoplay
+                        style={{
+                          height: "100%",
+                          width: "60px",
+                        }}
+                      />
+                    ) : (
+                      "Login"
+                    )}
+                  </Button>
                 </div>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
-      ) : (
-        <Player src="/lotties/thumb-animation.json" speed={2} loop autoplay />
-      )}
+                <div className="text-center text-sm flex flex-col gap-1">
+                  Don&apos;t have an account?{" "}
+                  <span className="underline underline-offset-4 cursor-pointer">
+                    Ask your manager for one.
+                  </span>
+                </div>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
