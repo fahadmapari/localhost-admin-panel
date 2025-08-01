@@ -35,7 +35,7 @@ interface PopoverContentProps {
 
 interface PopoverTriggerProps {
   children: React.ReactNode;
-  asChild?: boolean;
+  aschild?: boolean;
 }
 
 interface VirtualizedListProps {
@@ -203,7 +203,7 @@ const VirtualizedSelect = forwardRef<HTMLButtonElement, VirtualizedSelectProps>(
 
     return (
       <Popover>
-        <PopoverTrigger asChild>
+        <PopoverTrigger>
           <button
             ref={ref}
             type="button"

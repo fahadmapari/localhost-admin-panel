@@ -367,10 +367,6 @@ const ProductionCreationForm = ({
     });
   };
 
-  useEffect(() => {
-    console.log("country", form.getValues().meetingPoint.country);
-  }, []);
-
   return (
     <div className="h-full">
       <Form {...form}>
