@@ -7,6 +7,7 @@ import { useParams } from "react-router";
 import useSWR from "swr";
 
 interface InitialProductState {
+  id: string;
   title: string;
   serviceType: "guide" | "assistant";
   tourType: "shared" | "private";
@@ -17,6 +18,7 @@ interface InitialProductState {
   willLearn: string[];
   tourTextLanguage: "english";
   bookingType: "instant" | "request";
+  tourGuideLanguage: string;
   tourGuideLanguageInstant: string[];
   tourGuideLanguageOnRequest: string[];
   mandatoryInformation: string[];
@@ -82,6 +84,7 @@ interface InitialProductState {
   overridePriceFromContract: boolean;
   isBookingPerProduct: boolean;
   productCode: string;
+  baseProductId: string;
 }
 
 const ProductEdit = () => {
@@ -92,6 +95,8 @@ const ProductEdit = () => {
     const product = data.data;
 
     const productData = {
+      baseProductId: product.baseProduct._id,
+      id: product._id,
       title: product.baseProduct.title,
       serviceType: product.serviceType,
       tourType: product.tourType,

@@ -3,9 +3,10 @@ import { Dialog, DialogContent } from "../ui/dialog";
 
 interface ProductUploadLoaderProps {
   open: boolean;
+  label: string;
 }
 
-const ProductUploadLoader = ({ open }: ProductUploadLoaderProps) => {
+const ProductUploadLoader = ({ open, label }: ProductUploadLoaderProps) => {
   return (
     <Dialog open={open}>
       <DialogContent className="outline-none" showCloseButton={false}>
@@ -15,9 +16,7 @@ const ProductUploadLoader = ({ open }: ProductUploadLoaderProps) => {
           autoplay
           style={{ width: 200 }}
         />
-        <span className="mx-auto text-ring">
-          Uploading Your Crafted Product.
-        </span>
+        <span className="mx-auto text-ring">{label}</span>
       </DialogContent>
     </Dialog>
   );

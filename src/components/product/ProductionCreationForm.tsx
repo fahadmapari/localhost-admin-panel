@@ -44,10 +44,12 @@ import AlertModal from "../common/AlertModal";
 import MultipleProductEditModal from "./MultipleProductEditModal";
 import VirtualDropdownSelect from "../inputs/VirtualDropdownSelect";
 import VirtualizedSelect from "../inputs/VirtualDropdownSelect";
+import { useNavigate } from "react-router";
 
 interface ProductFormProps {
   isEdit?: boolean;
   product?: {
+    id: string;
     title: string;
     serviceType: "guide" | "assistant";
     tourType: "shared" | "private";
@@ -58,6 +60,7 @@ interface ProductFormProps {
     willLearn: string[];
     tourTextLanguage: "english";
     bookingType: "instant" | "request";
+    tourGuideLanguage: string;
     tourGuideLanguageInstant: string[];
     tourGuideLanguageOnRequest: string[];
     mandatoryInformation: string[];
@@ -123,6 +126,7 @@ interface ProductFormProps {
     overridePriceFromContract: boolean;
     isBookingPerProduct: boolean;
     productCode: string;
+    baseProductId: string;
   };
 }
 
@@ -138,6 +142,7 @@ const ProductionCreationForm = ({
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [showMultipleEditModal, setShowMultipleEditModal] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
     defaultValues: product || {
@@ -306,10 +311,14 @@ const ProductionCreationForm = ({
     }
 
     const formData = objectToFormData(values);
+    formData.append("edit", "single");
+    formData.append("productCode", product?.productCode || "");
+    formData.append("baseProductId", product?.baseProductId || "");
+    formData.append("id", product?.id || "");
 
     try {
       setIsUploading(true);
-      await api.post("/products/edit", formData, {
+      await api.put("/products/edit/" + product?.id, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -319,10 +328,12 @@ const ProductionCreationForm = ({
 
       setIsUploading(false);
 
-      toast.success("Product created successfully", {
+      toast.success("Product edited successfully", {
         position: "top-center",
         richColors: true,
       });
+
+      navigate("/products/list");
     } catch (error) {
       setIsUploading(false);
       console.log(error);
@@ -352,6 +363,8 @@ const ProductionCreationForm = ({
         position: "top-center",
         richColors: true,
       });
+
+      navigate("/products/list");
     } catch (error) {
       setIsUploading(false);
       console.log(error);
@@ -380,7 +393,7 @@ const ProductionCreationForm = ({
           )}
         >
           {isEdit && (
-            <div className="flex items-center gap-2 text-sm px-2 mb-2">
+            <div className="flex items-center gap-2 text-xs px-2 mb-2 bg-secondary rounded-md w-fit p-1">
               <span className="font-medium">Product Code:</span>
               <span className="uppercase">{product?.productCode || "-"}</span>
             </div>
@@ -1056,6 +1069,11 @@ const ProductionCreationForm = ({
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Images</FormLabel>
+                          {isEdit && (
+                            <FormDescription>
+                              Note: All product variants images will be updated.
+                            </FormDescription>
+                          )}
                           <FormControl>
                             <MultiImageUpload
                               value={field.value}
@@ -1674,7 +1692,14 @@ const ProductionCreationForm = ({
           </div>
         </form>
       </Form>
-      <ProductUploadLoader open={isUploading} />
+      <ProductUploadLoader
+        label={
+          isEdit
+            ? "Making your desired changes."
+            : "Uploading Your Crafted Product."
+        }
+        open={isUploading}
+      />
       {isEdit && (
         <AlertModal
           open={showDeleteAlert}
