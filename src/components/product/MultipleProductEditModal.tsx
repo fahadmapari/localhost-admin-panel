@@ -77,7 +77,9 @@ const MultipleProductEditModal = ({
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button type="submit">Submit Changes</Button>
+          <Button className="cursor-pointer" type="submit">
+            Submit Changes
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

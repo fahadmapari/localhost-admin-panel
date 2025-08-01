@@ -237,10 +237,12 @@ const ProductionCreationForm = ({
 
   const cities = useMemo(() => {
     return countriesAndCities?.cities[watchedCountry] || [];
-  }, [watchedCountry]);
+  }, [watchedCountry, isLoading, countriesAndCities?.cities]);
 
   useEffect(() => {
-    form.setValue("meetingPoint.city", "");
+    if (!isEdit) {
+      form.setValue("meetingPoint.city", "");
+    }
   }, [watchedCountry]);
 
   const isPricingScheduleError = (
@@ -587,6 +589,7 @@ const ProductionCreationForm = ({
                                     productSchema.shape.tourTextLanguage.options
                                   }
                                   label="Tour Text Languages"
+                                  disabled={isEdit}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -608,6 +611,7 @@ const ProductionCreationForm = ({
                                     defaultValue={field.value}
                                     options={Object.values(languages)}
                                     label="Tour Guide Languages"
+                                    disabled={isEdit}
                                   />
                                 </FormControl>
                                 <FormMessage />

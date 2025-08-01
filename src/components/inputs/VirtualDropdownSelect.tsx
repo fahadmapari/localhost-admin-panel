@@ -142,7 +142,7 @@ const VirtualizedSelect = forwardRef<HTMLButtonElement, VirtualizedSelectProps>(
     }, [options, searchQuery]);
 
     const selectedOption: string | undefined = options.find(
-      (option: string) => option === value
+      (option: string) => option.toLowerCase() === value?.toLowerCase()
     );
 
     const handleSelect = (optionValue: string): void => {
