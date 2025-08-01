@@ -1,7 +1,6 @@
 import ProductionCreationForm from "@/components/product/ProductionCreationForm";
 import { Skeleton } from "@/components/ui/skeleton";
 import api from "@/lib/axios";
-import { CLOUD_FRONT_URL } from "@/lib/constants";
 import { TourListType } from "@/types/product";
 import { useParams } from "react-router";
 import useSWR from "swr";
@@ -131,7 +130,7 @@ const ProductEdit = () => {
         text: product.endPoint.text,
       },
       tags: product.tags,
-      images: product.baseProduct.images.map((img) => CLOUD_FRONT_URL + img),
+      images: product.baseProduct.images,
       priceModel: product.priceModel,
       currency: product.currency,
       b2bRateInstant: product.b2bRateInstant,

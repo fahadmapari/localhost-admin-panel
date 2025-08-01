@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { CLOUD_FRONT_URL } from "@/lib/constants";
 
 interface ImageFile {
   file?: File;
@@ -45,8 +46,8 @@ export function MultiImageUpload({
       if (typeof item === "string") {
         // It's a URL
         return {
-          url: item,
-          preview: item,
+          url: CLOUD_FRONT_URL + item,
+          preview: CLOUD_FRONT_URL + item,
           id: `url-${item}-${index}`,
           isExisting: true,
         };

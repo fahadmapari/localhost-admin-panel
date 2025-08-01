@@ -333,7 +333,7 @@ const ProductionCreationForm = ({
         richColors: true,
       });
 
-      navigate("/products/list");
+      navigate("/products");
     } catch (error) {
       setIsUploading(false);
       console.log(error);
@@ -364,7 +364,7 @@ const ProductionCreationForm = ({
         richColors: true,
       });
 
-      navigate("/products/list");
+      navigate("/products");
     } catch (error) {
       setIsUploading(false);
       console.log(error);
