@@ -42,6 +42,8 @@ import axios from "axios";
 import useSWR from "swr";
 import AlertModal from "../common/AlertModal";
 import MultipleProductEditModal from "./MultipleProductEditModal";
+import VirtualDropdownSelect from "../inputs/VirtualDropdownSelect";
+import VirtualizedSelect from "../inputs/VirtualDropdownSelect";
 
 interface ProductFormProps {
   isEdit?: boolean;
@@ -138,7 +140,6 @@ const ProductionCreationForm = ({
   const [isUploading, setIsUploading] = useState(false);
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
-    mode: "onChange",
     defaultValues: product || {
       title: "",
       serviceType: "guide",
@@ -161,8 +162,8 @@ const ProductionCreationForm = ({
       voucherType: "printed or e-voucher accepted",
       maxPax: 15,
       meetingPoint: {
-        country: "germany",
-        city: "berlin",
+        country: undefined,
+        city: undefined,
         latitude: undefined,
         longitude: undefined,
         text: "",
@@ -241,8 +242,6 @@ const ProductionCreationForm = ({
   useEffect(() => {
     form.setValue("meetingPoint.city", "");
   }, [watchedCountry]);
-
-  console.log("changing");
 
   const isPricingScheduleError = (
     errors: FieldErrors<z.infer<typeof productSchema>>
@@ -367,6 +366,10 @@ const ProductionCreationForm = ({
       richColors: true,
     });
   };
+
+  useEffect(() => {
+    console.log("country", form.getValues().meetingPoint.country);
+  }, []);
 
   return (
     <div className="h-full">
@@ -868,7 +871,7 @@ const ProductionCreationForm = ({
                         Meeting Point & Tags
                       </h3>
 
-                      <div className="flex gap-4">
+                      <div className="flex gap-4 items-start">
                         <FormField
                           control={form.control}
                           name="meetingPoint.country"
@@ -876,13 +879,12 @@ const ProductionCreationForm = ({
                             <FormItem className="flex-1">
                               <FormLabel>Country</FormLabel>
                               <FormControl>
-                                <DropdownSelect
-                                  value={field.value}
-                                  onChange={field.onChange}
-                                  defaultValue={field.value}
+                                <VirtualDropdownSelect
+                                  {...field}
+                                  onValueChange={field.onChange}
                                   options={countriesAndCities?.countries || []}
-                                  label="countries"
-                                  disabled={isLoading}
+                                  placeholder="Select Country"
+                                  disabled={isEdit || isLoading}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -897,13 +899,12 @@ const ProductionCreationForm = ({
                             <FormItem className="flex-1">
                               <FormLabel>City</FormLabel>
                               <FormControl>
-                                <DropdownSelect
-                                  value={field.value}
-                                  onChange={field.onChange}
-                                  defaultValue={field.value}
+                                <VirtualizedSelect
+                                  {...field}
+                                  onValueChange={field.onChange}
                                   options={cities}
-                                  label="cities"
-                                  disabled={isLoading}
+                                  placeholder="Select City"
+                                  disabled={isEdit || isLoading}
                                 />
                               </FormControl>
                               <FormMessage />

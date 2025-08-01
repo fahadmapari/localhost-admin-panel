@@ -169,6 +169,7 @@ export function DataTable<TData, TValue>({
                         : "opacity-50 cursor-pointer"
                     )}
                     onClick={() => table.setPageIndex(Number(page - 1))}
+                    key={page}
                   >
                     {page}
                   </PaginationLink>
