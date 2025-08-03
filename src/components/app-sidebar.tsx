@@ -120,11 +120,11 @@ const data = {
       items: [
         {
           title: "List",
-          url: "/clients",
+          url: "/client",
         },
         {
-          title: "Add New",
-          url: "/clients/create",
+          title: "Register",
+          url: "/client/register",
         },
       ],
     },

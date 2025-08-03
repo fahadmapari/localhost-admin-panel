@@ -13,6 +13,7 @@ import AdminList from "./pages/admin/AdminList.tsx";
 import ProductMetrics from "./pages/dashboard/ProductMetrics.tsx";
 import ProductEdit from "./pages/product/ProductEdit.tsx";
 import Error404 from "./components/common/Error404.tsx";
+import RegisterClient from "./pages/client/RegisterClient.tsx";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,14 @@ const router = createBrowserRouter([
       {
         path: "admin",
         Component: AdminList,
+      },
+      {
+        path: "client",
+        Component: RegisterClient,
+      },
+      {
+        path: "client/register",
+        Component: RegisterClient,
       },
       {
         path: "*", // catch-all 404 route

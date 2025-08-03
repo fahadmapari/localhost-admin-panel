@@ -10,26 +10,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../ui/dialog";
-import { difference } from "lodash";
 import { Label } from "../ui/label";
 
 interface Props {
   open: boolean;
   close: () => void;
-  instantLanguages: string[];
-  requestLanguages: string[];
+  type: string;
+  languages: string[];
 }
 
-const MultipleProductEditModal = ({
-  close,
-  open,
-  instantLanguages,
-  requestLanguages,
-}: Props) => {
-  const [selectedInstantLanguages, setSelectedInstantLanguages] =
-    useState(instantLanguages);
-  const [selectedRequestLanguages, setSelectedRequestLanguages] =
-    useState(requestLanguages);
+const MultipleProductEditModal = ({ close, open, languages, type }: Props) => {
+  const [selectedLanguages, setSelectedLanguages] = useState(languages);
 
   return (
     <Dialog open={open} onOpenChange={close}>
@@ -42,34 +33,14 @@ const MultipleProductEditModal = ({
         </DialogHeader>
         <div className="grid gap-6">
           <div className="space-y-2">
-            <Label>Tour Guide Languages (Instant)</Label>
+            <Label>Tour Guide Languages ({type})</Label>
             <MultiSelect
-              value={selectedInstantLanguages}
+              value={selectedLanguages}
               onValueChange={(value) => {
-                const uniqueValues = difference(
-                  value,
-                  selectedRequestLanguages
-                );
-                setSelectedInstantLanguages(uniqueValues);
+                setSelectedLanguages(value);
               }}
-              defaultValue={selectedInstantLanguages}
-              options={instantLanguages}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label>Tour Guide Languages (On Request)</Label>
-            <MultiSelect
-              value={selectedRequestLanguages}
-              onValueChange={(value) => {
-                const uniqueValues = difference(
-                  value,
-                  selectedInstantLanguages
-                );
-                setSelectedRequestLanguages(uniqueValues);
-              }}
-              defaultValue={selectedRequestLanguages}
-              options={requestLanguages}
+              defaultValue={languages}
+              options={languages}
             />
           </div>
         </div>

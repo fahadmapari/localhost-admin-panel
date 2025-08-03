@@ -1711,8 +1711,12 @@ const ProductionCreationForm = ({
         <MultipleProductEditModal
           open={showMultipleEditModal}
           close={() => setShowMultipleEditModal(false)}
-          instantLanguages={product?.tourGuideLanguageInstant || []}
-          requestLanguages={product?.tourGuideLanguageOnRequest || []}
+          type={product?.bookingType || ""}
+          languages={
+            product?.bookingType === "instant"
+              ? product?.tourGuideLanguageInstant || []
+              : product?.tourGuideLanguageOnRequest || []
+          }
         />
       )}
     </div>
