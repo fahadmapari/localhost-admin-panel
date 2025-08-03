@@ -18,6 +18,7 @@ interface Props {
   label: string;
   className?: string;
   disabled?: boolean;
+  placeholder?: string;
 }
 
 const DropdownSelect = ({
@@ -28,6 +29,7 @@ const DropdownSelect = ({
   label,
   className,
   disabled = false,
+  placeholder = "Select",
 }: Props) => {
   return (
     <Select
@@ -37,7 +39,7 @@ const DropdownSelect = ({
       disabled={disabled}
     >
       <SelectTrigger className={cn("w-full capitalize", className)}>
-        <SelectValue placeholder="Select" />
+        <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
