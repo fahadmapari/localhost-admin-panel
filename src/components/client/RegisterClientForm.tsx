@@ -24,7 +24,7 @@ import useSWR from "swr";
 import axios from "axios";
 import { toast } from "sonner";
 import VirtualDropdownSelect from "../inputs/VirtualDropdownSelect";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import api from "@/lib/axios";
 
@@ -39,6 +39,10 @@ const RegisterClientForm = () => {
   });
   const [isUploading, setIsUploading] = useState(false);
   const navigate = useNavigate();
+
+  const { watch } = form;
+
+  const watchedCountry = watch("companyCountry");
 
   const { data: countriesAndCities } = useSWR(
     ["countries", "cities"],
@@ -123,6 +127,10 @@ const RegisterClientForm = () => {
       });
     }
   }
+
+  useEffect(() => {
+    form.setValue("companyCity", "");
+  }, [watchedCountry]);
 
   return (
     <div className="h-full">
@@ -410,14 +418,13 @@ const RegisterClientForm = () => {
                       name="companyCity"
                       render={({ field }) => (
                         <FormItem className="flex-1">
-                          <FormLabel>City</FormLabel>
+                          <FormLabel>Country</FormLabel>
                           <FormControl>
-                            <DropdownSelect
-                              value={field.value}
-                              onChange={field.onChange}
-                              options={[]}
-                              label="Countries"
-                              defaultValue={field.value}
+                            <VirtualDropdownSelect
+                              {...field}
+                              onValueChange={field.onChange}
+                              options={countriesAndCities?.countries || []}
+                              placeholder="Select Country"
                             />
                           </FormControl>
                           <FormMessage />
