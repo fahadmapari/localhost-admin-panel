@@ -1,4 +1,4 @@
-import { cn, objectToFormData } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import {
   Accordion,
   AccordionContent,
@@ -98,13 +98,11 @@ const RegisterClientForm = () => {
   );
 
   async function onSubmit(values: z.infer<typeof clientSchema>) {
-    const formData = objectToFormData(values);
-
     try {
       setIsUploading(true);
-      await api.post("/clients", formData, {
+      await api.post("/clients", values, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
         },
       });
 
@@ -574,6 +572,27 @@ const RegisterClientForm = () => {
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
+                    <FormField
+                      control={form.control}
+                      name="companyCurrency"
+                      render={({ field }) => (
+                        <FormItem className="min-w-40">
+                          <FormLabel>Currency</FormLabel>
+                          <FormControl>
+                            <DropdownSelect
+                              value={field.value || ""}
+                              onChange={field.onChange}
+                              options={["EUR", "USD", "INR"]}
+                              label="Currencies"
+                              defaultValue={field.value || ""}
+                              placeholder={"Currency"}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
                     <FormField
                       control={form.control}
                       name="companyEmail"

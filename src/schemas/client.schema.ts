@@ -46,6 +46,7 @@ export const clientSchema = z
     companyWebsite: z.url().optional(),
     companyEmail: z.email().optional(),
     companyAssociationName: z.string().optional(),
+    companyCurrency: z.enum(["EUR", "USD", "INR"]).optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
