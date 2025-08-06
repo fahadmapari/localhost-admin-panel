@@ -24,7 +24,7 @@ import useSWR from "swr";
 import axios from "axios";
 import { toast } from "sonner";
 import VirtualDropdownSelect from "../inputs/VirtualDropdownSelect";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import api from "@/lib/axios";
 
@@ -130,6 +130,10 @@ const RegisterClientForm = () => {
     form.setValue("companyCity", "");
   }, [watchedCountry]);
 
+  const cities = useMemo(() => {
+    return countriesAndCities?.cities[watchedCountry] || [];
+  }, [watchedCountry, isLoading, countriesAndCities?.cities]);
+
   return (
     <div className="h-full">
       <Form {...form}>
@@ -192,7 +196,7 @@ const RegisterClientForm = () => {
                         <FormItem className="flex-1">
                           <FormLabel>Last Name</FormLabel>
                           <FormControl>
-                            <Input {...field} type="password" />
+                            <Input {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -416,13 +420,14 @@ const RegisterClientForm = () => {
                       name="companyCity"
                       render={({ field }) => (
                         <FormItem className="flex-1">
-                          <FormLabel>Country</FormLabel>
+                          <FormLabel>City</FormLabel>
                           <FormControl>
                             <VirtualDropdownSelect
                               {...field}
+                              value={field.value}
                               onValueChange={field.onChange}
-                              options={countriesAndCities?.countries || []}
-                              placeholder="Select Country"
+                              options={cities}
+                              placeholder="Select City"
                             />
                           </FormControl>
                           <FormMessage />
