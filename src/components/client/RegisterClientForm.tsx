@@ -110,12 +110,12 @@ const RegisterClientForm = () => {
 
       setIsUploading(false);
 
-      toast.success("Product created successfully", {
+      toast.success("Client registered successfully", {
         position: "top-center",
         richColors: true,
       });
 
-      navigate("/client/list");
+      navigate("/client");
     } catch (error) {
       setIsUploading(false);
       console.log(error);
