@@ -24,6 +24,7 @@ const chartConfig = {
 interface ProductUploadBarChartProps {
   last12MonthsProducts: { createdAt: string }[];
   topCountries: { _id: string; count: number }[];
+  topCities: { _id: string; count: number }[];
 }
 
 const buildWeeklyData = (data: { createdAt: string }[]) => {
@@ -69,6 +70,7 @@ const buildMonthlyData = (data: { createdAt: string }[]) => {
 const ProductUploadBarChart = ({
   last12MonthsProducts,
   topCountries,
+  topCities,
 }: ProductUploadBarChartProps) => {
   const weeklyData = buildWeeklyData(last12MonthsProducts);
   const monthlyData = buildMonthlyData(last12MonthsProducts);
@@ -175,18 +177,14 @@ const ProductUploadBarChart = ({
 
         <Card className="flex-1">
           <CardHeader>
-            <CardTitle>Top 10 Countries</CardTitle>
+            <CardTitle>Top 10 Cities</CardTitle>
             <CardDescription>
-              Counties having hightest number of products
+              Cities having hightest number of products
             </CardDescription>
           </CardHeader>
           <CardContent>
             <ChartContainer config={chartConfig}>
-              <BarChart
-                accessibilityLayer
-                data={topCountries}
-                layout="vertical"
-              >
+              <BarChart accessibilityLayer data={topCities} layout="vertical">
                 <CartesianGrid vertical={false} />
                 <XAxis
                   dataKey="count"

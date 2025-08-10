@@ -11,7 +11,10 @@ interface ProductMetricsState {
   totalUniqueProductCount: number;
   totalProductsCount: number;
   last12MonthProducts: { createdAt: string }[];
-  topCountries: { _id: string; count: number }[];
+  topCountriesAndCities: {
+    topCountries: { _id: string; count: number }[];
+    topCities: { _id: string; count: number }[];
+  }[];
 }
 
 const ProductMetrics = () => {
@@ -45,9 +48,15 @@ const ProductMetrics = () => {
                 <Skeleton className="flex-1 h-[116px]" />
               </div>
 
-              <div className="flex gap-4 items-center">
-                <Skeleton className="flex-1 h-[300px]" />
-                <Skeleton className="flex-1 h-[300px]" />
+              <div className="flex flex-col gap-4">
+                <div className="flex gap-4 items-center">
+                  <Skeleton className="flex-1 h-[300px]" />
+                  <Skeleton className="flex-1 h-[300px]" />
+                </div>
+                <div className="flex gap-4 items-center">
+                  <Skeleton className="flex-1 h-[300px]" />
+                  <Skeleton className="flex-1 h-[300px]" />
+                </div>
               </div>
             </>
           ) : (
@@ -60,7 +69,10 @@ const ProductMetrics = () => {
               />
               <ProductUploadBarChart
                 last12MonthsProducts={data?.last12MonthProducts || []}
-                topCountries={data?.topCountries || []}
+                topCountries={
+                  data?.topCountriesAndCities[0]?.topCountries || []
+                }
+                topCities={data?.topCountriesAndCities[0]?.topCities || []}
               />
             </>
           )}
