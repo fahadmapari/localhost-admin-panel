@@ -15,6 +15,7 @@ import ProductEdit from "./pages/product/ProductEdit.tsx";
 import Error404 from "./components/common/Error404.tsx";
 import RegisterClient from "./pages/client/RegisterClient.tsx";
 import ClientList from "./pages/client/ClientList.tsx";
+import ClientMetrics from "./pages/client/ClientMetrics.tsx";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "dashboard/products",
         Component: ProductMetrics,
+      },
+      {
+        path: "dashboard/clients",
+        Component: ClientMetrics,
       },
       {
         path: "products",

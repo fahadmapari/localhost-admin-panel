@@ -11,6 +11,7 @@ interface ProductMetricsState {
   totalUniqueProductCount: number;
   totalProductsCount: number;
   last12MonthProducts: { createdAt: string }[];
+  topCountries: { _id: string; count: number }[];
 }
 
 const ProductMetrics = () => {
@@ -59,6 +60,7 @@ const ProductMetrics = () => {
               />
               <ProductUploadBarChart
                 last12MonthsProducts={data?.last12MonthProducts || []}
+                topCountries={data?.topCountries || []}
               />
             </>
           )}

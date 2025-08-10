@@ -23,6 +23,7 @@ const chartConfig = {
 
 interface ProductUploadBarChartProps {
   last12MonthsProducts: { createdAt: string }[];
+  topCountries: { _id: string; count: number }[];
 }
 
 const buildWeeklyData = (data: { createdAt: string }[]) => {
@@ -67,66 +68,151 @@ const buildMonthlyData = (data: { createdAt: string }[]) => {
 
 const ProductUploadBarChart = ({
   last12MonthsProducts,
+  topCountries,
 }: ProductUploadBarChartProps) => {
   const weeklyData = buildWeeklyData(last12MonthsProducts);
   const monthlyData = buildMonthlyData(last12MonthsProducts);
   return (
-    <div className="flex gap-4">
-      <Card className="flex-1">
-        <CardHeader>
-          <CardTitle>Weekly Uploaded Unique Products</CardTitle>
-          <CardDescription>Last 7 days</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig}>
-            <BarChart data={weeklyData}>
-              <CartesianGrid vertical={false} />
-              <XAxis
-                dataKey="day"
-                tickLine={false}
-                tickMargin={10}
-                axisLine={false}
-                tickFormatter={(value) => value.slice(0, 3)}
-              />
-              <YAxis tickLine={false} tickMargin={10} axisLine={false} />
-              <ChartTooltip content={<ChartTooltipContent />} />
-              <Bar
-                dataKey={"products"}
-                fill="var(--color-products)"
-                radius={8}
-              />
-            </BarChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
+    <div className="flex flex-col gap-4">
+      <div className="flex gap-4">
+        <Card className="flex-1">
+          <CardHeader>
+            <CardTitle>Weekly Uploaded Unique Products</CardTitle>
+            <CardDescription>Last 7 days</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={chartConfig}>
+              <BarChart data={weeklyData}>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="day"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                  tickFormatter={(value) => value.slice(0, 3)}
+                />
+                <YAxis tickLine={false} tickMargin={10} axisLine={false} />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Bar
+                  dataKey={"products"}
+                  fill="var(--color-products)"
+                  radius={8}
+                />
+              </BarChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
 
-      <Card className="flex-1">
-        <CardHeader>
-          <CardTitle>Monthly Uploaded Unique Products</CardTitle>
-          <CardDescription>Last 12 months</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig}>
-            <BarChart data={monthlyData}>
-              <CartesianGrid vertical={false} />
-              <XAxis
-                dataKey="day"
-                tickLine={false}
-                tickMargin={10}
-                axisLine={false}
-                tickFormatter={(value) => value.slice(0, 3)}
-              />
-              <YAxis tickLine={false} tickMargin={10} axisLine={false} />
-              <ChartTooltip content={<ChartTooltipContent />} />
-              <Bar
-                dataKey={"products"}
-                fill="var(--color-products)"
-                radius={5}
-              />
-            </BarChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
+        <Card className="flex-1">
+          <CardHeader>
+            <CardTitle>Monthly Uploaded Unique Products</CardTitle>
+            <CardDescription>Last 12 months</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={chartConfig}>
+              <BarChart data={monthlyData}>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="day"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                  tickFormatter={(value) => value.slice(0, 3)}
+                />
+                <YAxis tickLine={false} tickMargin={10} axisLine={false} />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Bar
+                  dataKey={"products"}
+                  fill="var(--color-products)"
+                  radius={5}
+                />
+              </BarChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="flex gap-4">
+        <Card className="flex-1">
+          <CardHeader>
+            <CardTitle>Top 10 Countries</CardTitle>
+            <CardDescription>
+              Counties having hightest number of products
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={chartConfig}>
+              <BarChart
+                accessibilityLayer
+                data={topCountries}
+                layout="vertical"
+              >
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="count"
+                  type="number"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                />
+                <YAxis
+                  dataKey="_id"
+                  type="category"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Bar
+                  dataKey={"count"}
+                  fill="var(--color-products)"
+                  radius={5}
+                />
+              </BarChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
+
+        <Card className="flex-1">
+          <CardHeader>
+            <CardTitle>Top 10 Countries</CardTitle>
+            <CardDescription>
+              Counties having hightest number of products
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={chartConfig}>
+              <BarChart
+                accessibilityLayer
+                data={topCountries}
+                layout="vertical"
+              >
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="count"
+                  type="number"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                />
+                <YAxis
+                  dataKey="_id"
+                  type="category"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Bar
+                  dataKey={"count"}
+                  fill="var(--color-products)"
+                  radius={5}
+                />
+              </BarChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
