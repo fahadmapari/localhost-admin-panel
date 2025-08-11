@@ -2,7 +2,10 @@ import ProductsCountCards from "@/components/dashboard/product/ProductsCountCard
 import ProductUploadBarChart from "@/components/dashboard/product/ProductUploadBarChart";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";
 import api from "@/lib/axios";
+import { TooltipContent } from "@radix-ui/react-tooltip";
+import { RefreshCcw } from "lucide-react";
 import useSWR from "swr";
 
 interface ProductMetricsState {
@@ -36,7 +39,22 @@ const ProductMetrics = () => {
 
   return (
     <div className="p-4 h-full flex flex-col">
-      <h1 className="text-3xl font-semibold pb-4">Product Metrics</h1>
+      <div className="flex justify-between pb-4 items-end">
+        <h1 className="text-3xl font-semibold ">Product Metrics</h1>
+        <div className="flex items-center gap-2 text-muted-foreground text-sm">
+          Updates Every 24 Hours
+          <span>
+            <Tooltip>
+              <TooltipTrigger className="flex hover:animate-spin hover:text-primary items-center justify-center cursor-pointer">
+                <RefreshCcw size={16} />
+              </TooltipTrigger>
+              <TooltipContent className="text-primary mb-2">
+                Force Update (Under Construction)
+              </TooltipContent>
+            </Tooltip>
+          </span>
+        </div>
+      </div>
       <ScrollArea className="flex-1 overflow-hidden">
         <div className="space-y-6">
           {isLoading ? (
