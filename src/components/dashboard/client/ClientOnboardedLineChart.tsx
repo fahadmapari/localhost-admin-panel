@@ -1,4 +1,4 @@
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 import {
   Card,
@@ -75,6 +75,12 @@ function ClientOnboardedLineChart({ clientsOnboardLast12Months }: Props) {
               axisLine={false}
               tickMargin={8}
               tickFormatter={(value) => value.slice(0, 3)}
+            />
+            <YAxis
+              axisLine={false}
+              allowDecimals={false}
+              tickLine={false}
+              tickMargin={8}
             />
             <ChartTooltip
               cursor={false}

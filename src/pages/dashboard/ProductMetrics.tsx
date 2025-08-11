@@ -42,7 +42,7 @@ const ProductMetrics = () => {
       <div className="flex justify-between pb-4 items-end">
         <h1 className="text-3xl font-semibold ">Product Metrics</h1>
         <div className="flex items-center gap-2 text-muted-foreground text-sm">
-          Updates Every 24 Hours
+          Updates Every 1 Hour
           <span>
             <Tooltip>
               <TooltipTrigger className="flex hover:animate-spin hover:text-primary items-center justify-center cursor-pointer">
