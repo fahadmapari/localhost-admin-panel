@@ -42,6 +42,7 @@ const ChangePasswordModal = ({ close, open }: ChangePasswordModalProps) => {
       await api.put("/admins/change-password", values);
 
       setIsChanging(false);
+      close();
     } catch (error) {
       toast.error("Error while changing password" + error, {
         position: "top-center",
