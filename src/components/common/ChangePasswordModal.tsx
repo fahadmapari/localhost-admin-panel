@@ -20,6 +20,10 @@ import { z } from "zod";
 import { changePasswordSchema } from "@/schemas/user.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
+import api from "@/lib/axios";
+import { toast } from "sonner";
+import { useState } from "react";
+import { LoaderCircle } from "lucide-react";
 
 interface ChangePasswordModalProps {
   open: boolean;
@@ -30,12 +34,26 @@ const ChangePasswordModal = ({ close, open }: ChangePasswordModalProps) => {
   const form = useForm({
     resolver: zodResolver(changePasswordSchema),
   });
+  const [isChanging, setIsChanging] = useState(false);
 
-  async function onSubmit(values: z.infer<typeof changePasswordSchema>) {}
+  async function onSubmit(values: z.infer<typeof changePasswordSchema>) {
+    try {
+      setIsChanging(true);
+      await api.put("/admins/change-password", values);
+
+      setIsChanging(false);
+    } catch (error) {
+      toast.error("Error while changing password" + error, {
+        position: "top-center",
+        richColors: true,
+      });
+      setIsChanging(false);
+    }
+  }
 
   return (
     <Dialog open={open} onOpenChange={close}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px]" showCloseButton={!isChanging}>
         <DialogHeader>
           <DialogTitle>Change Your Account Password</DialogTitle>
         </DialogHeader>
@@ -86,10 +104,20 @@ const ChangePasswordModal = ({ close, open }: ChangePasswordModalProps) => {
             </div>
             <DialogFooter className="mt-6">
               <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline" disabled={isChanging}>
+                  Cancel
+                </Button>
               </DialogClose>
-              <Button type="submit" className="cursor-pointer">
-                Change Password
+              <Button
+                type="submit"
+                className="cursor-pointer"
+                disabled={isChanging}
+              >
+                {isChanging ? (
+                  <LoaderCircle className="animate-spin" />
+                ) : (
+                  "Change Password"
+                )}
               </Button>
             </DialogFooter>
           </form>
