@@ -1,3 +1,4 @@
+import AdminCreationLoader from "@/components/admin/AdminCreationLoader";
 import PageHeading from "@/components/common/PageHeading";
 import DropdownSelect from "@/components/inputs/DropdownSelect";
 import { Button } from "@/components/ui/button";
@@ -11,30 +12,60 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import api from "@/lib/axios";
 import { userSchema } from "@/schemas/user.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const AdminRegister = () => {
   const form = useForm({
     resolver: zodResolver(userSchema),
   });
+  const [isCreating, setIsCreating] = useState(false);
 
-  async function onSubmit(values: z.infer<typeof userSchema>) {}
+  const navigate = useNavigate();
+
+  async function onSubmit(values: z.infer<typeof userSchema>) {
+    try {
+      setIsCreating(true);
+      await api.post("/admins", values);
+
+      toast.success("Admin registered successfully", {
+        position: "top-center",
+        richColors: true,
+      });
+
+      setIsCreating(false);
+
+      form.reset();
+
+      navigate("/admin");
+    } catch (error) {
+      setIsCreating(false);
+      // @ts-expect-error - message
+      toast.error("Error while registering admin" + error?.message, {
+        position: "top-center",
+        richColors: true,
+      });
+    }
+  }
 
   return (
     <div className="p-4 h-full flex flex-col">
       <div className="pb-4">
         <PageHeading label="Register New Admin" />
       </div>
-      <div className="flex-1">
-        <Card className="w-full p-4 py-6">
-          <Form {...form}>
-            <form
-              className="flex flex-col gap-4"
-              onSubmit={form.handleSubmit(onSubmit)}
-            >
+      <Form {...form}>
+        <form
+          className="flex-1 flex flex-col"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <div>
+            <Card className="w-full p-4 py-6">
               <div className="flex items-start gap-4">
                 <FormField
                   control={form.control}
@@ -121,14 +152,22 @@ const AdminRegister = () => {
                   )}
                 />
               </div>
+            </Card>
+          </div>
+          <Button
+            type="submit"
+            className="w-full cursor-pointer mt-6"
+            disabled={isCreating}
+          >
+            Register Admin
+          </Button>
+        </form>
+      </Form>
 
-              <Button type="submit" className="w-full">
-                Register Admin
-              </Button>
-            </form>
-          </Form>
-        </Card>
-      </div>
+      <AdminCreationLoader
+        open={isCreating}
+        label="Welcoming new member to the team."
+      />
     </div>
   );
 };

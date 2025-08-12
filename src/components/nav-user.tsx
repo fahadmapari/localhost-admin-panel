@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, ChevronsUpDown, LogOut } from "lucide-react";
+import { Bell, ChevronsUpDown, Hash, LogOut } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -20,9 +20,12 @@ import {
 } from "@/components/ui/sidebar";
 import { logout } from "@/lib/axios/api";
 import { useAuthStore } from "@/store/auth.store";
+import ChangePasswordModal from "./common/ChangePasswordModal";
+import { useState } from "react";
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { user } = useAuthStore();
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
 
   return (
     <SidebarMenu>
@@ -81,6 +84,12 @@ export function NavUser() {
                 <Bell />
                 Notifications
               </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setShowChangePasswordModal(true)}
+              >
+                <Hash />
+                Change Password
+              </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={logout}>
@@ -90,6 +99,13 @@ export function NavUser() {
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
+
+      <ChangePasswordModal
+        open={showChangePasswordModal}
+        close={() => {
+          setShowChangePasswordModal(false);
+        }}
+      />
     </SidebarMenu>
   );
 }
