@@ -30,7 +30,7 @@ interface ProductUploadBarChartProps {
 const buildWeeklyData = (data: { createdAt: string }[]) => {
   const weeklyData: Record<string, number> = {};
 
-  for (let i = 7; i >= 0; i--) {
+  for (let i = 1; i <= 7; i++) {
     const monthName = dayjs().subtract(i, "day").format("dddd");
     weeklyData[monthName] = 0;
   }

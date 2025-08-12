@@ -61,6 +61,22 @@ const data = {
       ],
     },
     {
+      title: "Client",
+      url: "#",
+      icon: Users,
+      isActive: false,
+      items: [
+        {
+          title: "List",
+          url: "/client",
+        },
+        {
+          title: "Register",
+          url: "/client/register",
+        },
+      ],
+    },
+    {
       title: "Admin",
       url: "#",
       icon: User,
@@ -109,22 +125,6 @@ const data = {
         {
           title: "Add New",
           url: "/bookings/create",
-        },
-      ],
-    },
-    {
-      title: "Client",
-      url: "#",
-      icon: Users,
-      isActive: false,
-      items: [
-        {
-          title: "List",
-          url: "/client",
-        },
-        {
-          title: "Register",
-          url: "/client/register",
         },
       ],
     },
