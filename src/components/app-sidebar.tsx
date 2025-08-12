@@ -88,7 +88,7 @@ const data = {
         },
         {
           title: "Add New",
-          url: "/admin/create",
+          url: "/admin/register",
         },
       ],
     },

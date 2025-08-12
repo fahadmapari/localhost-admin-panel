@@ -16,6 +16,7 @@ import Error404 from "./components/common/Error404.tsx";
 import RegisterClient from "./pages/client/RegisterClient.tsx";
 import ClientList from "./pages/client/ClientList.tsx";
 import ClientMetrics from "./pages/client/ClientMetrics.tsx";
+import AdminRegister from "./pages/admin/AdminRegister.tsx";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "admin",
         Component: AdminList,
+      },
+      {
+        path: "admin/register",
+        Component: AdminRegister,
       },
       {
         path: "client",

@@ -9,9 +9,9 @@ interface AdminUser {
   _id: string;
   name: string;
   email: string;
-  role: "admin" | "client" | "user"; // adjust union if there are more roles
-  createdAt: string; // ISO date string
-  updatedAt: string; // ISO date string
+  role: "admin" | "super amdmin";
+  createdAt: string;
+  updatedAt: string;
   __v: number;
 }
 
