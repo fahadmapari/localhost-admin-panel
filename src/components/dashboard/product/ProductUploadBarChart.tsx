@@ -30,14 +30,16 @@ interface ProductUploadBarChartProps {
 const buildWeeklyData = (data: { createdAt: string }[]) => {
   const weeklyData: Record<string, number> = {};
 
-  for (let i = 1; i <= 7; i++) {
-    const monthName = dayjs().subtract(i, "day").format("dddd");
+  for (let i = 7; i >= 1; i--) {
+    const monthName = dayjs().subtract(i, "day").format("dddd DD/MM/YY");
     weeklyData[monthName] = 0;
   }
 
   for (const product of data) {
-    const day = dayjs(product.createdAt).format("dddd");
-    weeklyData[day] += 1;
+    const day = dayjs(product.createdAt).format("dddd DD/MM/YY");
+    if (day in weeklyData) {
+      weeklyData[day] += 1;
+    }
   }
 
   const weeklyDataArray = Object.entries(weeklyData).map(([key, value]) => {
