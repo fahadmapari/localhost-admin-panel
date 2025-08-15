@@ -1,5 +1,7 @@
 import { DataTable } from "@/components/common/DataTable";
 import FiltersScreen from "@/components/common/FiltersScreen";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Loader } from "@/components/ui/loader";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,7 +9,8 @@ import { usePaginationControl } from "@/hooks/usePaginationControl";
 import api from "@/lib/axios";
 import { TourListType } from "@/types/product";
 import { ColumnDef } from "@tanstack/react-table";
-import { useEffect, useMemo, useState } from "react";
+import { Search } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
 
 import useSWR from "swr";
@@ -23,6 +26,13 @@ const List = () => {
     pageSize: 15,
   });
   const [bookingType, setBookingType] = useState<string>("all");
+  const [searchTitle, setSearchTitle] = useState<string>("");
+
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const handleSearchClick = () => {
+    setSearchTitle(searchInputRef.current?.value?.trim() || "");
+  };
 
   useEffect(() => {
     setPagination({
@@ -96,7 +106,7 @@ const List = () => {
   ];
 
   const { data, error, isLoading } = useSWR(
-    `/products?page=${pagination.pageIndex}&limit=${pagination.pageSize}&bookingType=${bookingType}`,
+    `/products?page=${pagination.pageIndex}&limit=${pagination.pageSize}&bookingType=${bookingType}&searchTerm=${searchTitle}`,
     async (url): Promise<ProductType> => {
       const { data } = await api.get(url);
       console.log(data?.data?.productsData);
@@ -133,6 +143,16 @@ const List = () => {
           </div>
           <FiltersScreen />
         </div>
+      </div>
+      <div className="flex items-center gap-2 mb-2">
+        <Input
+          ref={searchInputRef}
+          placeholder="Search by title"
+          className="w-full"
+        />
+        <Button className="cursor-pointer" onClick={handleSearchClick}>
+          <Search /> <span>Search</span>
+        </Button>
       </div>
       <Tabs
         className="mb-2"
