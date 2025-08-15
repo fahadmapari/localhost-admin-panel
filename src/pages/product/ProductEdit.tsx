@@ -84,6 +84,7 @@ interface InitialProductState {
   isBookingPerProduct: boolean;
   productCode: string;
   baseProductId: string;
+  url: string;
 }
 
 const ProductEdit = () => {
@@ -161,6 +162,7 @@ const ProductEdit = () => {
       isBookingPerProduct: product.isBookingPerProduct,
       tourGuideLanguage: product.tourGuideLanguage,
       productCode: product.productCode,
+      url: product.url,
     };
 
     return productData as InitialProductState;

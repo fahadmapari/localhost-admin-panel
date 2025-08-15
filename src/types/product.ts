@@ -129,5 +129,6 @@ export interface TourListType {
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string
   productCode: string;
+  url: string;
   __v: number;
 }

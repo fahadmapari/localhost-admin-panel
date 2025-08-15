@@ -127,6 +127,7 @@ interface ProductFormProps {
     isBookingPerProduct: boolean;
     productCode: string;
     baseProductId: string;
+    url: string;
   };
 }
 
@@ -392,12 +393,21 @@ const ProductionCreationForm = ({
             onError
           )}
         >
-          {isEdit && (
-            <div className="flex items-center gap-2 text-xs px-2 mb-2 bg-secondary rounded-md w-fit p-1">
-              <span className="font-medium">Product Code:</span>
-              <span className="uppercase">{product?.productCode || "-"}</span>
-            </div>
-          )}
+          <div className="flex gap-2 items-center">
+            {isEdit && (
+              <div className="flex items-center gap-2 text-xs px-2 mb-2 bg-secondary rounded-md w-fit p-1">
+                <span className="font-medium">Product Code:</span>
+                <span className="uppercase">{product?.productCode || "-"}</span>
+              </div>
+            )}
+
+            {isEdit && (
+              <div className="flex items-center gap-2 text-xs px-2 mb-2 bg-secondary rounded-md w-fit p-1">
+                <span className="font-medium">URL:</span>
+                <span>/{product?.url || "-"}</span>
+              </div>
+            )}
+          </div>
           <div className="flex-1 overflow-hidden">
             <ScrollArea className="h-full">
               <Accordion
