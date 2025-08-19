@@ -17,6 +17,7 @@ import RegisterClient from "./pages/client/RegisterClient.tsx";
 import ClientList from "./pages/client/ClientList.tsx";
 import ClientMetrics from "./pages/client/ClientMetrics.tsx";
 import AdminRegister from "./pages/admin/AdminRegister.tsx";
+import NewBooking from "./pages/booking/NewBooking.tsx";
 
 const router = createBrowserRouter([
   {
@@ -64,6 +65,18 @@ const router = createBrowserRouter([
       {
         path: "client/register",
         Component: RegisterClient,
+      },
+      {
+        path: "bookings",
+        element: <div>bookings</div>,
+      },
+      {
+        path: "bookings/create",
+        Component: NewBooking,
+      },
+      {
+        path: "bookings/custom",
+        element: <div>custom</div>,
       },
       {
         path: "*", // catch-all 404 route

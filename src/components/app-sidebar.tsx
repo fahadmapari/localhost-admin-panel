@@ -61,22 +61,6 @@ const data = {
       ],
     },
     {
-      title: "Client",
-      url: "#",
-      icon: Users,
-      isActive: false,
-      items: [
-        {
-          title: "List",
-          url: "/client",
-        },
-        {
-          title: "Register",
-          url: "/client/register",
-        },
-      ],
-    },
-    {
       title: "Admin",
       url: "#",
       icon: User,
@@ -92,6 +76,23 @@ const data = {
         },
       ],
     },
+    {
+      title: "Client",
+      url: "#",
+      icon: Users,
+      isActive: false,
+      items: [
+        {
+          title: "List",
+          url: "/client",
+        },
+        {
+          title: "Register",
+          url: "/client/register",
+        },
+      ],
+    },
+
     {
       title: "Products",
       url: "#",
@@ -123,8 +124,12 @@ const data = {
           url: "/bookings",
         },
         {
-          title: "Add New",
+          title: "New Booking",
           url: "/bookings/create",
+        },
+        {
+          title: "Custom Booking",
+          url: "/bookings/custom",
         },
       ],
     },
