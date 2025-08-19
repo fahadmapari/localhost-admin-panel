@@ -12,15 +12,16 @@ export const bookingSchema = z.object({
   orderItems: z.array(
     z.object({
       productId: z.string("Product id is required"),
+      productTitle: z.string("Product title is required"),
       quantity: z.number("Quantity is required"),
       price: z.number("Price is required"),
       meetingPoint: z.string("Meeting point is required"),
       endPoint: z.string("End point is required"),
       startTime: z.string("Start time is required"),
-      duration: z.string("Duration is required"),
+      duration: z.number("Duration is required"),
       paxCount: z.number("Number of travellers is required"),
       details: z.string().optional(),
-      Date: z.date("Date is required"),
+      date: z.date("Date is required"),
     })
   ),
   totalPrice: z.number("Total price is required"),
