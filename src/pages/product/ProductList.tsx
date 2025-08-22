@@ -6,6 +6,7 @@ import { Loader } from "@/components/ui/loader";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePaginationControl } from "@/hooks/usePaginationControl";
+import { useResponsive } from "@/hooks/useResponsive";
 import api from "@/lib/axios";
 import { TourListType } from "@/types/product";
 import { ColumnDef } from "@tanstack/react-table";
@@ -21,10 +22,13 @@ interface ProductType {
 }
 
 const List = () => {
+  const { isBigScreen } = useResponsive();
+
   const [pagination, setPagination] = usePaginationControl({
     pageIndex: 0,
-    pageSize: 15,
+    pageSize: isBigScreen ? 15 : 10,
   });
+
   const [bookingType, setBookingType] = useState<string>("all");
   const [searchTitle, setSearchTitle] = useState<string>("");
 
@@ -37,7 +41,7 @@ const List = () => {
   useEffect(() => {
     setPagination({
       pageIndex: 0,
-      pageSize: 15,
+      pageSize: isBigScreen ? 15 : 10,
     });
   }, [bookingType]);
 
