@@ -98,6 +98,8 @@ const BookingForm = () => {
     }
   }, [productSearching]);
 
+  const onSubmit = async (values: z.infer<typeof bookingSchema>) => {};
+
   const handleAddProduct = (product?: TourListType) => {
     if (!product) {
       toast.error("Please select a product", {
@@ -145,6 +147,42 @@ const BookingForm = () => {
     form.setValue("totalPrice", totalPrice);
   }, [watchedOrderItems]);
 
+  const handleDateChange = (date: Date, index: number) => {
+    form.setValue(
+      "orderItems",
+      form
+        .getValues("orderItems")
+        .map((item, i) => (i === index ? { ...item, date } : item))
+    );
+  };
+
+  const handleStartTimeChange = (time: string, index: number) => {
+    form.setValue(
+      "orderItems",
+      form
+        .getValues("orderItems")
+        .map((item, i) => (i === index ? { ...item, startTime: time } : item))
+    );
+  };
+
+  const handlePaxCountChange = (paxCount: number, index: number) => {
+    form.setValue(
+      "orderItems",
+      form
+        .getValues("orderItems")
+        .map((item, i) => (i === index ? { ...item, paxCount } : item))
+    );
+  };
+
+  const handleQuantityChange = (quantity: number, index: number) => {
+    form.setValue(
+      "orderItems",
+      form
+        .getValues("orderItems")
+        .map((item, i) => (i === index ? { ...item, quantity } : item))
+    );
+  };
+
   return (
     <div className="h-full flex flex-col">
       <PageHeading label="New Booking" />
@@ -154,7 +192,10 @@ const BookingForm = () => {
       ) : (
         <ScrollArea className="flex-1 overflow-hidden">
           <Form {...form}>
-            <form className="flex-1 flex flex-col">
+            <form
+              className="flex-1 flex flex-col"
+              onSubmit={form.handleSubmit(onSubmit)}
+            >
               <div className="flex-1 overflow-y-auto">
                 <Card className="flex-1 mt-4 p-4 flex flex-col">
                   <div className="flex flex-col gap-4">
@@ -388,7 +429,13 @@ const BookingForm = () => {
                                       <FormControl>
                                         <Input
                                           className="w-full"
-                                          value={f.quantity}
+                                          value={f.paxCount}
+                                          onChange={(e) =>
+                                            handlePaxCountChange(
+                                              Number(e.target.value),
+                                              i
+                                            )
+                                          }
                                           type="number"
                                           step={1}
                                         />
@@ -402,6 +449,12 @@ const BookingForm = () => {
                                           className="w-full"
                                           value={f.quantity}
                                           type="number"
+                                          onChange={(e) =>
+                                            handleQuantityChange(
+                                              Number(e.target.value),
+                                              i
+                                            )
+                                          }
                                           step={1}
                                         />
                                       </FormControl>
@@ -439,6 +492,12 @@ const BookingForm = () => {
                                         <Input
                                           className="w-full"
                                           value={f.startTime}
+                                          onChange={(time) =>
+                                            handleStartTimeChange(
+                                              time.target.value,
+                                              i
+                                            )
+                                          }
                                           type="time"
                                         />
                                       </FormControl>
@@ -461,10 +520,13 @@ const BookingForm = () => {
                                       <FormControl>
                                         <DatePicker
                                           className="w-full"
-                                          value={f.value}
-                                          onChange={f.onChange}
-                                          defaultValue={f.date}
-                                          type="date"
+                                          value={f.date}
+                                          onChange={(date) =>
+                                            handleDateChange(
+                                              date || new Date(),
+                                              i
+                                            )
+                                          }
                                         />
                                       </FormControl>
                                     </div>
