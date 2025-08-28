@@ -18,6 +18,8 @@ import ClientList from "./pages/client/ClientList.tsx";
 import ClientMetrics from "./pages/client/ClientMetrics.tsx";
 import AdminRegister from "./pages/admin/AdminRegister.tsx";
 import NewBooking from "./pages/booking/NewBooking.tsx";
+import Messages from "./pages/communication/Messages.tsx";
+import Conversation from "./pages/communication/Conversation.tsx";
 
 const router = createBrowserRouter([
   {
@@ -77,6 +79,14 @@ const router = createBrowserRouter([
       {
         path: "bookings/custom",
         element: <div>custom</div>,
+      },
+      {
+        path: "messages",
+        Component: Messages,
+      },
+      {
+        path: "messages/:id",
+        Component: Conversation,
       },
       {
         path: "*", // catch-all 404 route

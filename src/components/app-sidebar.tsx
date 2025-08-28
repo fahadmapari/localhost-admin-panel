@@ -8,6 +8,7 @@ import {
   UserCog,
   LayoutDashboard,
   Network,
+  MessageSquare,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -126,6 +127,18 @@ const data = {
         {
           title: "Custom Booking",
           url: "/bookings/custom",
+        },
+      ],
+    },
+    {
+      title: "Communication",
+      url: "#",
+      icon: MessageSquare,
+      isActive: false,
+      items: [
+        {
+          title: "Messages",
+          url: "/messages",
         },
       ],
     },
