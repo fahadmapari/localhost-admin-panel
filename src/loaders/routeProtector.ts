@@ -20,7 +20,7 @@ export const routeProtector = async () => {
     setAuthToken(res.data.data.accessToken);
     setIsLoggedIn(true);
     setUser({
-      id: res.data.data.user.id,
+      id: res.data.data.user.userId,
       name: res.data.data.user.name,
       role: res.data.data.user.role,
       email: res.data.data.user.email,

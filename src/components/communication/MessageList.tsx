@@ -2,6 +2,7 @@ import { Conversation } from "@/types/conversation";
 import { ScrollArea } from "../ui/scroll-area";
 import { Skeleton } from "../ui/skeleton";
 import { Link } from "react-router";
+import { useAuthStore } from "@/store/auth.store";
 
 interface Props {
   conversations: Conversation[];
@@ -9,6 +10,7 @@ interface Props {
 }
 
 const MessageList = ({ conversations, isLoading }: Props) => {
+  const { user } = useAuthStore();
   return (
     <ScrollArea className="flex-1 overflow-hidden">
       {isLoading
@@ -20,7 +22,11 @@ const MessageList = ({ conversations, isLoading }: Props) => {
           ))
         : conversations.map((c, i) => (
             <MessageListItem
-              name={c.participants[1].name}
+              name={
+                user?.id === c.createdBy
+                  ? c.participants[1].name
+                  : c.participants[0].name
+              }
               title={c.title}
               id={c._id}
               key={i}

@@ -1,7 +1,6 @@
 import PageHeading from "@/components/common/PageHeading";
 import MessageList from "@/components/communication/MessageList";
 import NewConversationModal from "@/components/communication/NewConversationModal";
-import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
@@ -31,7 +30,7 @@ const Messages = () => {
     <div className="p-4 h-full flex flex-col gap-4 relative">
       <PageHeading label="Messages" />
       <MessageList conversations={conversations || []} isLoading={isLoading} />
-      <Button
+      <div
         className="rounded-full w-12 h-12 p-2 absolute bottom-5 right-5"
         onClick={() => setShowCreateNewConversationModal(true)}
       >
@@ -41,7 +40,7 @@ const Messages = () => {
           </TooltipTrigger>
           <TooltipContent>Start a new chat</TooltipContent>
         </Tooltip>
-      </Button>
+      </div>
 
       <NewConversationModal
         open={showCreateNewConversationModal}

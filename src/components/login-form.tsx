@@ -55,7 +55,7 @@ export function LoginForm({
       setAccessToken(data.data.accessToken);
       setIsLoggedIn(true);
       setUser({
-        id: data.data.user.id,
+        id: data.data.user.userId,
         name: data.data.user.name,
         role: data.data.user.role,
         email: data.data.user.email,
