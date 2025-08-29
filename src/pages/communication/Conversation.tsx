@@ -152,6 +152,10 @@ const Conversation = () => {
         className="w-full flex-1 border border-border rounded-md px-4 space-y-4 flex flex-col overflow-y-hidden"
         ref={scrollAreaRef}
       >
+        <div className="text-center text-muted-foreground py-1">
+          Created at{" "}
+          {dayjs(conversation?.createdAt).format("DD/MM/YYYY - hh:mm A")}
+        </div>
         {isLoading ? (
           <div className="flex-1 flex items-center justify-center">
             <Player src="/lotties/abstract-loading.json" autoplay loop />
