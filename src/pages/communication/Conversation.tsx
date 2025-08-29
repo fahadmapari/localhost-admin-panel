@@ -5,7 +5,10 @@ import api from "@/lib/axios";
 import { SERVER_URL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth.store";
-import { MessageType } from "@/types/conversation";
+import {
+  Conversation as ConversationType,
+  MessageType,
+} from "@/types/conversation";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { ChevronLeft, Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -62,6 +65,7 @@ const Conversation = () => {
     });
 
     return () => {
+      socket.emit("leave-convo", { conversationId: id });
       socket.off("join-convo");
       socket.off("new-message");
     };
@@ -92,6 +96,17 @@ const Conversation = () => {
     }
   );
 
+  const { data: conversation, isLoading: conversationIsLoading } = useSWR(
+    `/conversations/${id}`,
+    async (url) => {
+      const { data } = await api.get<{
+        data: ConversationType;
+      }>(url);
+
+      return data.data;
+    }
+  );
+
   return (
     <div className="h-full p-4 flex flex-col gap-4">
       <div className="flex items-center gap-4">
@@ -101,14 +116,27 @@ const Conversation = () => {
             onClick={() => navigate(-1)}
           />
         </div>
-        <div className="w-12 h-12 bg-ring rounded-full flex justify-center items-center font-medium">
-          FM
+        <div className="w-12 h-12 bg-ring rounded-full flex justify-center items-center font-medium uppercase">
+          {!conversationIsLoading && (
+            <>
+              {user?.id === conversation?.createdBy
+                ? conversation?.participants[1]?.name?.charAt(0)
+                : conversation?.participants[0]?.name?.charAt(0)}
+              {user?.id === conversation?.createdBy
+                ? conversation?.participants[1]?.name?.split(" ")[1]?.charAt(0)
+                : conversation?.participants[0]?.name?.split(" ")[1]?.charAt(0)}
+            </>
+          )}
         </div>
 
-        <div className=" flex flex-col gap-1">
-          <div className="uppercase text-xl font-bold">{id}</div>
+        <div className=" flex flex-col gap-0">
+          <div className="uppercase text-xl font-bold">
+            {conversation?.title}
+          </div>
           <span className="text-sm capitalize text-secondary-foreground">
-            PARTICIPANT NAME
+            {user?.id === conversation?.createdBy
+              ? conversation?.participants[1]?.name
+              : conversation?.participants[0]?.name}
           </span>
         </div>
       </div>

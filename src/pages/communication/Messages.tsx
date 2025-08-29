@@ -31,12 +31,12 @@ const Messages = () => {
       <PageHeading label="Messages" />
       <MessageList conversations={conversations || []} isLoading={isLoading} />
       <div
-        className="rounded-full w-12 h-12 p-2 absolute bottom-5 right-5"
+        className="rounded-full w-12 h-12 p-2 absolute bottom-5 right-5 bg-primary text-secondary flex items-center justify-center cursor-pointer"
         onClick={() => setShowCreateNewConversationModal(true)}
       >
         <Tooltip>
           <TooltipTrigger>
-            <Edit />
+            <Edit className="cursor-pointer" />
           </TooltipTrigger>
           <TooltipContent>Start a new chat</TooltipContent>
         </Tooltip>

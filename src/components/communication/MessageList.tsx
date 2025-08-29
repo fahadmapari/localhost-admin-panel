@@ -48,7 +48,7 @@ const MessageListItem = ({ name, title, id }: MessageListItemProps) => {
       to={"/messages/" + id}
       className="px-4 flex items-center gap-4 border-y border-border py-2 first-of-type:border-t-0 hover:bg-secondary cursor-pointer"
     >
-      <div className="w-12 h-12 bg-ring rounded-full flex justify-center items-center font-medium">
+      <div className="w-12 uppercase h-12 bg-ring rounded-full flex justify-center items-center font-medium">
         {name.charAt(0)}
         {name.split(" ")[1]?.charAt(0)}
       </div>
