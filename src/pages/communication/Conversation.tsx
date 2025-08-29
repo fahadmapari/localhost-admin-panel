@@ -10,6 +10,7 @@ import {
   MessageType,
 } from "@/types/conversation";
 import { Player } from "@lottiefiles/react-lottie-player";
+import dayjs from "dayjs";
 import { ChevronLeft, Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
@@ -28,6 +29,7 @@ const Conversation = () => {
     {
       message: string;
       sender: string;
+      timestamp: string;
     }[]
   >([]);
 
@@ -60,6 +62,7 @@ const Conversation = () => {
         {
           message: data.message,
           sender: data.sender,
+          timestamp: dayjs(data.timestamp).format("DD/MM/YYYY - hh:mm A"),
         },
       ]);
     });
@@ -85,7 +88,11 @@ const Conversation = () => {
       }>(url);
 
       const messageHistory =
-        data.data.map((m) => ({ message: m.text, sender: m.sender })) || [];
+        data.data.map((m) => ({
+          message: m.text,
+          sender: m.sender,
+          timestamp: dayjs(m.createdAt).format("DD/MM/YYYY - hh:mm A"),
+        })) || [];
 
       setMessages((prev) => [...prev, ...messageHistory]);
 
@@ -154,6 +161,7 @@ const Conversation = () => {
             <Message
               message={message.message}
               ownMessage={message.sender === user?.id}
+              timestamp={message.timestamp}
               key={i}
             />
           ))
@@ -178,9 +186,10 @@ const Conversation = () => {
 interface MessageProps {
   ownMessage?: boolean;
   message: string;
+  timestamp: string;
 }
 
-const Message = ({ ownMessage = false, message }: MessageProps) => {
+const Message = ({ ownMessage = false, message, timestamp }: MessageProps) => {
   return (
     <div
       className={cn(
@@ -195,9 +204,7 @@ const Message = ({ ownMessage = false, message }: MessageProps) => {
         )}
       />
       {message}
-      <span className="ml-auto text-xs text-muted-foreground">
-        12/02/1999 - 12:00 PM
-      </span>
+      <span className="ml-auto text-xs text-muted-foreground">{timestamp}</span>
     </div>
   );
 };

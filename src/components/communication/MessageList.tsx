@@ -46,7 +46,7 @@ const MessageListItem = ({ name, title, id }: MessageListItemProps) => {
   return (
     <Link
       to={"/messages/" + id}
-      className="px-4 flex items-center gap-4 border-y border-border py-2 first-of-type:border-t-0 hover:bg-secondary cursor-pointer"
+      className="px-4 flex items-center gap-4 border-b border-border py-2 first-of-type:border-t-0 hover:bg-secondary cursor-pointer"
     >
       <div className="w-12 uppercase h-12 bg-ring rounded-full flex justify-center items-center font-medium">
         {name.charAt(0)}
@@ -56,7 +56,9 @@ const MessageListItem = ({ name, title, id }: MessageListItemProps) => {
         <div className="font-bold text-base uppercase">
           {title} - {name}
         </div>
-        <div className="text-sm font-normal">Message preview.</div>
+        <div className="text-sm font-normal text-muted-foreground">
+          Click to open chat.
+        </div>
       </div>
     </Link>
   );
