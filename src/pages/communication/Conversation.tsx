@@ -22,7 +22,7 @@ const Conversation = () => {
   const { id } = useParams();
   const { user } = useAuthStore();
   const navigate = useNavigate();
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
   const socket = io(SERVER_URL);
   const [message, setMessage] = useState<string>("");
   const [messages, setMessages] = useState<
@@ -75,10 +75,10 @@ const Conversation = () => {
   }, []);
 
   useEffect(() => {
-    if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "instant" });
     }
-  }, []);
+  }, [bottomRef.current, messages.length]);
 
   const { isLoading } = useSWR(
     `/conversations/messages/${id}`,
@@ -148,10 +148,7 @@ const Conversation = () => {
         </div>
       </div>
 
-      <ScrollArea
-        className="w-full flex-1 border border-border rounded-md px-4 space-y-4 flex flex-col overflow-y-hidden"
-        ref={scrollAreaRef}
-      >
+      <ScrollArea className="w-full flex-1 border border-border rounded-md px-4 space-y-4 flex flex-col overflow-y-hidden">
         <div className="text-center text-muted-foreground py-1">
           Created at{" "}
           {dayjs(conversation?.createdAt).format("DD/MM/YYYY - hh:mm A")}
@@ -170,6 +167,8 @@ const Conversation = () => {
             />
           ))
         )}
+
+        <div className="w-full" ref={bottomRef} />
       </ScrollArea>
 
       <div className="flex gap-2">
