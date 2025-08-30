@@ -16,15 +16,16 @@ const Messages = () => {
   const [showCreateNewConversationModal, setShowCreateNewConversationModal] =
     useState(false);
 
-  const { data: conversations, isLoading } = useSWR(
-    "/conversations",
-    async (url) => {
-      const { data } = await api.get<{
-        data: Conversation[];
-      }>(url);
-      return data.data;
-    }
-  );
+  const {
+    data: conversations,
+    isLoading,
+    mutate,
+  } = useSWR("/conversations", async (url) => {
+    const { data } = await api.get<{
+      data: Conversation[];
+    }>(url);
+    return data.data;
+  });
 
   return (
     <div className="p-4 h-full flex flex-col gap-4 relative">
@@ -44,7 +45,10 @@ const Messages = () => {
 
       <NewConversationModal
         open={showCreateNewConversationModal}
-        onClose={() => setShowCreateNewConversationModal(false)}
+        onClose={() => {
+          setShowCreateNewConversationModal(false);
+          mutate();
+        }}
       />
     </div>
   );
