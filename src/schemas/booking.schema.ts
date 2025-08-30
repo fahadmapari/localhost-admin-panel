@@ -10,21 +10,24 @@ export const bookingSchema = z.object({
   }),
   agencyRef: z.string("Agency ref is required").optional(),
   comments: z.string().optional(),
-  orderItems: z.array(
-    z.object({
-      productId: z.string("Product id is required"),
-      productTitle: z.string("Product title is required"),
-      quantity: z.number("Quantity is required"),
-      price: z.number("Price is required"),
-      meetingPoint: z.string("Meeting point is required"),
-      endPoint: z.string("End point is required"),
-      startTime: z.string("Start time is required"),
-      duration: z.number("Duration is required"),
-      paxCount: z.number("Number of travellers is required"),
-      details: z.string().optional(),
-      date: z.date("Date is required"),
-    })
-  ),
+  orderItems: z
+    .array(
+      z.object({
+        productId: z.string("Product id is required"),
+        productTitle: z.string("Product title is required"),
+        quantity: z.number("Quantity is required"),
+        price: z.number("Price is required"),
+        meetingPoint: z.string("Meeting point is required"),
+        endPoint: z.string("End point is required"),
+        startTime: z.string("Start time is required"),
+        duration: z.number("Duration is required"),
+        paxCount: z.number("Number of travellers is required"),
+        details: z.string().optional(),
+        date: z.date("Date is required"),
+      }),
+      "Order items are required"
+    )
+    .min(1, "At least one order item is required"),
   totalPrice: z.number("Total price is required"),
   discountCode: z.string().optional(),
 });

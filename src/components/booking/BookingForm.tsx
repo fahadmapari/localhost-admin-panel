@@ -27,6 +27,7 @@ import PageHeading from "../common/PageHeading";
 import { ScrollArea } from "../ui/scroll-area";
 import { ClientProfile } from "@/types/client";
 import { Skeleton } from "../ui/skeleton";
+import { cn } from "@/lib/utils";
 
 const BookingForm = () => {
   const form = useForm({
@@ -377,7 +378,14 @@ const BookingForm = () => {
                       </div>
                     </div>
 
-                    <div className="w-full flex-1 flex flex-col border-dashed border rounded-md border-border p-4">
+                    <div
+                      className={cn(
+                        "w-full flex-1 flex flex-col border-dashed border rounded-md border-border p-4",
+                        form.getFieldState("orderItems")?.error
+                          ? "border-destructive"
+                          : ""
+                      )}
+                    >
                       <div className="text-2xl font-medium mb-4">
                         Order Items
                       </div>
@@ -546,6 +554,7 @@ const BookingForm = () => {
                                 </div>
                               </FormItem>
                             ))}
+                            <FormMessage />
                           </div>
                         )}
                       />
@@ -576,7 +585,6 @@ const BookingForm = () => {
                             <div className="text-2xl font-bold">
                               {field.value || 0} EUR
                             </div>
-                            <FormMessage />
                           </FormItem>
                         )}
                       />
