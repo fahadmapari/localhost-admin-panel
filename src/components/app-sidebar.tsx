@@ -44,20 +44,12 @@ const data = {
       icon: LayoutDashboard,
       items: [
         {
-          title: "Bookings Metrics",
-          url: "/dashboard/bookings",
-        },
-        {
           title: "Products Metrics",
           url: "/dashboard/products",
         },
         {
           title: "Clients Metrics",
           url: "/dashboard/clients",
-        },
-        {
-          title: "Suppliers Metrics",
-          url: "/dashboard/suppliers",
         },
       ],
     },
@@ -155,22 +147,6 @@ const data = {
         {
           title: "Add New",
           url: "/suppliers/create",
-        },
-      ],
-    },
-    {
-      title: "HR",
-      url: "#",
-      icon: Network,
-      isActive: false,
-      items: [
-        {
-          title: "List",
-          url: "/hr",
-        },
-        {
-          title: "Add New",
-          url: "/hr/create",
         },
       ],
     },
