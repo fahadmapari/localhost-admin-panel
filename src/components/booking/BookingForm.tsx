@@ -28,6 +28,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { ClientProfile } from "@/types/client";
 import { Skeleton } from "../ui/skeleton";
 import { cn } from "@/lib/utils";
+import { z } from "zod";
 
 const BookingForm = () => {
   const form = useForm({
@@ -99,7 +100,9 @@ const BookingForm = () => {
     }
   }, [productSearching]);
 
-  const onSubmit = async (values: z.infer<typeof bookingSchema>) => {};
+  const onSubmit = async (values: z.infer<typeof bookingSchema>) => {
+    console.log(values);
+  };
 
   const handleAddProduct = (product?: TourListType) => {
     if (!product) {

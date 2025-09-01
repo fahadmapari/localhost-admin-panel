@@ -103,26 +103,6 @@ export const MultiDateSelect = React.forwardRef<
       onValueChange?.(newValue);
     };
 
-    const handleDateSelect = (date: Date | undefined) => {
-      if (!date) return;
-
-      let newValue: Date[];
-      const existingIndex = selectedDates.findIndex((selectedDate) =>
-        isSameDay(selectedDate, date)
-      );
-
-      if (existingIndex >= 0) {
-        newValue = selectedDates.filter((_, index) => index !== existingIndex);
-      } else {
-        newValue = [...selectedDates, date];
-      }
-
-      if (value === undefined) {
-        setInternalValue(newValue);
-      }
-      onValueChange?.(newValue);
-    };
-
     const handlePresetSelect = (presetDate: Date) => {
       const isSelected = selectedDates.some((date) =>
         isSameDay(date, presetDate)

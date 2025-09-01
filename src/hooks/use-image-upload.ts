@@ -14,16 +14,17 @@ export function useImageUpload({ onUpload }: UseImageUploadProps = {}) {
 
   // Dummy upload function that simulates a delay and returns the local preview URL
   const dummyUpload = async (file: File, localUrl: string): Promise<string> => {
+    console.log(file);
     try {
       setUploading(true);
       // Simulate network delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       // Simulate random upload errors (20% chance)
       if (Math.random() < 0.2) {
         throw new Error("Upload failed - This is a demo error");
       }
-      
+
       setError(null);
       // In a real implementation, this would be the URL from the server
       return localUrl;
@@ -56,7 +57,7 @@ export function useImageUpload({ onUpload }: UseImageUploadProps = {}) {
           URL.revokeObjectURL(localUrl);
           setPreviewUrl(null);
           setFileName(null);
-          return console.error(err)
+          return console.error(err);
         }
       }
     },

@@ -7,7 +7,6 @@ import {
   Users,
   UserCog,
   LayoutDashboard,
-  Network,
   MessageSquare,
 } from "lucide-react";
 
@@ -163,7 +162,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
       <SidebarTrigger className="border border-border cursor-pointer absolute right-0 top-2/3 translate-x-1/2 bg-background rounded-full p-2 z-20" />

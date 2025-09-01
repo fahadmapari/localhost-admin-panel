@@ -636,7 +636,9 @@ const RegisterClientForm = () => {
           </div>
 
           <div className="w-full flex justify-center mt-4">
-            <Button className="cursor-pointer">Register Client</Button>
+            <Button className="cursor-pointer" disabled={isUploading}>
+              Register Client
+            </Button>
           </div>
         </form>
       </Form>
