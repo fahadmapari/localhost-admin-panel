@@ -1,3 +1,4 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/c73ed9f4-7188-4d0a-b801-2e2588438008/deploy-status)](https://app.netlify.com/projects/localhostadmin/deploys)
 
 # Screenshots - 30/08/2025
 <img width="1920" height="1080" alt="Screenshot (1)" src="https://github.com/user-attachments/assets/798fecd5-dc71-4b3f-9b66-aae57d15d57e" />
