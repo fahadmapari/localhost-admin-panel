@@ -30,6 +30,7 @@ const MessageList = ({ conversations, isLoading }: Props) => {
               title={c.title}
               id={c._id}
               key={i}
+              lastMessage={c.lastMessage?.text}
             />
           ))}
     </ScrollArea>
@@ -40,9 +41,15 @@ interface MessageListItemProps {
   name: string;
   title: string;
   id: string;
+  lastMessage?: string;
 }
 
-const MessageListItem = ({ name, title, id }: MessageListItemProps) => {
+const MessageListItem = ({
+  name,
+  title,
+  id,
+  lastMessage,
+}: MessageListItemProps) => {
   return (
     <Link
       to={"/messages/" + id}
@@ -57,7 +64,7 @@ const MessageListItem = ({ name, title, id }: MessageListItemProps) => {
           {title} - {name}
         </div>
         <div className="text-sm font-normal text-muted-foreground">
-          Click to open chat.
+          {lastMessage ? lastMessage : "Click to open chat."}
         </div>
       </div>
     </Link>

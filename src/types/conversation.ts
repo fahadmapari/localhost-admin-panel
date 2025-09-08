@@ -4,6 +4,7 @@ export interface Conversation {
   _id: string;
   participants: UserRef[]; // Array of user IDs
   title: string;
+  lastMessage?: MessageType;
   createdBy: string; // User ID of creator
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string
