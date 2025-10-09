@@ -141,11 +141,11 @@ const data = {
       items: [
         {
           title: "List",
-          url: "/suppliers",
+          url: "/supplier",
         },
         {
           title: "Add New",
-          url: "/suppliers/create",
+          url: "/supplier/create",
         },
       ],
     },

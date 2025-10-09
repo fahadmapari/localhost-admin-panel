@@ -20,6 +20,7 @@ import AdminRegister from "./pages/admin/AdminRegister.tsx";
 import NewBooking from "./pages/booking/NewBooking.tsx";
 import Messages from "./pages/communication/Messages.tsx";
 import Conversation from "./pages/communication/Conversation.tsx";
+import RegisterSupplier from "./pages/supplier/RegisterSupplier.tsx";
 
 const router = createBrowserRouter([
   {
@@ -87,6 +88,14 @@ const router = createBrowserRouter([
       {
         path: "messages/:id",
         Component: Conversation,
+      },
+      {
+        path: "supplier",
+        element: <div>suppliers element</div>,
+      },
+      {
+        path: "supplier/create",
+        Component: RegisterSupplier,
       },
       {
         path: "*", // catch-all 404 route
