@@ -191,9 +191,9 @@ const docsSchema = z
     licenced: z.boolean(),
     insured: z.boolean(),
     criminalRecord: z.boolean(),
-    confirmed: z.boolean(),
+    contracted: z.boolean(),
     whisperSystem: z.boolean(),
-    vatAmount: z.number().optional(),
+    vatAmount: z.boolean(),
     commission: z.boolean(),
   })
   .optional();
@@ -393,9 +393,9 @@ export const supplierDefaultValues: Partial<Supplier> = {
     licenced: false,
     insured: false,
     criminalRecord: false,
-    confirmed: false,
+    contracted: false,
     whisperSystem: false,
-    vatAmount: undefined,
+    vatAmount: false,
     commission: false,
   },
   serviceConfig: {
