@@ -600,7 +600,318 @@ const RegisterSupplier = () => {
                 <AccordionTrigger className="text-2xl cursor-pointer">
                   Communication Information
                 </AccordionTrigger>
-                <AccordionContent></AccordionContent>
+                <AccordionContent>
+                  <div className="flex flex-col gap-4">
+                    <div className="flex gap-4">
+                      <FormField
+                        control={form.control}
+                        name="contact.preferredFormOfContact"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Preferred form of contact</FormLabel>
+                            <FormControl>
+                              <DropdownSelect
+                                options={
+                                  supplierSchema.shape.contact.shape
+                                    .preferredFormOfContact.options
+                                }
+                                onChange={field.onChange}
+                                defaultValue={field.value as string}
+                                value={field.value as string}
+                                label="Method of contact"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="flex gap-4">
+                      <FormField
+                        control={form.control}
+                        name="contact.email"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="contact.alternateEmail"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Alternate email</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="flex gap-4">
+                      <div className="flex-1 flex gap-2">
+                        <FormField
+                          control={form.control}
+                          name="contact.mobile.code"
+                          render={({ field }) => (
+                            <FormItem className="w-28">
+                              <FormLabel>Country code</FormLabel>
+                              <FormControl>
+                                <Input {...field} type="tel" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="contact.mobile.number"
+                          render={({ field }) => (
+                            <FormItem className="flex-1">
+                              <FormLabel>Mobile</FormLabel>
+                              <FormControl>
+                                <Input {...field} type="tel" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <div className="flex-1 flex gap-2">
+                        <FormField
+                          control={form.control}
+                          name="contact.officePhone.code"
+                          render={({ field }) => (
+                            <FormItem className="w-28">
+                              <FormLabel>Country code</FormLabel>
+                              <FormControl>
+                                <Input {...field} type="tel" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="contact.officePhone.number"
+                          render={({ field }) => (
+                            <FormItem className="flex-1">
+                              <FormLabel>Office phone</FormLabel>
+                              <FormControl>
+                                <Input {...field} type="tel" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <div className="flex-1 flex gap-2">
+                        <FormField
+                          control={form.control}
+                          name="contact.officePhone.code"
+                          render={({ field }) => (
+                            <FormItem className="w-28">
+                              <FormLabel>Country code</FormLabel>
+                              <FormControl>
+                                <Input {...field} type="tel" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="contact.officePhone.number"
+                          render={({ field }) => (
+                            <FormItem className="flex-1">
+                              <FormLabel>Home phone</FormLabel>
+                              <FormControl>
+                                <Input {...field} type="tel" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex gap-4">
+                      <FormField
+                        control={form.control}
+                        name="contact.skype"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Skype</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="contact.website"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Website</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="contact.socialMedia.facebook"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Facebook (URL)</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="contact.socialMedia.linkedin"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Linkedin (URL)</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="flex gap-4">
+                      <FormField
+                        control={form.control}
+                        name="contact.socialMedia.instagram"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Instagram (URL)</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="contact.socialMedia.twitter"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Twitter (URL)</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="contact.tripAdvisor"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>TripAdvisor (URL)</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="flex gap-4">
+                      <FormField
+                        control={form.control}
+                        name="contact.profileVideo"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Profile video (URL)</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="contact.otherProfile"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Other profile (URL)</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="contact.review"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Review (URL)</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="flex gap-4">
+                      <FormField
+                        control={form.control}
+                        name="contact.sampleTourVideo"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Sample tour video (URL)</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                </AccordionContent>
               </AccordionItem>
 
               <AccordionItem

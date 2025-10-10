@@ -58,7 +58,7 @@ const contactSchema = z.object({
     .toLowerCase()
     .optional(),
   mobile: z.object({
-    code: z.string().optional(),
+    code: z.string("Mobile code is required"),
     number: z.string().min(1, "Mobile number is required"),
   }),
   officePhone: phoneSchema.optional(),
@@ -77,10 +77,11 @@ const contactSchema = z.object({
       tiktok: z.string().optional(),
     })
     .optional(),
-  profileVideo: z.string().url().optional().or(z.literal("")),
-  otherProfile: z.string().url().optional().or(z.literal("")),
-  sampleTourVideo: z.string().url().optional().or(z.literal("")),
-  review: z.string().url().optional().or(z.literal("")),
+  tripAdvisor: z.url().optional().or(z.literal("")),
+  profileVideo: z.url().optional().or(z.literal("")),
+  otherProfile: z.url().optional().or(z.literal("")),
+  sampleTourVideo: z.url().optional().or(z.literal("")),
+  review: z.url().optional().or(z.literal("")),
 });
 
 // Experience Schema
