@@ -125,7 +125,7 @@ const billingSchema = z.object({
   vat: z.string().optional(),
   bankAccountHolder: z.string().optional(),
   iban: z.string().optional(),
-  currency: z.string(),
+  currency: z.enum(["EUR", "USD", "INR"]),
   otherPaymentOptions: z.string().optional(),
   vatType: z
     .enum([

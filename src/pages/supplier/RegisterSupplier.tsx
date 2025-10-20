@@ -28,6 +28,7 @@ import { DatePicker } from "@/components/date-picker";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Textarea } from "@/components/ui/textarea";
 
 const RegisterSupplier = () => {
   const form = useForm<Supplier>({
@@ -721,7 +722,7 @@ const RegisterSupplier = () => {
                       <div className="flex-1 flex gap-2">
                         <FormField
                           control={form.control}
-                          name="contact.officePhone.code"
+                          name="contact.homePhone.code"
                           render={({ field }) => (
                             <FormItem className="w-28">
                               <FormLabel>Country code</FormLabel>
@@ -735,7 +736,7 @@ const RegisterSupplier = () => {
 
                         <FormField
                           control={form.control}
-                          name="contact.officePhone.number"
+                          name="contact.homePhone.number"
                           render={({ field }) => (
                             <FormItem className="flex-1">
                               <FormLabel>Home phone</FormLabel>
@@ -921,7 +922,165 @@ const RegisterSupplier = () => {
                 <AccordionTrigger className="text-2xl cursor-pointer">
                   Experience
                 </AccordionTrigger>
-                <AccordionContent></AccordionContent>
+                <AccordionContent>
+                  <div className="space-y-4">
+                    <div className="flex gap-4">
+                      <FormField
+                        control={form.control}
+                        name="experience.aboutYourself"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>About yourself</FormLabel>
+                            <FormControl>
+                              <Textarea {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="flex gap-4">
+                      <FormField
+                        control={form.control}
+                        name="experience.shortDescription"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Short description of tours</FormLabel>
+                            <FormControl>
+                              <Textarea {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="flex gap-4">
+                      <FormField
+                        control={form.control}
+                        name="experience.references"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>References</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="flex gap-4">
+                      <FormField
+                        control={form.control}
+                        name="experience.yearsOfExperience"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Years of experience</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="experience.formalEducation"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Formal education</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="experience.nonFormalEducation"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Non-Formal education</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="experience.professionalCourses"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Professional courses</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="flex gap-4">
+                      <FormField
+                        control={form.control}
+                        name="experience.tourTopic"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Tour topic</FormLabel>
+                            <FormControl>
+                              <DropdownSelect
+                                options={
+                                  supplierSchema.shape.experience
+                                    .unwrap()
+                                    .shape.tourTopic.unwrap().options
+                                }
+                                onChange={field.onChange}
+                                defaultValue={field.value as string}
+                                value={field.value as string}
+                                label="Tour topic"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="experience.tourType"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Tour type</FormLabel>
+                            <FormControl>
+                              <DropdownSelect
+                                options={
+                                  supplierSchema.shape.experience
+                                    .unwrap()
+                                    .shape.tourType.unwrap().options
+                                }
+                                onChange={field.onChange}
+                                defaultValue={field.value as string}
+                                value={field.value as string}
+                                label="Tour topic"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                </AccordionContent>
               </AccordionItem>
 
               <AccordionItem
@@ -931,7 +1090,142 @@ const RegisterSupplier = () => {
                 <AccordionTrigger className="text-2xl cursor-pointer">
                   Billing Information
                 </AccordionTrigger>
-                <AccordionContent></AccordionContent>
+                <AccordionContent>
+                  <div className="space-y-4">
+                    <div className="flex gap-4">
+                      <FormField
+                        control={form.control}
+                        name="billing.bic"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>BIC</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="billing.taxNo"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>TAX No</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="billing.vatNo"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>VAT No</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="flex gap-4">
+                      <FormField
+                        control={form.control}
+                        name="billing.vat"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>VAT</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="billing.bankAccountHolder"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Bank account holder</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="billing.iban"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>IBAN</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="flex gap-4">
+                      <FormField
+                        control={form.control}
+                        name="billing.currency"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Currency</FormLabel>
+                            <FormControl>
+                              <DropdownSelect
+                                options={
+                                  supplierSchema.shape.billing.unwrap().shape
+                                    .currency.options
+                                }
+                                onChange={field.onChange}
+                                defaultValue={field.value as string}
+                                value={field.value as string}
+                                label="Currency"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="billing.otherPaymentOptions"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Other payment options</FormLabel>
+                            <FormControl>
+                              <DropdownSelect
+                                options={["Cash", "Credit Card", "Debit Card"]}
+                                onChange={field.onChange}
+                                defaultValue={field.value as string}
+                                value={field.value as string}
+                                label="Payment options"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                </AccordionContent>
               </AccordionItem>
 
               <AccordionItem
