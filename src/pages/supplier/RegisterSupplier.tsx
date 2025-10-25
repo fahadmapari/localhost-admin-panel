@@ -29,6 +29,8 @@ import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 const RegisterSupplier = () => {
   const form = useForm<Supplier>({
@@ -1224,6 +1226,39 @@ const RegisterSupplier = () => {
                         )}
                       />
                     </div>
+
+                    <div className="flex gap-4">
+                      <FormField
+                        control={form.control}
+                        name="billing.vatType"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel className="pb-2">VAT type</FormLabel>
+                            <FormControl>
+                              <RadioGroup
+                                value={field.value}
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                {supplierSchema.shape.billing
+                                  .unwrap()
+                                  .shape.vatType.unwrap()
+                                  .options.map((option) => (
+                                    <div className="flex items-center gap-3">
+                                      <RadioGroupItem
+                                        value={option}
+                                        id={option}
+                                      />
+                                      <Label htmlFor={option}>{option}</Label>
+                                    </div>
+                                  ))}
+                              </RadioGroup>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
                 </AccordionContent>
               </AccordionItem>
@@ -1235,9 +1270,90 @@ const RegisterSupplier = () => {
                 <AccordionTrigger className="text-2xl cursor-pointer">
                   Contract Information
                 </AccordionTrigger>
-                <AccordionContent></AccordionContent>
+                <AccordionContent>
+                  <div className="space-y-4">
+                    <div className="flex gap-4">
+                      <FormField
+                        control={form.control}
+                        name="contract.contractStartDate"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Contract start date</FormLabel>
+                            <FormControl>
+                              <DatePicker
+                                value={field.value}
+                                onChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="contract.contractEndDate"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Contract end date</FormLabel>
+                            <FormControl>
+                              <DatePicker
+                                value={field.value}
+                                onChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="flex gap-4">
+                      <FormField
+                        control={form.control}
+                        name="contract.serviceType"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Service type</FormLabel>
+                            <FormControl>
+                              <DropdownSelect
+                                options={[
+                                  "Travel",
+                                  "Accommodation",
+                                  "Food",
+                                  "Other",
+                                ]}
+                                onChange={field.onChange}
+                                defaultValue={field.value as string}
+                                value={field.value as string}
+                                label="Service type"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <Separator />
+                  </div>
+                </AccordionContent>
               </AccordionItem>
             </Accordion>
+
+            <FormField
+              control={form.control}
+              name="comments"
+              render={({ field }) => (
+                <FormItem className="flex-1 pt-4">
+                  <FormLabel>Comments</FormLabel>
+                  <FormControl>
+                    <Textarea {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </ScrollArea>
           <div className="flex items-center justify-center mt-4">
             <Button>SUBMIT</Button>
