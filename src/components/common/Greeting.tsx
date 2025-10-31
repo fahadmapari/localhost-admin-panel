@@ -7,9 +7,9 @@ const Greeting = () => {
   const getGreetingFromTime = (): string => {
     const time = Number(dayjs().format("H"));
 
-    if (time < 12) {
+    if (time < 12 && time > 5) {
       return "Good Morning";
-    } else if (time < 17) {
+    } else if (time < 17 && time > 12) {
       return "Good Afternoon";
     } else {
       return "Good Evening";
@@ -19,7 +19,7 @@ const Greeting = () => {
   const getTimeIcon = () => {
     const time = Number(dayjs().format("H"));
 
-    if (time < 17) {
+    if (time < 17 && time > 12) {
       return <Sun size={14} />;
     } else {
       return <Moon size={14} />;

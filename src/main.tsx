@@ -21,6 +21,7 @@ import NewBooking from "./pages/booking/NewBooking.tsx";
 import Messages from "./pages/communication/Messages.tsx";
 import Conversation from "./pages/communication/Conversation.tsx";
 import RegisterSupplier from "./pages/supplier/RegisterSupplier.tsx";
+import ListSupplier from "./pages/supplier/ListSupplier.tsx";
 
 const router = createBrowserRouter([
   {
@@ -91,7 +92,7 @@ const router = createBrowserRouter([
       },
       {
         path: "supplier",
-        element: <div>suppliers element</div>,
+        Component: ListSupplier,
       },
       {
         path: "supplier/create",

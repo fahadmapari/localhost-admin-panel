@@ -8,6 +8,7 @@ import { ThemeProvider } from "./providers/ThemeProvider";
 import { Toaster } from "./components/ui/sonner";
 import { TooltipProvider } from "./components/ui/tooltip";
 import Greeting from "./components/common/Greeting";
+import Welcome from "./components/common/Welcome";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
               <ThemeSwitcher />
             </header>
             <main className="h-full gap-4 m-4 mt-0 bg-muted/50 flex-1 overflow-hidden rounded-xl">
+              <Welcome />
               <Outlet />
               <Toaster />
             </main>
