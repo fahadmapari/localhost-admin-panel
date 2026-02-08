@@ -23,7 +23,9 @@ const Conversation = () => {
   const { user } = useAuthStore();
   const navigate = useNavigate();
   const bottomRef = useRef<HTMLDivElement>(null);
-  const socket = io(SERVER_URL);
+  const socket = io(SERVER_URL, {
+    transports: ["websocket"],
+  });
   const [message, setMessage] = useState<string>("");
   const [messages, setMessages] = useState<
     {
@@ -100,7 +102,7 @@ const Conversation = () => {
     },
     {
       revalidateOnFocus: false,
-    }
+    },
   );
 
   const { data: conversation, isLoading: conversationIsLoading } = useSWR(
@@ -111,7 +113,7 @@ const Conversation = () => {
       }>(url);
 
       return data.data;
-    }
+    },
   );
 
   return (
@@ -197,13 +199,13 @@ const Message = ({ ownMessage = false, message, timestamp }: MessageProps) => {
     <div
       className={cn(
         "relative max-w-[500px] bg-accent rounded-lg px-4 py-2 text-base font-semibold my-4 flex flex-col gap-2 mx-2",
-        ownMessage ? "self-end ml-auto rounded-tr-md" : "rounded-tl-md"
+        ownMessage ? "self-end ml-auto rounded-tr-md" : "rounded-tl-md",
       )}
     >
       <div
         className={cn(
           "w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[10px] border-r-accent absolute top-1 z-20",
-          ownMessage ? "-right-2 -scale-100" : "-left-2 !rounded-tl-none"
+          ownMessage ? "-right-2 -scale-100" : "-left-2 !rounded-tl-none",
         )}
       />
       {message}
