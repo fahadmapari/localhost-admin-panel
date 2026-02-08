@@ -2,8 +2,7 @@ import dayjs from "dayjs";
 import { Moon, Sun } from "lucide-react";
 
 const Greeting = () => {
-  const time = dayjs().format("dddd HH:mm A");
-
+  const time = dayjs().format("dddd hh:mm A");
   const getGreetingFromTime = (): string => {
     const time = Number(dayjs().format("H"));
 
@@ -34,7 +33,7 @@ const Greeting = () => {
       <div className="h-4 w-0.5 bg-muted" />
       <div className="flex items-center gap-1">
         {getTimeIcon()}
-        <span className="text-xs font-bold text-muted-foreground">
+        <span className="text-xs font-bold text-muted-foreground capitalize">
           {getGreetingFromTime()}
         </span>
       </div>

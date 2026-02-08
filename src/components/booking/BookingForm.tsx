@@ -102,6 +102,10 @@ const BookingForm = () => {
 
   const onSubmit = async (values: z.infer<typeof bookingSchema>) => {
     console.log(values);
+
+    const res = await api.post("/bookings", values);
+
+    console.log(res);
   };
 
   const handleAddProduct = (product?: TourListType) => {
