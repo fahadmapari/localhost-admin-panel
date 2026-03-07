@@ -217,7 +217,7 @@ const ProductionCreationForm = ({
     ["countries", "cities"],
     async () => {
       const response = await axios.get<CountryCityType[]>(
-        "/json/countries_cities.json"
+        "/json/countries_cities.json",
       );
 
       // TODO: optimize the json file later
@@ -231,7 +231,7 @@ const ProductionCreationForm = ({
     },
     {
       revalidateOnFocus: false,
-    }
+    },
   );
 
   const {
@@ -252,7 +252,7 @@ const ProductionCreationForm = ({
   }, [watchedCountry]);
 
   const isPricingScheduleError = (
-    errors: FieldErrors<z.infer<typeof productSchema>>
+    errors: FieldErrors<z.infer<typeof productSchema>>,
   ) => {
     return errors.b2bRateInstant ||
       errors.b2bExtraHourSupplementInsant ||
@@ -270,7 +270,7 @@ const ProductionCreationForm = ({
   };
 
   const isProductInfoError = (
-    errors: FieldErrors<z.infer<typeof productSchema>>
+    errors: FieldErrors<z.infer<typeof productSchema>>,
   ) => {
     return errors.title ||
       errors.serviceType ||
@@ -299,8 +299,22 @@ const ProductionCreationForm = ({
 
   async function onEditSubmit(values: z.infer<typeof productSchema>) {
     values.existingImages = values.images.filter(
-      (image) => typeof image === "string"
+      (image) => typeof image === "string",
     );
+
+    const formData = new FormData();
+
+    formData.append(
+      "payload",
+      JSON.stringify({
+        ...values,
+        edit: "single",
+        productCode: product?.productCode || "",
+        baseProductId: product?.baseProductId || "",
+        id: product?.id || "",
+      }),
+    );
+
     values.images = values.images.filter((image) => image instanceof File);
 
     if (values.images.length === 0 && values.existingImages.length === 0) {
@@ -311,11 +325,7 @@ const ProductionCreationForm = ({
       return;
     }
 
-    const formData = objectToFormData(values);
-    formData.append("edit", "single");
-    formData.append("productCode", product?.productCode || "");
-    formData.append("baseProductId", product?.baseProductId || "");
-    formData.append("id", product?.id || "");
+    values.images.map((image) => formData.append("images", image));
 
     try {
       setIsUploading(true);
@@ -346,7 +356,13 @@ const ProductionCreationForm = ({
   }
 
   async function onSubmit(values: z.infer<typeof productSchema>) {
-    const formData = objectToFormData(values);
+    const formData = new FormData();
+
+    formData.append("payload", JSON.stringify(values));
+
+    values.images.forEach((file) => {
+      formData.append("images", file);
+    });
 
     try {
       setIsUploading(true);
@@ -390,7 +406,7 @@ const ProductionCreationForm = ({
           className="h-full flex flex-col"
           onSubmit={form.handleSubmit(
             isEdit ? onEditSubmit : onSubmit,
-            onError
+            onError,
           )}
         >
           <div className="flex gap-2 items-center">
@@ -419,7 +435,7 @@ const ProductionCreationForm = ({
                 <AccordionItem
                   className={cn(
                     "border p-4 rounded-xl",
-                    isProductInfoError(errors) && "border-destructive"
+                    isProductInfoError(errors) && "border-destructive",
                   )}
                   value="item-1"
                   defaultChecked={true}
@@ -683,7 +699,7 @@ const ProductionCreationForm = ({
                                       const uniqueValues = difference(
                                         value,
                                         form.getValues()
-                                          .tourGuideLanguageOnRequest
+                                          .tourGuideLanguageOnRequest,
                                       );
                                       field.onChange(uniqueValues);
                                     }}
@@ -717,7 +733,7 @@ const ProductionCreationForm = ({
                                       const uniqueValues = difference(
                                         value,
                                         form.getValues()
-                                          .tourGuideLanguageInstant
+                                          .tourGuideLanguageInstant,
                                       );
                                       field.onChange(uniqueValues);
                                     }}
@@ -948,7 +964,9 @@ const ProductionCreationForm = ({
                                   {...field}
                                   onChange={(e) =>
                                     field.onChange(
-                                      e ? parseFloat(e.target.value) : undefined
+                                      e
+                                        ? parseFloat(e.target.value)
+                                        : undefined,
                                     )
                                   }
                                   type="number"
@@ -971,7 +989,9 @@ const ProductionCreationForm = ({
                                   {...field}
                                   onChange={(e) =>
                                     field.onChange(
-                                      e ? parseFloat(e.target.value) : undefined
+                                      e
+                                        ? parseFloat(e.target.value)
+                                        : undefined,
                                     )
                                   }
                                   type="number"
@@ -1065,7 +1085,7 @@ const ProductionCreationForm = ({
                 <AccordionItem
                   className={cn(
                     "border p-4 rounded-xl",
-                    errors.images && "border-destructive"
+                    errors.images && "border-destructive",
                   )}
                   value="item-2"
                 >
@@ -1105,7 +1125,7 @@ const ProductionCreationForm = ({
                 <AccordionItem
                   className={cn(
                     "!border p-4 rounded-xl",
-                    isPricingScheduleError(errors) && "border-destructive"
+                    isPricingScheduleError(errors) && "border-destructive",
                   )}
                   value="item-3"
                 >
@@ -1651,7 +1671,7 @@ const ProductionCreationForm = ({
               <Button
                 className={cn(
                   "mx-auto cursor-pointer",
-                  isUploading && "opacity-50"
+                  isUploading && "opacity-50",
                 )}
                 type="submit"
                 disabled={isUploading}
@@ -1663,7 +1683,7 @@ const ProductionCreationForm = ({
                 <Button
                   className={cn(
                     "mx-auto cursor-pointer",
-                    isUploading && "opacity-50"
+                    isUploading && "opacity-50",
                   )}
                   type="button"
                   disabled={isUploading}
@@ -1677,7 +1697,7 @@ const ProductionCreationForm = ({
                 <Button
                   className={cn(
                     "mx-auto hover:bg-destructive hover:text-primary cursor-pointer border border-destructive bg-transparent text-destructive",
-                    isUploading && "opacity-50"
+                    isUploading && "opacity-50",
                   )}
                   type="button"
                   disabled={isUploading}
@@ -1690,7 +1710,7 @@ const ProductionCreationForm = ({
                 <Button
                   className={cn(
                     "mx-auto hover:bg-destructive hover:text-primary cursor-pointer border border-destructive bg-transparent text-destructive",
-                    isUploading && "opacity-50"
+                    isUploading && "opacity-50",
                   )}
                   type="button"
                   disabled={isUploading}
