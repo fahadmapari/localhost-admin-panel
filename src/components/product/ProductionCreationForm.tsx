@@ -53,6 +53,8 @@ import MultipleProductEditModal from "./MultipleProductEditModal";
 import VirtualDropdownSelect from "../inputs/VirtualDropdownSelect";
 import VirtualizedSelect from "../inputs/VirtualDropdownSelect";
 import { useNavigate } from "react-router";
+import { Brain } from "lucide-react";
+import { Player } from "@lottiefiles/react-lottie-player";
 
 interface ProductFormProps {
   isEdit?: boolean;
@@ -154,12 +156,12 @@ const ProductionCreationForm = ({
   product,
   isEdit = false,
 }: ProductFormProps) => {
+  const [rewritingInProgress, setRewritingInProgress] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [showMultipleEditModal, setShowMultipleEditModal] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [activeReviewDialog, setActiveReviewDialog] = useState<ReviewKey | null>(
-    null,
-  );
+  const [activeReviewDialog, setActiveReviewDialog] =
+    useState<ReviewKey | null>(null);
   const [draftRemark, setDraftRemark] = useState("");
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof productSchema>>({
@@ -323,6 +325,58 @@ const ProductionCreationForm = ({
       : false;
   };
 
+  const handleAIDescriptionRewrite = async () => {
+    try {
+      const originalDescription = form.getValues("description");
+
+      if (!originalDescription) {
+        toast.error("Please enter a description before rewriting it", {
+          position: "top-center",
+          richColors: true,
+        });
+
+        return;
+      }
+
+      setRewritingInProgress(true);
+
+      const res = await api.post("/ai/rewrite", {
+        text: originalDescription,
+      });
+
+      if (
+        !res.data?.data ||
+        !res.data?.data?.rewrittenText ||
+        res.status !== 200
+      ) {
+        toast.error("Error while rewriting the description", {
+          position: "top-center",
+          richColors: true,
+        });
+
+        setRewritingInProgress(false);
+
+        return;
+      }
+
+      form.setValue("description", res.data.data.rewrittenText);
+      toast.success("Description rewritten successfully", {
+        position: "top-center",
+        richColors: true,
+      });
+
+      setRewritingInProgress(false);
+    } catch {
+      setRewritingInProgress(false);
+      toast.error("Error while rewriting the description", {
+        position: "top-center",
+        richColors: true,
+      });
+    } finally {
+      setRewritingInProgress(false);
+    }
+  };
+
   async function onEditSubmit(values: z.infer<typeof productSchema>) {
     values.existingImages = values.images.filter(
       (image) => typeof image === "string",
@@ -430,34 +484,34 @@ const ProductionCreationForm = ({
     {
       label: string;
       enabledField: "firstRoundReview" | "secondRoundReview";
-      remarksField:
-        | "firstRoundReviewRemarks"
-        | "secondRoundReviewRemarks";
+      remarksField: "firstRoundReviewRemarks" | "secondRoundReviewRemarks";
     }
   > = {
     firstRound: {
-      label: "1st Round Review",
+      label: "1st Review",
       enabledField: "firstRoundReview",
       remarksField: "firstRoundReviewRemarks",
     },
     secondRound: {
-      label: "2nd Round Review",
+      label: "2nd Review",
       enabledField: "secondRoundReview",
       remarksField: "secondRoundReviewRemarks",
     },
   };
 
-  const reviewValues: Record<ReviewKey, { enabled: boolean; remarks: string[] }> =
-    {
-      firstRound: {
-        enabled: firstRoundReview,
-        remarks: firstRoundReviewRemarks,
-      },
-      secondRound: {
-        enabled: secondRoundReview,
-        remarks: secondRoundReviewRemarks,
-      },
-    };
+  const reviewValues: Record<
+    ReviewKey,
+    { enabled: boolean; remarks: string[] }
+  > = {
+    firstRound: {
+      enabled: firstRoundReview,
+      remarks: firstRoundReviewRemarks,
+    },
+    secondRound: {
+      enabled: secondRoundReview,
+      remarks: secondRoundReviewRemarks,
+    },
+  };
 
   const openReviewDialog = (reviewKey: ReviewKey) => {
     setActiveReviewDialog(reviewKey);
@@ -653,12 +707,35 @@ const ProductionCreationForm = ({
                         name="description"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Description</FormLabel>
+                            <div className="flex gap-4 items-center">
+                              <FormLabel>Description</FormLabel>
+                              <button
+                                className="flex gap-2 items-center bg-accent-foreground text-accent font-semibold px-2 rounded py-1 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:pointer-events-none"
+                                onClick={handleAIDescriptionRewrite}
+                                disabled={rewritingInProgress}
+                              >
+                                <Brain size={18} />
+                                Rewrite with AI
+                              </button>
+                            </div>
                             <FormControl>
-                              <Textarea
-                                className="w-full h-[250px] disabled:opacity-60"
-                                {...field}
-                              />
+                              <div className="relative">
+                                <Textarea
+                                  className="w-full h-[250px] disabled:opacity-60"
+                                  {...field}
+                                  disabled={rewritingInProgress}
+                                />
+
+                                {rewritingInProgress && (
+                                  <Player
+                                    className="absolute top-0 w-full h-full pointer-events-none"
+                                    src="/lotties/ai.json"
+                                    loop={true}
+                                    autoplay={true}
+                                    controls={false}
+                                  />
+                                )}
+                              </div>
                             </FormControl>
                             <FormMessage />
                           </FormItem>
