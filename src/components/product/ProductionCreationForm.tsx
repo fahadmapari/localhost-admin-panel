@@ -36,20 +36,13 @@ import { useEffect, useMemo, useState } from "react";
 import { difference } from "lodash";
 import ProductUploadLoader from "./ProductUploadLoader";
 import { MultiValueTextarea } from "../ui/MultiValueTextarea";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
 
 import languages from "../../assets/json/languages.v1.json";
 import axios from "axios";
 import useSWR from "swr";
 import AlertModal from "../common/AlertModal";
 import MultipleProductEditModal from "./MultipleProductEditModal";
+import ReviewDialog from "./ReviewDialog";
 import VirtualDropdownSelect from "../inputs/VirtualDropdownSelect";
 import VirtualizedSelect from "../inputs/VirtualDropdownSelect";
 import { useNavigate } from "react-router";
@@ -1771,37 +1764,38 @@ const ProductionCreationForm = ({
           </div>
           <div className="flex flex-col items-center justify-center mt-6 w-full">
             <div className="flex flex-wrap items-center justify-between gap-4 w-full mb-4 border border-border rounded-xl p-4">
-              {(["firstRound", "secondRound"] as ReviewKey[]).map(
-                (reviewKey) => (
-                  <div
-                    key={reviewKey}
-                    className="flex items-center gap-3 rounded-lg border border-border/60 px-3 py-2"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium">
-                        {reviewConfig[reviewKey].label}:
-                      </span>
-                      <Switch
-                        checked={reviewValues[reviewKey].enabled}
-                        onCheckedChange={(checked) =>
-                          handleReviewToggle(reviewKey, checked)
-                        }
-                      />
-                    </div>
+              {isEdit &&
+                (["firstRound", "secondRound"] as ReviewKey[]).map(
+                  (reviewKey) => (
+                    <div
+                      key={reviewKey}
+                      className="flex items-center gap-3 rounded-lg border border-border/60 px-3 py-2"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium">
+                          {reviewConfig[reviewKey].label}:
+                        </span>
+                        <Switch
+                          checked={reviewValues[reviewKey].enabled}
+                          onCheckedChange={(checked) =>
+                            handleReviewToggle(reviewKey, checked)
+                          }
+                        />
+                      </div>
 
-                    {reviewValues[reviewKey].remarks.length > 0 && (
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => openReviewDialog(reviewKey)}
-                      >
-                        View Remarks ({reviewValues[reviewKey].remarks.length})
-                      </Button>
-                    )}
-                  </div>
-                ),
-              )}
+                      {reviewValues[reviewKey].remarks.length > 0 && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => openReviewDialog(reviewKey)}
+                        >
+                          View Remarks ({reviewValues[reviewKey].remarks.length})
+                        </Button>
+                      )}
+                    </div>
+                  ),
+                )}
 
               <FormField
                 control={form.control}
@@ -1954,87 +1948,22 @@ const ProductionCreationForm = ({
         />
       )}
 
-      <Dialog
-        open={activeReviewDialog !== null}
-        onOpenChange={(open) => {
-          if (!open) {
-            setActiveReviewDialog(null);
-            setDraftRemark("");
-          }
+      <ReviewDialog
+        open={isEdit && activeReviewDialog !== null}
+        title={
+          activeReviewDialog
+            ? reviewConfig[activeReviewDialog].label
+            : "Review Remarks"
+        }
+        remarks={activeReview?.remarks || []}
+        draftRemark={draftRemark}
+        onDraftRemarkChange={setDraftRemark}
+        onClose={() => {
+          setActiveReviewDialog(null);
+          setDraftRemark("");
         }}
-      >
-        <DialogContent className="sm:max-w-[560px]">
-          <DialogHeader>
-            <DialogTitle>
-              {activeReviewDialog
-                ? reviewConfig[activeReviewDialog].label
-                : "Review Remarks"}
-            </DialogTitle>
-            <DialogDescription>
-              View existing remarks and add a new one for this review stage.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <p className="text-sm font-medium">Remarks</p>
-              <div className="max-h-60 space-y-2 overflow-y-auto rounded-md border border-border p-3">
-                {activeReview?.remarks.length ? (
-                  activeReview.remarks.map((remark, index) => (
-                    <div
-                      key={`${activeReviewDialog}-${index}`}
-                      className="rounded-md bg-secondary/50 px-3 py-2 text-sm"
-                    >
-                      <span className="font-medium">Remark {index + 1}:</span>{" "}
-                      {remark}
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-sm text-muted-foreground">
-                    No remarks added yet.
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label
-                htmlFor="review-remark-input"
-                className="text-sm font-medium"
-              >
-                Add New Remark
-              </label>
-              <Textarea
-                id="review-remark-input"
-                value={draftRemark}
-                onChange={(e) => setDraftRemark(e.target.value)}
-                placeholder="Leave your review remarks here"
-                className="min-h-28"
-              />
-            </div>
-          </div>
-
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => {
-                setActiveReviewDialog(null);
-                setDraftRemark("");
-              }}
-            >
-              Close
-            </Button>
-            <Button
-              type="button"
-              onClick={handleAddRemark}
-              disabled={!draftRemark.trim()}
-            >
-              Add Remark
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        onAddRemark={handleAddRemark}
+      />
     </div>
   );
 };
