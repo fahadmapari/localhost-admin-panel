@@ -1603,8 +1603,8 @@ const ProductionCreationForm = ({
                 control={form.control}
                 name="isB2B"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col justify-center items-center gap-2">
-                    <FormLabel>B2B Enabled</FormLabel>
+                  <FormItem className="flex justify-center items-center gap-2">
+                    <FormLabel>B2B Enabled:</FormLabel>
                     <FormControl>
                       <Switch
                         checked={field.value}
@@ -1620,8 +1620,8 @@ const ProductionCreationForm = ({
                 control={form.control}
                 name="isB2C"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col justify-center items-center gap-2">
-                    <FormLabel>B2C Enabled</FormLabel>
+                  <FormItem className="flex justify-center items-center gap-2">
+                    <FormLabel>B2C Enabled:</FormLabel>
                     <FormControl>
                       <Switch
                         checked={field.value}
@@ -1637,8 +1637,8 @@ const ProductionCreationForm = ({
                 control={form.control}
                 name="overridePriceFromContract"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col justify-center items-center gap-2">
-                    <FormLabel>Override Price From Contract</FormLabel>
+                  <FormItem className="flex justify-center items-center gap-2">
+                    <FormLabel>Override Price From Contract:</FormLabel>
                     <FormControl>
                       <Switch
                         checked={field.value}
@@ -1654,8 +1654,8 @@ const ProductionCreationForm = ({
                 control={form.control}
                 name="isBookingPerProduct"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col justify-center items-center gap-2">
-                    <FormLabel>Booking Per Product</FormLabel>
+                  <FormItem className="flex justify-center items-center gap-2">
+                    <FormLabel>Booking Per Product:</FormLabel>
                     <FormControl>
                       <Switch
                         checked={field.value}
