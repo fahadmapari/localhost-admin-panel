@@ -143,6 +143,10 @@ export const productSchema = z.object({
     .array(z.string())
     .min(1, "At least one cancellation term is required."),
   realease: z.string().min(1, "Realease is required."),
+  firstRoundReview: z.boolean(),
+  firstRoundReviewRemarks: z.array(z.string()),
+  secondRoundReview: z.boolean(),
+  secondRoundReviewRemarks: z.array(z.string()),
   isB2B: z.boolean(),
   isB2C: z.boolean(),
   overridePriceFromContract: z.boolean(),
