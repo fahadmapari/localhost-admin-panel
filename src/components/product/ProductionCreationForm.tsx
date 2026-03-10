@@ -27,7 +27,7 @@ import { Separator } from "../ui/separator";
 import { MultiSelect } from "../multi-select";
 import { MultiImageUpload } from "../multi-image-upload";
 import { toast } from "sonner";
-import { cn, objectToFormData } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Switch } from "../ui/switch";
 import { MultiDateSelect } from "../multi-date-select";
 import { DatePicker } from "../date-picker";
@@ -42,9 +42,12 @@ import axios from "axios";
 import useSWR from "swr";
 import AlertModal from "../common/AlertModal";
 import MultipleProductEditModal from "./MultipleProductEditModal";
+import ReviewDialog from "./ReviewDialog";
 import VirtualDropdownSelect from "../inputs/VirtualDropdownSelect";
 import VirtualizedSelect from "../inputs/VirtualDropdownSelect";
 import { useNavigate } from "react-router";
+import { Brain } from "lucide-react";
+import { Player } from "@lottiefiles/react-lottie-player";
 
 interface ProductFormProps {
   isEdit?: boolean;
@@ -121,6 +124,10 @@ interface ProductFormProps {
     };
     cancellationTerms: string[];
     realease: string;
+    firstRoundReview: boolean;
+    firstRoundReviewRemarks: string[];
+    secondRoundReview: boolean;
+    secondRoundReviewRemarks: string[];
     isB2B: boolean;
     isB2C: boolean;
     overridePriceFromContract: boolean;
@@ -136,13 +143,19 @@ interface CountryCityType {
   cities: string[];
 }
 
+type ReviewKey = "firstRound" | "secondRound";
+
 const ProductionCreationForm = ({
   product,
   isEdit = false,
 }: ProductFormProps) => {
+  const [rewritingInProgress, setRewritingInProgress] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [showMultipleEditModal, setShowMultipleEditModal] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [activeReviewDialog, setActiveReviewDialog] =
+    useState<ReviewKey | null>(null);
+  const [draftRemark, setDraftRemark] = useState("");
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
@@ -206,6 +219,10 @@ const ProductionCreationForm = ({
       },
       cancellationTerms: [],
       realease: "",
+      firstRoundReview: false,
+      firstRoundReviewRemarks: [],
+      secondRoundReview: false,
+      secondRoundReviewRemarks: [],
       isB2B: true,
       isB2C: true,
       overridePriceFromContract: false,
@@ -240,6 +257,10 @@ const ProductionCreationForm = ({
   } = form;
 
   const watchedCountry = watch("meetingPoint.country");
+  const firstRoundReview = watch("firstRoundReview");
+  const firstRoundReviewRemarks = watch("firstRoundReviewRemarks");
+  const secondRoundReview = watch("secondRoundReview");
+  const secondRoundReviewRemarks = watch("secondRoundReviewRemarks");
 
   const cities = useMemo(() => {
     return countriesAndCities?.cities[watchedCountry] || [];
@@ -295,6 +316,58 @@ const ProductionCreationForm = ({
       errors.tags
       ? true
       : false;
+  };
+
+  const handleAIDescriptionRewrite = async () => {
+    try {
+      const originalDescription = form.getValues("description");
+
+      if (!originalDescription) {
+        toast.error("Please enter a description before rewriting it", {
+          position: "top-center",
+          richColors: true,
+        });
+
+        return;
+      }
+
+      setRewritingInProgress(true);
+
+      const res = await api.post("/ai/rewrite", {
+        text: originalDescription,
+      });
+
+      if (
+        !res.data?.data ||
+        !res.data?.data?.rewrittenText ||
+        res.status !== 200
+      ) {
+        toast.error("Error while rewriting the description", {
+          position: "top-center",
+          richColors: true,
+        });
+
+        setRewritingInProgress(false);
+
+        return;
+      }
+
+      form.setValue("description", res.data.data.rewrittenText);
+      toast.success("Description rewritten successfully", {
+        position: "top-center",
+        richColors: true,
+      });
+
+      setRewritingInProgress(false);
+    } catch {
+      setRewritingInProgress(false);
+      toast.error("Error while rewriting the description", {
+        position: "top-center",
+        richColors: true,
+      });
+    } finally {
+      setRewritingInProgress(false);
+    }
   };
 
   async function onEditSubmit(values: z.infer<typeof productSchema>) {
@@ -398,6 +471,75 @@ const ProductionCreationForm = ({
       richColors: true,
     });
   };
+
+  const reviewConfig: Record<
+    ReviewKey,
+    {
+      label: string;
+      enabledField: "firstRoundReview" | "secondRoundReview";
+      remarksField: "firstRoundReviewRemarks" | "secondRoundReviewRemarks";
+    }
+  > = {
+    firstRound: {
+      label: "1st Review",
+      enabledField: "firstRoundReview",
+      remarksField: "firstRoundReviewRemarks",
+    },
+    secondRound: {
+      label: "2nd Review",
+      enabledField: "secondRoundReview",
+      remarksField: "secondRoundReviewRemarks",
+    },
+  };
+
+  const reviewValues: Record<
+    ReviewKey,
+    { enabled: boolean; remarks: string[] }
+  > = {
+    firstRound: {
+      enabled: firstRoundReview,
+      remarks: firstRoundReviewRemarks,
+    },
+    secondRound: {
+      enabled: secondRoundReview,
+      remarks: secondRoundReviewRemarks,
+    },
+  };
+
+  const openReviewDialog = (reviewKey: ReviewKey) => {
+    setActiveReviewDialog(reviewKey);
+    setDraftRemark("");
+  };
+
+  const handleReviewToggle = (reviewKey: ReviewKey, checked: boolean) => {
+    form.setValue(reviewConfig[reviewKey].enabledField, checked, {
+      shouldDirty: true,
+    });
+
+    if (checked) {
+      openReviewDialog(reviewKey);
+    }
+  };
+
+  const handleAddRemark = () => {
+    const remark = draftRemark.trim();
+
+    if (!activeReviewDialog || !remark) {
+      return;
+    }
+
+    const remarksField = reviewConfig[activeReviewDialog].remarksField;
+    const currentRemarks = form.getValues(remarksField) || [];
+
+    form.setValue(remarksField, [...currentRemarks, remark], {
+      shouldDirty: true,
+    });
+    setDraftRemark("");
+  };
+
+  const activeReview = activeReviewDialog
+    ? reviewValues[activeReviewDialog]
+    : undefined;
 
   return (
     <div className="h-full">
@@ -558,12 +700,35 @@ const ProductionCreationForm = ({
                         name="description"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Description</FormLabel>
+                            <div className="flex gap-4 items-center">
+                              <FormLabel>Description</FormLabel>
+                              <button
+                                className="flex gap-2 items-center bg-accent-foreground text-accent font-semibold px-2 rounded py-1 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:pointer-events-none"
+                                onClick={handleAIDescriptionRewrite}
+                                disabled={rewritingInProgress}
+                              >
+                                <Brain size={18} />
+                                Rewrite with AI
+                              </button>
+                            </div>
                             <FormControl>
-                              <Textarea
-                                className="w-full h-[250px] disabled:opacity-60"
-                                {...field}
-                              />
+                              <div className="relative">
+                                <Textarea
+                                  className="w-full h-[250px] disabled:opacity-60"
+                                  {...field}
+                                  disabled={rewritingInProgress}
+                                />
+
+                                {rewritingInProgress && (
+                                  <Player
+                                    className="absolute top-0 w-full h-full pointer-events-none"
+                                    src="/lotties/ai.json"
+                                    loop={true}
+                                    autoplay={true}
+                                    controls={false}
+                                  />
+                                )}
+                              </div>
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -1598,7 +1763,40 @@ const ProductionCreationForm = ({
             </ScrollArea>
           </div>
           <div className="flex flex-col items-center justify-center mt-6 w-full">
-            <div className="flex items-center justify-between w-full mb-4 border border-border rounded-xl p-4">
+            <div className="flex flex-wrap items-center justify-between gap-4 w-full mb-4 border border-border rounded-xl p-4">
+              {isEdit &&
+                (["firstRound", "secondRound"] as ReviewKey[]).map(
+                  (reviewKey) => (
+                    <div
+                      key={reviewKey}
+                      className="flex items-center gap-3 rounded-lg border border-border/60 px-3 py-2"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium">
+                          {reviewConfig[reviewKey].label}:
+                        </span>
+                        <Switch
+                          checked={reviewValues[reviewKey].enabled}
+                          onCheckedChange={(checked) =>
+                            handleReviewToggle(reviewKey, checked)
+                          }
+                        />
+                      </div>
+
+                      {reviewValues[reviewKey].remarks.length > 0 && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => openReviewDialog(reviewKey)}
+                        >
+                          View Remarks ({reviewValues[reviewKey].remarks.length})
+                        </Button>
+                      )}
+                    </div>
+                  ),
+                )}
+
               <FormField
                 control={form.control}
                 name="isB2B"
@@ -1749,6 +1947,23 @@ const ProductionCreationForm = ({
           }
         />
       )}
+
+      <ReviewDialog
+        open={isEdit && activeReviewDialog !== null}
+        title={
+          activeReviewDialog
+            ? reviewConfig[activeReviewDialog].label
+            : "Review Remarks"
+        }
+        remarks={activeReview?.remarks || []}
+        draftRemark={draftRemark}
+        onDraftRemarkChange={setDraftRemark}
+        onClose={() => {
+          setActiveReviewDialog(null);
+          setDraftRemark("");
+        }}
+        onAddRemark={handleAddRemark}
+      />
     </div>
   );
 };

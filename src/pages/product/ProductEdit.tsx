@@ -78,6 +78,10 @@ interface InitialProductState {
   };
   cancellationTerms: string[];
   realease: string;
+  firstRoundReview: boolean;
+  firstRoundReviewRemarks: string[];
+  secondRoundReview: boolean;
+  secondRoundReviewRemarks: string[];
   isB2B: boolean;
   isB2C: boolean;
   overridePriceFromContract: boolean;
@@ -156,6 +160,10 @@ const ProductEdit = () => {
       },
       cancellationTerms: product.cancellationTerms,
       realease: product.realease,
+      firstRoundReview: product.firstRoundReview ?? false,
+      firstRoundReviewRemarks: product.firstRoundReviewRemarks ?? [],
+      secondRoundReview: product.secondRoundReview ?? false,
+      secondRoundReviewRemarks: product.secondRoundReviewRemarks ?? [],
       isB2B: product.isB2B,
       isB2C: product.isB2C,
       overridePriceFromContract: product.overridePriceFromContract,

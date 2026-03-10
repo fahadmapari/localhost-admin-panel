@@ -67,6 +67,10 @@ export interface TourProduct {
   availability: Availability;
   cancellationTerms: string[];
   realease: string;
+  firstRoundReview: boolean;
+  firstRoundReviewRemarks: string[];
+  secondRoundReview: boolean;
+  secondRoundReviewRemarks: string[];
   isB2B: boolean;
   isB2C: boolean;
   overridePriceFromContract: boolean;
@@ -122,6 +126,10 @@ export interface TourListType {
   b2cExtraHourSupplementOnRequest: number;
   publicHolidaySupplementPercent: number;
   weekendSupplementPercent: number;
+  firstRoundReview: boolean;
+  firstRoundReviewRemarks: string[];
+  secondRoundReview: boolean;
+  secondRoundReviewRemarks: string[];
   isB2B: boolean;
   isB2C: boolean;
   overridePriceFromContract: boolean;
