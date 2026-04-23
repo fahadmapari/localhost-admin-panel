@@ -1,5 +1,6 @@
 import { DataTable } from "@/components/common/DataTable";
 import FiltersScreen from "@/components/common/FiltersScreen";
+import AskAIProductModal from "@/components/product/AskAIProductModal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader } from "@/components/ui/loader";
@@ -10,9 +11,10 @@ import { useResponsive } from "@/hooks/useResponsive";
 import api from "@/lib/axios";
 import { TourListType } from "@/types/product";
 import { ColumnDef } from "@tanstack/react-table";
-import { Search } from "lucide-react";
+import { Brain, Search } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
+import { toast } from "sonner";
 
 import useSWR from "swr";
 
@@ -31,6 +33,10 @@ const List = () => {
 
   const [bookingType, setBookingType] = useState<string>("all");
   const [searchTitle, setSearchTitle] = useState<string>("");
+  const [isAskAIOpen, setIsAskAIOpen] = useState(false);
+  const [aiQuestion, setAiQuestion] = useState("");
+  const [aiAnswer, setAiAnswer] = useState("");
+  const [isAskingAI, setIsAskingAI] = useState(false);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -44,6 +50,55 @@ const List = () => {
       pageSize: isBigScreen ? 15 : 10,
     });
   }, [bookingType]);
+
+  const handleAskAIOpenChange = (open: boolean) => {
+    setIsAskAIOpen(open);
+
+    if (!open) {
+      setAiQuestion("");
+      setAiAnswer("");
+      setIsAskingAI(false);
+    }
+  };
+
+  const handleAskAI = async () => {
+    const trimmedQuestion = aiQuestion.trim();
+
+    if (!trimmedQuestion) {
+      toast.error("Please enter a question for AI.", {
+        position: "top-center",
+        richColors: true,
+      });
+      return;
+    }
+
+    try {
+      setIsAskingAI(true);
+      setAiAnswer("");
+
+      const res = await api.post("/ai/ask-product", {
+        query: trimmedQuestion,
+      });
+
+      const answer = res.data?.data?.answer;
+
+      if (!answer) {
+        throw new Error("Invalid AI response");
+      }
+
+      console.log(answer);
+
+      setAiAnswer(answer);
+    } catch (error) {
+      console.error(error);
+      toast.error("Unable to get an AI answer right now.", {
+        position: "top-center",
+        richColors: true,
+      });
+    } finally {
+      setIsAskingAI(false);
+    }
+  };
 
   const columns: ColumnDef<TourListType>[] = [
     {
@@ -118,12 +173,12 @@ const List = () => {
     },
     {
       revalidateOnFocus: false,
-    }
+    },
   );
 
   const totalProductCount = useMemo(
     () => data?.totalProducts,
-    [data?.totalProducts]
+    [data?.totalProducts],
   );
 
   if (error) {
@@ -157,6 +212,15 @@ const List = () => {
         <Button className="cursor-pointer" onClick={handleSearchClick}>
           <Search /> <span>Search</span>
         </Button>
+        <Button
+          type="button"
+          variant="outline"
+          className="cursor-pointer"
+          onClick={() => setIsAskAIOpen(true)}
+        >
+          <Brain />
+          <span>Ask AI</span>
+        </Button>
       </div>
       <Tabs
         className="mb-2"
@@ -181,6 +245,17 @@ const List = () => {
           pageCount={Math.ceil((totalProductCount || 0) / pagination.pageSize)}
         />
       </ScrollArea>
+
+      <AskAIProductModal
+        open={isAskAIOpen}
+        question={aiQuestion}
+        answer={aiAnswer}
+        isLoading={isAskingAI}
+        onClose={() => handleAskAIOpenChange(false)}
+        onOpenChange={handleAskAIOpenChange}
+        onQuestionChange={setAiQuestion}
+        onSubmit={handleAskAI}
+      />
     </div>
   );
 };
