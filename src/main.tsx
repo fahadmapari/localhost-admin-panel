@@ -18,10 +18,13 @@ import ClientList from "./pages/client/ClientList.tsx";
 import ClientMetrics from "./pages/client/ClientMetrics.tsx";
 import AdminRegister from "./pages/admin/AdminRegister.tsx";
 import NewBooking from "./pages/booking/NewBooking.tsx";
+import BookingList from "./pages/booking/BookingList.tsx";
+import BookingDetails from "./pages/booking/BookingDetails.tsx";
 import Messages from "./pages/communication/Messages.tsx";
 import Conversation from "./pages/communication/Conversation.tsx";
 import RegisterSupplier from "./pages/supplier/RegisterSupplier.tsx";
 import ListSupplier from "./pages/supplier/ListSupplier.tsx";
+import SupplierEdit from "./pages/supplier/SupplierEdit.tsx";
 
 const router = createBrowserRouter([
   {
@@ -72,11 +75,15 @@ const router = createBrowserRouter([
       },
       {
         path: "bookings",
-        element: <div>bookings</div>,
+        Component: BookingList,
       },
       {
         path: "bookings/create",
         Component: NewBooking,
+      },
+      {
+        path: "bookings/:id",
+        Component: BookingDetails,
       },
       {
         path: "bookings/custom",
@@ -97,6 +104,10 @@ const router = createBrowserRouter([
       {
         path: "supplier/create",
         Component: RegisterSupplier,
+      },
+      {
+        path: "supplier/:id",
+        Component: SupplierEdit,
       },
       {
         path: "*", // catch-all 404 route
