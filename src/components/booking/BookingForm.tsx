@@ -29,10 +29,25 @@ import { ClientProfile } from "@/types/client";
 import { Skeleton } from "../ui/skeleton";
 import { cn } from "@/lib/utils";
 import { z } from "zod";
+import { useNavigate } from "react-router";
 
 const BookingForm = () => {
+  const navigate = useNavigate();
+
   const form = useForm({
     resolver: zodResolver(bookingSchema),
+    defaultValues: {
+      clientId: "",
+      leadFirstName: "",
+      leadLastName: "",
+      leadEmail: "",
+      leadMobile: { countryCode: "", number: "" },
+      agencyRef: "",
+      comments: "",
+      orderItems: [],
+      totalPrice: 0,
+      discountCode: "",
+    },
   });
 
   const { watch } = form;
@@ -41,6 +56,8 @@ const BookingForm = () => {
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedProduct, setselectedProduct] = useState<string>("");
+  const [selectedClientLabel, setSelectedClientLabel] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -88,6 +105,22 @@ const BookingForm = () => {
     return products;
   }, [data]);
 
+  const clientsMap = useMemo(() => {
+    const map: Record<string, string> = {};
+    clients?.forEach((c) => {
+      const label =
+        c.companyInformation.name +
+        " - " +
+        c.firstName +
+        " " +
+        c.lastName +
+        " - " +
+        c.companyInformation.country;
+      map[label] = c._id;
+    });
+    return map;
+  }, [clients]);
+
   useEffect(() => {
     if (searchTerm) {
       mutate();
@@ -101,11 +134,24 @@ const BookingForm = () => {
   }, [productSearching]);
 
   const onSubmit = async (values: z.infer<typeof bookingSchema>) => {
-    console.log(values);
-
-    const res = await api.post("/bookings", values);
-
-    console.log(res);
+    setIsSubmitting(true);
+    try {
+      await api.post("/bookings", values);
+      toast.success("Booking created successfully", {
+        richColors: true,
+        position: "top-center",
+      });
+      form.reset();
+      setSelectedClientLabel("");
+      navigate("/bookings");
+    } catch (error: unknown) {
+      const message =
+        (error as { response?: { data?: { message?: string } } })?.response
+          ?.data?.message || "Failed to create booking";
+      toast.error(message, { richColors: true, position: "top-center" });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleAddProduct = (product?: TourListType) => {
@@ -216,22 +262,14 @@ const BookingForm = () => {
                             <FormLabel>Client</FormLabel>
                             <FormControl>
                               <DropdownSelect
-                                options={
-                                  clients?.map(
-                                    (c) =>
-                                      c.companyInformation.name +
-                                      " - " +
-                                      c.firstName +
-                                      " " +
-                                      c.lastName +
-                                      " - " +
-                                      c.companyInformation.country
-                                  ) || []
-                                }
+                                options={Object.keys(clientsMap)}
                                 label="Select Client"
-                                value={field.value}
-                                onChange={field.onChange}
-                                defaultValue={field.value}
+                                value={selectedClientLabel}
+                                onChange={(label) => {
+                                  setSelectedClientLabel(label);
+                                  field.onChange(clientsMap[label] || "");
+                                }}
+                                defaultValue={selectedClientLabel}
                               />
                             </FormControl>
                             <FormMessage />
@@ -262,6 +300,22 @@ const BookingForm = () => {
                             <FormLabel>Last Name</FormLabel>
                             <FormControl>
                               <Input {...field} type="text" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div>
+                      <FormField
+                        control={form.control}
+                        name="leadEmail"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                              <Input {...field} type="email" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -601,7 +655,10 @@ const BookingForm = () => {
               </div>
 
               <div className="flex items-center justify-center pt-4">
-                <Button type="submit">Create New Booking</Button>
+                <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting && <Loader className="animate-spin" />}
+                  Create New Booking
+                </Button>
               </div>
             </form>
           </Form>
