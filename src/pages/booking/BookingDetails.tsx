@@ -6,6 +6,7 @@ import { ArrowLeft } from "lucide-react";
 import { Link, useParams } from "react-router";
 import useSWR from "swr";
 import { Card } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import InfoField from "@/components/booking/InfoField";
@@ -66,7 +67,7 @@ const BookingDetails = () => {
     typeof data.clientId === "object" ? (data.clientId as ClientProfile) : null;
 
   return (
-    <div className="p-4 flex flex-col gap-4">
+    <div className="h-full p-4 flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div>
           <div className="text-sm text-muted-foreground mb-1">
@@ -85,7 +86,9 @@ const BookingDetails = () => {
         </Link>
       </div>
 
-      <Card className="p-6">
+      <ScrollArea className="flex-1 overflow-hidden">
+        <div className="flex flex-col gap-4">
+          <Card className="p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <InfoField label="Booking Reference">{data.bookingRef}</InfoField>
           <InfoField label="Lead Passenger Name">
@@ -270,6 +273,8 @@ const BookingDetails = () => {
           );
         })}
       </div>
+        </div>
+      </ScrollArea>
 
       {remarksOpenFor ? (
         <ProductRemarksDialog
